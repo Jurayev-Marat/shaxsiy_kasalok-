@@ -71,6 +71,9 @@ input,select{width:100%;padding:12px;border-radius:13px;border:1px solid var(--b
 .sec{display:none}.sec.on{display:block;animation:f .3s}
 @keyframes f{from{opacity:0;transform:translateY(8px)}}
 .hint{font-size:12px;color:var(--mut);margin-top:8px}
+dialog{background:var(--card);color:var(--tx);border:1px solid var(--bd);border-radius:22px;padding:20px;width:min(92vw,420px);margin:auto;box-shadow:var(--sh)}
+dialog::backdrop{background:rgba(10,10,30,.55);backdrop-filter:blur(4px)}
+dialog h2{margin-bottom:14px}.btn.g{background:var(--bg);color:var(--tx);box-shadow:none;border:1px solid var(--bd)}
 </style>
 </head>
 <body>
@@ -80,7 +83,7 @@ input,select{width:100%;padding:12px;border-radius:13px;border:1px solid var(--b
 <section class="sec on" id="s-home">
  <div class="card hero"><div>Umumiy mablag' (barcha karta + naqd)</div><div class="big" id="hb">0</div>
   <div class="grid"><div class="stat">💳 Kartalarda<b id="hc">0</b></div><div class="stat">💵 Cho'ntakda<b id="hk">0</b></div><div class="stat">✅ Bugungi vazifa<b id="ht">0</b></div></div></div>
- <div class="card"><div class="sal"><div><div style="color:var(--mut);font-size:13px">Oylik maosh</div><div class="v" id="sv">Kiritilmagan</div><div style="font-size:13px;color:var(--mut)" id="sd"></div></div><div><button class="btn s" id="sg">Oylik keldi ✓</button> <button class="btn s" id="se" style="background:var(--bg);color:var(--tx);box-shadow:none;border:1px solid var(--bd)">✏️</button></div></div></div>
+ <div class="card"><div class="sal"><div><div style="color:var(--mut);font-size:13px">💰 Oxirgi oylik</div><div class="v" id="sv">Hali yo'q</div><div style="font-size:13px;color:var(--mut)" id="sd"></div><div style="font-size:12px;color:var(--mut);margin-top:4px" id="sa"></div></div><div><button class="btn s" id="sg">Oylik keldi ✓</button> <button class="btn s" id="se" title="Oylik kuni" style="background:var(--bg);color:var(--tx);box-shadow:none;border:1px solid var(--bd)">📅</button></div></div></div>
  <div class="g2">
   <div class="card"><h2>⏰ Yaqin eslatmalar</h2><div id="up"></div></div>
   <div class="card"><h2>💸 Oxirgi harajatlar</h2><div id="lt"></div></div>
@@ -99,7 +102,7 @@ input,select{width:100%;padding:12px;border-radius:13px;border:1px solid var(--b
  <form id="fw"><select id="wt"><option value="in">➕ Kirim</option><option value="out">➖ Chiqim</option></select>
  <select id="wa2"></select>
  <input id="wa" type="number" min="1" placeholder="Summa (so'm)" required>
- <select id="wc"><option>Oziq-ovqat</option><option>Transport</option><option>Kommunal</option><option>Ko'ngilochar</option><option>Maosh</option><option>Boshqa</option></select>
+ <select id="wc"></select>
  <div class="ig full"><input id="wn" placeholder="Izoh (yozing yoki 🎤 ayting)"><button type="button" class="mic" data-for="wn">🎤</button></div>
  <button class="btn full">Qo'shish</button></form></div>
  <div class="card"><h2>Tarix</h2><div id="wl"></div></div>
@@ -118,6 +121,13 @@ input,select{width:100%;padding:12px;border-radius:13px;border:1px solid var(--b
 </div>
 
 <nav><button data-s="home" class="on">🏠 Bosh</button><button data-s="wal">💳 Kartalar</button><button data-s="tsk">✅ Vazifalar</button></nav>
+<dialog id="dl"><h2>💰 Daromad qo'shish</h2><form id="fs">
+<input class="full" id="sm" type="number" min="1" placeholder="Summa (so'm)" required>
+<select id="sc"><option>Oylik</option><option>Avans</option><option>Mukofot</option><option>Qo'shimcha daromad</option><option>Boshqa</option></select>
+<select id="sk"></select>
+<input class="full" id="sdte" type="date" required>
+<div class="ig full"><input id="sn" placeholder="Izoh (masalan: iyun oyi, 2 ta smena)"><button type="button" class="mic" data-for="sn">🎤</button></div>
+<button class="btn">Saqlash</button><button type="button" class="btn g" id="sx">Bekor</button></form></dialog>
 <div id="toast"></div>
 
 <script>
@@ -147,14 +157,21 @@ document.querySelectorAll('#tb button').forEach(b=>b.onclick=()=>{flt=b.dataset.
 
 /* Ovozli kiritish */
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+let cur=null;
+const ERR={'not-allowed':"Mikrofonga ruxsat berilmagan. Brauzer sozlamalaridan ruxsat bering (sahifani to'g'ridan-to'g'ri o'z manzilida oching)",'service-not-allowed':"Bu yerda ovoz xizmati yopiq. Sahifani Chrome/Safari'da o'z manzilida oching",'no-speech':"Ovoz eshitilmadi. Mikrofonga yaqinroq gapirib, qayta bosing",'audio-capture':"Mikrofon topilmadi",'network':"Ovoz tanish uchun internet kerak"};
+function listen(b,lang){
+ const r=new SR();cur=r;r.lang=lang;r.interimResults=true;r.maxAlternatives=1;
+ const el=$(b.dataset.for);let got=false;
+ b.classList.add('rec');toast('🎤 Gapiring...');
+ r.onresult=e=>{let t='';for(const x of e.results)t+=x[0].transcript;got=true;el.value=t;if(e.results[e.results.length-1].isFinal){if(b.dataset.for==='tn')parseTime(t);toast('🎤 '+t)}};
+ r.onerror=e=>{b.classList.remove('rec');if(e.error==='language-not-supported'&&lang!=='ru-RU'){listen(b,'ru-RU');return}if(e.error==='aborted')return;toast(ERR[e.error]||('Xato: '+e.error))};
+ r.onend=()=>{b.classList.remove('rec');cur=null;if(got&&b.dataset.for==='tn')parseTime(el.value)};
+ try{r.start()}catch(e){b.classList.remove('rec');toast('Ovozni boshlab bo\'lmadi, qayta urinib ko\'ring')}
+}
 document.querySelectorAll('.mic').forEach(b=>b.onclick=()=>{
- if(!SR){toast('Brauzer ovozni qo\'llamaydi. Chrome yoki Safari ishlating');return}
- const r=new SR();r.lang='uz-UZ';r.interimResults=false;
- b.classList.add('rec');
- r.onresult=e=>{const txt=e.results[0][0].transcript;$(b.dataset.for).value=txt;if(b.dataset.for==='tn')parseTime(txt);toast('🎤 '+txt)};
- r.onerror=e=>toast(e.error==='not-allowed'?'Mikrofonga ruxsat bering':'Ovoz eshitilmadi');
- r.onend=()=>b.classList.remove('rec');
- try{r.start()}catch(e){b.classList.remove('rec')}
+ if(cur){cur.stop();return}
+ if(!SR){toast("Bu brauzerda ovoz tanish yo'q. Klaviaturadagi 🎤 tugmasidan foydalaning");$(b.dataset.for).focus();return}
+ listen(b,'uz-UZ');
 });
 function parseTime(t){t=t.toLowerCase();const d=new Date();let ch=0;
  if(/ertaga|ertalab keyin/.test(t)){d.setDate(d.getDate()+1);ch=1}
@@ -172,15 +189,21 @@ $('fa').onsubmit=e=>{e.preventDefault();A.push({id:'a'+Date.now(),k:'card',bank:
 function da(id){if(!confirm('Kartani o\'chirasizmi?'))return;A=A.filter(a=>a.id!==id);W=W.filter(w=>w.acc!==id);sv('a',A);sv('w',W);ra();rw();rh()}
 
 /* Kasholak */
+const IN=['Oylik','Avans','Mukofot',"Qo'shimcha daromad",'Boshqa'],OUT=['Oziq-ovqat','Transport','Kommunal',"Ko'ngilochar",'Salomatlik','Kiyim','Boshqa'];
+function fc(){$('wc').innerHTML=($('wt').value==='in'?IN:OUT).map(c=>`<option>${c}</option>`).join('')}
+$('wt').onchange=fc;fc();
 function wrow(w){const a=A.find(x=>x.id===(w.acc||'cash'));return `<div class="row"><div class="m"><b>${esc(w.c)}${w.n?' · '+esc(w.n):''}</b><span>${a?esc(a.bank):''} · ${fd(w.d)}</span></div><span class="${w.t==='in'?'in':'out'}">${w.t==='in'?'+':'−'}${fm(w.a)}</span>`}
 function rw(){$('wl').innerHTML=W.length?W.map(w=>wrow(w)+`<button class="x" onclick="dw(${w.id})">✕</button></div>`).join(''):'<div class="empty">Hozircha yozuv yo\'q</div>'}
 function dw(id){W=W.filter(x=>x.id!==id);sv('w',W);rw();ra();rh()}
-$('fw').onsubmit=e=>{e.preventDefault();W.unshift({id:Date.now(),t:$('wt').value,acc:$('wa2').value,a:+$('wa').value,c:$('wc').value,n:$('wn').value,d:new Date().toISOString()});sv('w',W);e.target.reset();rw();ra();rh();toast('Yozuv qo\'shildi ✔')};
+$('fw').onsubmit=e=>{e.preventDefault();W.unshift({id:Date.now(),t:$('wt').value,acc:$('wa2').value,a:+$('wa').value,c:$('wc').value,n:$('wn').value,d:new Date().toISOString()});sv('w',W);e.target.reset();fc();rw();ra();rh();toast('Yozuv qo\'shildi ✔')};
 
 /* Oylik */
 function nextPay(){const d=new Date(),x=new Date(d.getFullYear(),d.getMonth(),S.day);if(x<new Date(d.getFullYear(),d.getMonth(),d.getDate()))x.setMonth(x.getMonth()+1);return Math.round((x-new Date(d.getFullYear(),d.getMonth(),d.getDate()))/864e5)}
-$('se').onclick=()=>{const a=prompt('Oylik miqdori (so\'m):',S.amt||'');if(!a)return;const d=prompt('Oylik har oyning nechanchi kuni? (1-31)',S.day||5);S={amt:+a,day:Math.min(31,Math.max(1,+d||5))};sv('s',S);rh()};
-$('sg').onclick=()=>{if(!S.amt){$('se').click();return}const id=prompt('Qaysi kartaga tushdi? Raqam kiriting:\n'+A.map((a,i)=>(i+1)+'. '+a.bank+(a.l?' ••'+a.l:'')).join('\n'),'1');const a=A[(+id||1)-1];if(!a)return;W.unshift({id:Date.now(),t:'in',acc:a.id,a:S.amt,c:'Maosh',n:'Oylik',d:new Date().toISOString()});sv('w',W);rw();ra();rh();toast('Oylik qo\'shildi 🎉')};
+const isSal=w=>w.t==='in'&&(w.c==='Oylik'||w.c==='Maosh');
+$('se').onclick=()=>{const d=prompt('Oylik har oyning nechanchi kuni tushadi? (1-31)',S.day||5);if(!d)return;S={day:Math.min(31,Math.max(1,+d||5))};sv('s',S);rh()};
+$('sg').onclick=()=>{$('sk').innerHTML=A.map(a=>`<option value="${a.id}">${esc(a.bank)}${a.l?' ••'+esc(a.l):''}</option>`).join('');$('sdte').value=iso(new Date()).slice(0,10);const l=W.filter(isSal)[0];$('sm').placeholder=l?"Oxirgi oylik: "+fm(l.a):"Summa (so'm)";$('dl').showModal()};
+$('sx').onclick=()=>$('dl').close();
+$('fs').onsubmit=e=>{e.preventDefault();W.unshift({id:Date.now(),t:'in',acc:$('sk').value,a:+$('sm').value,c:$('sc').value,n:$('sn').value,d:new Date($('sdte').value+'T12:00').toISOString()});W.sort((a,b)=>b.d.localeCompare(a.d));sv('w',W);e.target.reset();$('dl').close();rw();ra();rh();toast('Daromad qo\'shildi 🎉')};
 
 /* Vazifalar */
 function adv(t){const d=new Date(t.d);if(t.p==='d')d.setDate(d.getDate()+1);if(t.p==='m')d.setMonth(d.getMonth()+1);if(t.p==='y')d.setFullYear(d.getFullYear()+1);return iso(d)}
@@ -196,7 +219,9 @@ function rh(){
  const cards=A.filter(a=>a.k==='card').reduce((s,a)=>s+bal(a),0),cash=A.filter(a=>a.k==='cash').reduce((s,a)=>s+bal(a),0);
  $('hb').textContent=fm(cards+cash);$('hc').textContent=fm(cards);$('hk').textContent=fm(cash);
  const end=new Date();end.setHours(23,59,59);$('ht').textContent=T.filter(t=>new Date(t.d)<=end).length;
- if(S.amt){$('sv').textContent=fm(S.amt);const n=nextPay();$('sd').textContent=n===0?'Bugun oylik kuni! 🎉':n+' kundan keyin ('+S.day+'-sana)'}
+ const sl=W.filter(isSal);
+ if(sl.length){const l=sl[0],r=sl.slice(0,6),av=Math.round(r.reduce((x,w)=>x+w.a,0)/r.length);$('sv').textContent=fm(l.a);$('sa').textContent="O'rtacha: "+fm(av)+" · "+sl.length+" marta"+(l.n?" · "+l.n:"")}
+ if(S.day){const n=nextPay();$('sd').textContent=n===0?'Bugun oylik kuni! 🎉':"Keyingi oylik: "+n+" kundan keyin ("+S.day+"-sana)"}else $('sd').textContent="📅 tugmasi bilan oylik kunini belgilang";
  const u=[...T].sort((a,b)=>a.d.localeCompare(b.d)).slice(0,4);
  $('up').innerHTML=u.length?u.map(t=>trow(t)+'</div>').join(''):'<div class="empty">Eslatma yo\'q</div>';
  const l=W.filter(w=>w.t==='out').slice(0,4);
