@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>JM Hamyon & Reja</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#6c5ce7">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -78,15 +77,19 @@ body {
 }
 .wrap { max-width: 920px; margin: 0 auto; padding: 18px 16px 120px; position: relative; }
 
-/* 1.5s SPLASH SCREEN ANIMATION */
+/* 1.5s SPLASH SCREEN ANIMATION WITH PURE CSS AUTO-HIDE FALLBACK */
 #splash {
   position: fixed; inset: 0; background: #060713;
   z-index: 1000; display: flex; flex-direction: column;
   align-items: center; justify-content: center;
-  transition: opacity .45s ease, visibility .45s ease;
+  transition: opacity .4s ease, visibility .4s ease;
   cursor: pointer;
+  animation: splashAutoHide .4s ease 1.5s forwards;
 }
-#splash.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+#splash.hide { opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; display: none !important; }
+@keyframes splashAutoHide {
+  to { opacity: 0; visibility: hidden; pointer-events: none; }
+}
 .splash-box { position: relative; width: 140px; height: 140px; display: grid; place-items: center; }
 .splash-halo {
   position: absolute; inset: -20px; border-radius: 50%;
@@ -105,11 +108,11 @@ body {
   background: linear-gradient(135deg, #fff, var(--pr2), var(--gold));
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   opacity: 0; transform: translateY(10px);
-  animation: splashFade .8s .3s forwards;
+  animation: splashFade .8s .25s forwards;
 }
 .splash-sub {
   font-size: 11px; color: var(--mut); letter-spacing: 2.5px; text-transform: uppercase;
-  margin-top: 6px; opacity: 0; animation: splashFade .8s .45s forwards;
+  margin-top: 6px; opacity: 0; animation: splashFade .8s .4s forwards;
 }
 @keyframes splashFade { to { opacity: 1; transform: translateY(0); } }
 
@@ -512,8 +515,8 @@ dialog h2 { margin-bottom: 14px; }
 </head>
 <body>
 
-<!-- 1.5s SPLASH SCREEN (Bosganda darhol yopiladi) -->
-<div id="splash" onclick="hideSplash()">
+<!-- 1.5s SPLASH SCREEN (Avtomatik hamda bosganda darhol yopiladi) -->
+<div id="splash" onclick="this.classList.add('hide')">
   <div class="splash-box">
     <div class="splash-halo"></div>
     <svg class="jm-splash-svg" viewBox="0 0 100 100" fill="none">
@@ -648,7 +651,6 @@ dialog h2 { margin-bottom: 14px; }
 
   <!-- 2. AMALLAR (TRANZAKSIYALAR VA KARTALAR) -->
   <section class="sec" id="s-wal">
-    <!-- Yangi Yozuv Qo'shish & Smart Paste -->
     <div class="card" id="newTxCard">
       <div class="sec-hd">
         <h2>➕ Yangi kirim / chiqim yozuvi</h2>
@@ -671,7 +673,6 @@ dialog h2 { margin-bottom: 14px; }
       </form>
     </div>
 
-    <!-- Kartalar Ro'yxati & Boshqaruvi -->
     <div class="card">
       <div class="sec-hd">
         <h2>💳 Mening kartalarim va hamyonim</h2>
@@ -684,7 +685,6 @@ dialog h2 { margin-bottom: 14px; }
       <div class="cards" id="cs"></div>
     </div>
 
-    <!-- Tranzaksiyalar Tarixi -->
     <div class="card">
       <div class="sec-hd">
         <div>
@@ -694,7 +694,6 @@ dialog h2 { margin-bottom: 14px; }
         <button type="button" class="btn s g" onclick="openModal('dTxFilter')">⚙️ Filtr</button>
       </div>
 
-      <!-- Davr tugmalari: Kun, Hafta, Oy, Yil, Hammasi -->
       <div class="tabs" id="txPeriodTabs">
         <button type="button" data-p="day" onclick="setTxPeriod('day',this)">Kun</button>
         <button type="button" data-p="week" onclick="setTxPeriod('week',this)">Hafta</button>
@@ -703,19 +702,16 @@ dialog h2 { margin-bottom: 14px; }
         <button type="button" data-p="all" onclick="setTxPeriod('all',this)">Hammasi</button>
       </div>
 
-      <!-- Oy navigatsiyasi -->
       <div class="cal-nav" id="txCalNav">
         <button type="button" onclick="changeTxMonth(-1)">‹</button>
         <b id="txMonthTitle" style="font-size:15px">Noyabr 2026</b>
         <button type="button" onclick="changeTxMonth(1)">›</button>
       </div>
 
-      <!-- Karta bo'yicha filtr -->
       <div style="margin-bottom:10px">
         <select id="txAccFilter" onchange="rw()"></select>
       </div>
 
-      <!-- Tranzaksiyalar 3 ta xulosa kartochkasi -->
       <div class="tx-stat-3">
         <div>Kirim<b class="in" id="txSumIn">0</b></div>
         <div>Chiqim<b class="out" id="txSumOut">0</b></div>
@@ -922,7 +918,6 @@ dialog h2 { margin-bottom: 14px; }
       <div id="dlg" style="display:none"></div>
     </div>
 
-    <!-- Oylik Byudjet Limiti -->
     <div class="card">
       <div class="sec-hd">
         <h2>🛡️ Oylik harajat limiti</h2>
@@ -1062,7 +1057,7 @@ dialog h2 { margin-bottom: 14px; }
     </div>
 
     <div style="text-align:center;padding:16px 0 8px;color:var(--mut);font-size:12px">
-      <div style="font-weight:800;color:var(--gold);font-size:13px;letter-spacing:1px">JM Digital · JM Hamyon v2.0</div>
+      <div style="font-weight:800;color:var(--gold);font-size:13px;letter-spacing:1px">JM Digital · JM Hamyon v2.5</div>
       <div>Created by JM · Shaxsiy moliya va reja</div>
     </div>
   </section>
@@ -1132,7 +1127,7 @@ dialog h2 { margin-bottom: 14px; }
   </form>
 </dialog>
 
-<!-- MODAL 3: TRANZAKSIYANI TAHRIRLASH (Xato yozilgan kirim/chiqimni o'zgartirish - #dEditTx) -->
+<!-- MODAL 3: TRANZAKSIYANI TAHRIRLASH (#dEditTx) -->
 <dialog id="dEditTx">
   <h2>✏️ Yozuvni tahrirlash</h2>
   <div class="seg" id="etSeg">
@@ -1297,50 +1292,413 @@ dialog h2 { margin-bottom: 14px; }
 <script>
 const $ = id => document.getElementById(id);
 
-// Xavfsiz Modal ochish va yopish funksiyalari
 function openModal(id) {
   const d = $(id);
   if (!d) return;
-  try {
-    if (!d.open) d.showModal();
-  } catch (e) {
-    d.setAttribute('open', '');
-  }
+  try { if (!d.open) d.showModal(); } catch (e) { d.setAttribute('open', ''); }
 }
 function closeModal(id) {
   const d = $(id);
   if (!d) return;
-  try {
-    d.close();
-  } catch (e) {
-    d.removeAttribute('open');
-  }
+  try { d.close(); } catch (e) { d.removeAttribute('open'); }
 }
 
-// 1.5s Splash Screen
 function hideSplash() {
   const sp = $('splash');
-  if (sp && !sp.classList.contains('hide')) {
-    sp.classList.add('hide');
-    setTimeout(() => { if (sp.parentNode) sp.remove(); }, 500);
-  }
+  if (sp) sp.classList.add('hide');
 }
-setTimeout(hideSplash, 1300);
+setTimeout(hideSplash, 1450);
 
-// Til va Mahalliylashtirish
+// Til va Mahalliylashtirish (100% UZ / RU / EN)
 var LG = (() => {
   try {
+    const q = new URLSearchParams(location.search).get('lang');
+    if (['uz', 'ru', 'en'].includes(q)) { localStorage.setItem('lg', q); return q; }
     const s = localStorage.getItem('lg');
-    if (s) return s;
-    return 'uz';
+    if (['uz', 'ru', 'en'].includes(s)) return s;
+    const c = (((window.Telegram && Telegram.WebApp && Telegram.WebApp.initDataUnsafe) || {}).user || {}).language_code || navigator.language || 'uz';
+    return /^ru/i.test(c) ? 'ru' : /^en/i.test(c) ? 'en' : 'uz';
   } catch (e) { return 'uz'; }
 })();
 function LC() { return { uz: 'uz-UZ', ru: 'ru-RU', en: 'en-US' }[LG] || 'uz-UZ'; }
 
-let CUR = localStorage.getItem('cur') || "so'm";
-let hideBal = localStorage.getItem('hb_hide') === '1';
+const DICT = {
+  "Shaxsiy moliya va reja": ["Личные финансы и план", "Personal finance & plan"],
+  "Umumiy balans": ["Общий баланс", "Total balance"],
+  "Kirim:": ["Доход:", "Income:"],
+  "Chiqim:": ["Расход:", "Expense:"],
+  "Kirim": ["Доход", "Income"],
+  "Chiqim": ["Расход", "Expense"],
+  "O'tkazma": ["Перевод", "Transfer"],
+  "⇄ O'tkazma": ["⇄ Перевод", "⇄ Transfer"],
+  "💳 Kartalarda": ["💳 На картах", "💳 On cards"],
+  "💵 Cho'ntakda ✏️": ["💵 В кармане ✏️", "💵 In pocket ✏️"],
+  "✅ Bugungi reja": ["✅ План на сегодня", "✅ Today's plan"],
+  "⚡ Tezkor harajatlar (1-bosishda)": ["⚡ Быстрые расходы (в 1 клик)", "⚡ Quick expenses (1-tap)"],
+  "+ Shablon": ["+ Шаблон", "+ Template"],
+  "💳 Hisoblarim": ["💳 Мои счета", "💳 My accounts"],
+  "(pulini o'zgartirish uchun ustiga bosing)": ["(нажмите на карту, чтобы изменить баланс)", "(tap a card to edit balance)"],
+  "+ Karta": ["+ Карта", "+ Card"],
+  "+ Karta qo'shish": ["+ Добавить карту", "+ Add card"],
+  "💰 Oxirgi oylik": ["💰 Последняя зарплата", "💰 Last salary"],
+  "Hali yo'q": ["Пока нет", "None yet"],
+  "Oylik keldi ✓": ["Зарплата пришла ✓", "Salary received ✓"],
+  "Bugun oylik kuni! 🎉": ["Сегодня день зарплаты! 🎉", "Payday today! 🎉"],
+  "📅 tugmasi bilan oylik kunini belgilang": ["Нажмите 📅, чтобы указать день зарплаты", "Tap 📅 to set your payday"],
+  "⏰ Kunlik rejalar": ["⏰ Ежедневные планы", "⏰ Daily plans"],
+  "+ Qo'shish": ["+ Добавить", "+ Add"],
+  "Qo'shish": ["Добавить", "Add"],
+  "📊 Kategoriya bo'yicha chiqimlar": ["📊 Расходы по категориям", "📊 Expenses by category"],
+  "📅 Shu oy": ["📅 Этот месяц", "📅 This month"],
+  "📅 Bugun": ["📅 Сегодня", "📅 Today"],
+  "📅 Shu hafta": ["📅 Эта неделя", "📅 This week"],
+  "📅 Barcha vaqt": ["📅 Всё время", "📅 All time"],
+  "💸 Oxirgi amallar": ["💸 Последние операции", "💸 Recent transactions"],
+  "(✏️ bosib tahrirlang)": ["(нажмите ✏️ для изменения)", "(tap ✏️ to edit)"],
+  "+ Yozuv": ["+ Запись", "+ Entry"],
+  "➕ Yangi kirim / chiqim yozuvi": ["➕ Новая запись дохода / расхода", "➕ New income / expense entry"],
+  "📋 SMS / Chekdan olish": ["📋 Вставить из SMS / Чека", "📋 Paste from SMS / Receipt"],
+  "➖ Chiqim": ["➖ Расход", "➖ Expense"],
+  "➕ Kirim": ["➕ Доход", "➕ Income"],
+  "Summa (so'm)": ["Сумма (сум)", "Amount (UZS)"],
+  "Izoh (yozing yoki 🎤 «Taksiga 25 ming»)": ["Заметка (напишите или 🎤 «Такси 25 тысяч»)", "Note (type or 🎤 'Taxi 25 thousand')"],
+  "💳 Mening kartalarim va hamyonim": ["💳 Мои карты и кошелёк", "💳 My cards & wallet"],
+  "💡 Istalgan karta qoldig'ini o'zgartirish uchun ustiga yoki": ["💡 Чтобы изменить баланс карты, нажмите на неё или на кнопку", "💡 To edit any card balance, tap the card or"],
+  "«✏️ Tahrirlash»": ["«✏️ Изменить»", "'✏️ Edit'"],
+  "tugmasiga bosing.": ["на карте.", "button."],
+  "✏️ Tahrirlash": ["✏️ Изменить", "✏️ Edit"],
+  "NAQD HAMYON": ["НАЛИЧНЫЕ", "CASH WALLET"],
+  "Naqd pul": ["Наличные", "Cash"],
+  "Naqd": ["Наличные", "Cash"],
+  "🧾 Tranzaksiyalar tarixi": ["🧾 История транзакций", "🧾 Transaction history"],
+  "Xato yozilgan summani": ["Ошибочную сумму можно изменить кнопкой", "Edit any entry using the"],
+  "tugmasi orqali o'zgartiring": ["рядом с записью", "button"],
+  "⚙️ Filtr": ["⚙️ Фильтр", "⚙️ Filter"],
+  "Kun": ["День", "Day"],
+  "Hafta": ["Неделя", "Week"],
+  "Oy": ["Месяц", "Month"],
+  "Yil": ["Год", "Year"],
+  "Hammasi": ["Все", "All"],
+  "💳 Barcha hisoblar": ["💳 Все счета", "💳 All accounts"],
+  "Jami saldo": ["Общее сальдо", "Net balance"],
+  "🔍 Izoh, summa yoki kategoriya qidirish...": ["🔍 Поиск по заметке, сумме или категории...", "🔍 Search note, amount or category..."],
+  "Bu davr uchun yozuv topilmadi": ["Записей за этот период не найдено", "No entries found for this period"],
+  "🎛️ Foydali Vositalar": ["🎛️ Полезные инструменты", "🎛️ Useful Tools"],
+  "Vazifalar, rangli qaydlar, taymer, sekundomer, kalkulyator va konvertor": ["Задачи, цветные заметки, таймер, секундомер, калькулятор и конвертер", "Tasks, colored notes, timer, stopwatch, calculator & converter"],
+  "Vazifalar": ["Задачи", "Tasks"],
+  "Qaydlar": ["Заметки", "Notes"],
+  "Taymer": ["Таймер", "Timer"],
+  "Sekundomer": ["Секундомер", "Stopwatch"],
+  "Kalkulyator": ["Калькулятор", "Calculator"],
+  "Konvertor": ["Конвертер", "Converter"],
+  "Yangi vazifa": ["Новая задача", "New task"],
+  "«ertaga soat 18 da dars»": ["«завтра в 18 урок»", "\"tomorrow at 18 lesson\""],
+  "Bir marta": ["Один раз", "Once"],
+  "Kunlik": ["Ежедневно", "Daily"],
+  "Oy bo'yicha": ["Ежемесячно", "Monthly"],
+  "Yillik": ["Ежегодно", "Yearly"],
+  "Vazifalar yo'q": ["Задач пока нет", "No tasks yet"],
+  "Yaqin kunlarga reja yo'q": ["Планов на ближайшие дни нет", "No upcoming plans"],
+  "Bu davrda chiqimlar yo'q": ["В этом периоде расходов нет", "No expenses in this period"],
+  "Hozircha amallar yo'q": ["Операций пока нет", "No transactions yet"],
+  "📝 Yangi qayd": ["📝 Новая заметка", "📝 New note"],
+  "✏️ Qaydni tahrirlash": ["✏️ Редактировать заметку", "✏️ Edit note"],
+  "Qayd sarlavhasi": ["Заголовок заметки", "Note title"],
+  "Qayd matni...": ["Текст заметки...", "Note text..."],
+  "Saqlash": ["Сохранить", "Save"],
+  "💾 Saqlash": ["💾 Сохранить", "💾 Save"],
+  "+ Saqlash": ["+ Сохранить", "+ Save"],
+  "Hozircha qaydlar yo'q": ["Заметок пока нет", "No notes yet"],
+  "Ish": ["Работа", "Work"],
+  "Dam olish": ["Отдых", "Break"],
+  "Boshlash": ["Старт", "Start"],
+  "Davom etish": ["Продолжить", "Resume"],
+  "To'xtatish": ["Пауза", "Pause"],
+  "Qayta": ["Сброс", "Reset"],
+  "⏱️ Sekundomer": ["⏱️ Секундомер", "⏱️ Stopwatch"],
+  "🏁 Aylana": ["🏁 Круг", "🏁 Lap"],
+  "Aylana": ["Круг", "Lap"],
+  "Nolga": ["Сброс", "Reset"],
+  "🧮 Kalkulyator": ["🧮 Калькулятор", "🧮 Calculator"],
+  "💸 Harajatga o'tkazish": ["💸 В расход", "💸 Send to expense"],
+  "💱 Valyuta konvertori": ["💱 Конвертер валют", "💱 Currency converter"],
+  "1 USD ($) kursi (so'm)": ["Курс 1 USD ($) в сумах", "1 USD ($) rate in UZS"],
+  "1 KRW (₩) kursi (so'm)": ["Курс 1 KRW (₩) в сумах", "1 KRW (₩) rate in UZS"],
+  "Summani kiriting": ["Введите сумму", "Enter amount"],
+  "🤝 Qarzlar va Haqdorlik": ["🤝 Долги и Займы", "🤝 Debts & Loans"],
+  "+ Qarz qo'shish": ["+ Добавить долг", "+ Add debt"],
+  "📥 Men qarzdorman": ["📥 Я должен", "📥 I owe"],
+  "📤 Men haqdorman": ["📤 Мне должны", "📤 Owed to me"],
+  "Men qarzdorman": ["Я должен", "I owe"],
+  "Men haqdorman": ["Мне должны", "Owed to me"],
+  "Qarzlar yo'q": ["Долгов нет", "No debts"],
+  "To'langan": ["Погашен", "Settled"],
+  "To'landi": ["Оплачено", "Paid"],
+  "🛡️ Oylik harajat limiti": ["🛡️ Месячный лимит расходов", "🛡️ Monthly expense limit"],
+  "✏️ Limit o'rnatish": ["✏️ Задать лимит", "✏️ Set limit"],
+  "Oylik harajat limiti belgilanmagan. Yuqoridagi «✏️ Limit o'rnatish» tugmasini bosing.": ["Месячный лимит расходов не задан. Нажмите «✏️ Задать лимит» выше.", "Monthly expense limit not set. Tap '✏️ Set limit' above."],
+  "🥧 Shu oy harajatlari": ["🥧 Расходы за этот месяц", "🥧 This month's expenses"],
+  "Shu oy harajat yo'q": ["В этом месяце расходов нет", "No expenses this month"],
+  "📈 Oxirgi 6 oy dinamikasi": ["📈 Динамика за 6 месяцев", "📈 Last 6 months trend"],
+  "🎯 Jamg'arma maqsadlari": ["🎯 Цели накоплений", "🎯 Savings goals"],
+  "Nima uchun? (masalan: Telefon)": ["На что? (например: Телефон)", "For what? (e.g. Phone)"],
+  "Maqsad summasi": ["Сумма цели", "Target amount"],
+  "Maqsad qo'shish": ["Добавить цель", "Add goal"],
+  "+ Pul qo'shish": ["+ Пополнить", "+ Add funds"],
+  "Jamg'arma maqsadlari yo'q": ["Целей накоплений пока нет", "No savings goals yet"],
+  "🔁 Har oylik takroriy to'lovlar": ["🔁 Ежемесячные регулярные платежи", "🔁 Monthly recurring payments"],
+  "Nomi (Internet, Kredit)": ["Название (Интернет, Кредит)", "Name (Internet, Loan)"],
+  "Summa": ["Сумма", "Amount"],
+  "Oyning nechanchi kuni (1-31)": ["День месяца (1-31)", "Day of month (1-31)"],
+  "Takroriy to'lovlar yo'q": ["Регулярных платежей нет", "No recurring payments"],
+  "⚙️ Sozlamalar": ["⚙️ Настройки", "⚙️ Settings"],
+  "Valyuta, mavzu, kategoriyalar, xavfsizlik va zaxira": ["Валюта, тема, категории, безопасность и резервная копия", "Currency, theme, categories, security & backup"],
+  "💱 Asosiy valyuta": ["💱 Основная валюта", "💱 Primary currency"],
+  "Barcha asosiy summalar shu valyutada ko'rsatiladi": ["Все основные суммы отображаются в этой валюте", "All main amounts are displayed in this currency"],
+  "🎨 Mavzu va Ko'rinish": ["🎨 Тема и Внешний вид", "🎨 Theme & Appearance"],
+  "☀️ Yorug'": ["☀️ Светлая", "☀️ Light"],
+  "🌙 Tungi": ["🌙 Тёмная", "🌙 Dark"],
+  "🌊 Okean": ["🌊 Океан", "🌊 Ocean"],
+  "🖤 Tim qora": ["🖤 Чёрная (OLED)", "🖤 Pure Black"],
+  "Shrift o'lchami": ["Размер шрифта", "Font size"],
+  "Kichik": ["Мелкий", "Small"],
+  "O'rta": ["Средний", "Medium"],
+  "Katta": ["Крупный", "Large"],
+  "Juda katta": ["Очень крупный", "Extra large"],
+  "JM Logotip uslubi": ["Стиль логотипа JM", "JM Logo style"],
+  "Tillarang Monogramma": ["Золотая монограмма", "Gold Monogram"],
+  "IT Geometrik": ["IT Геометрия", "IT Geometric"],
+  "Minimalistik Neon": ["Минимализм Неон", "Minimalist Neon"],
+  "🗂️ Kategoriyalar boshqaruvi": ["🗂️ Управление категориями", "🗂️ Category management"],
+  "🔒 Xavfsizlik": ["🔒 Безопасность", "🔒 Security"],
+  "PIN-kod bilan himoyalash": ["Защита PIN-кодом", "PIN code protection"],
+  "Ilova ochilganda 4 xonali kod so'raladi": ["Запрашивать 4-значный код при входе", "Ask for 4-digit code on startup"],
+  "🔓 PIN-kodni o'chirish": ["🔓 Отключить PIN-код", "🔓 Remove PIN code"],
+  "🔒 PIN-kod o'rnatish": ["🔒 Установить PIN-код", "🔒 Set PIN code"],
+  "🛡️ Zaxira nusxa": ["🛡️ Резервная копия", "🛡️ Backup & Restore"],
+  "📊 Excel (.csv) yuklab olish": ["📊 Скачать Excel (.csv)", "📊 Download Excel (.csv)"],
+  "⬇️ JSON zaxira yuklab olish": ["⬇️ Скачать резервную копию JSON", "⬇️ Download JSON backup"],
+  "⬆️ Zaxiradan tiklash": ["⬆️ Восстановить из копии", "⬆️ Restore from backup"],
+  "Zaxira matni shu yerda chiqadi...": ["Текст резервной копии появится здесь...", "Backup JSON text will appear here..."],
+  "⚠️ Xavfli hudud": ["⚠️ Опасная зона", "⚠️ Danger zone"],
+  "Barcha yozuvlar, kartalar va ma'lumotlarni to'liq tozalab, ilovani boshlang'ich holatga qaytarish.": ["Полное удаление всех записей, карт и возврат приложения к начальному состоянию.", "Permanently clear all entries, cards and reset the app to initial state."],
+  "🗑 Barcha ma'lumotlarni o'chirish": ["🗑 Удалить все данные", "🗑 Delete all data"],
+  "🔒 PIN-kodni kiriting": ["🔒 Введите PIN-код", "🔒 Enter PIN code"],
+  "Ochish": ["Открыть", "Unlock"],
+  "Asosiy": ["Главная", "Home"],
+  "Amallar": ["Операции", "History"],
+  "Qarz & Hisob": ["Долги и Отчёт", "Debts & Report"],
+  "Vositalar": ["Инструменты", "Tools"],
+  "Sozlamalar": ["Настройки", "Settings"],
+  "✏️ Hisob va qoldiqni tahrirlash": ["✏️ Редактировать счёт и баланс", "✏️ Edit account & balance"],
+  "Karta yoki hamyondagi haqiqiy qoldiqni istalgan summaga o'zgartirishingiz mumkin.": ["Вы можете изменить текущий баланс карты или кошелька на любую сумму.", "You can adjust the actual balance of the card or wallet to any amount."],
+  "Bank yoki hisob nomi": ["Название банка или счёта", "Bank or account name"],
+  "Bank nomi (Humo, Uzcard...)": ["Название банка (Humo, Uzcard...)", "Bank name (Humo, Uzcard...)"],
+  "Karta oxirgi 4 raqami": ["Последние 4 цифры карты", "Last 4 digits of card"],
+  "Oxirgi 4 raqam (masalan: 1234)": ["Последние 4 цифры (например: 1234)", "Last 4 digits (e.g. 1234)"],
+  "Hozirgi haqiqiy qoldiq (so'm)": ["Текущий реальный баланс (сум)", "Current actual balance (UZS)"],
+  "Hozirgi qoldiq": ["Текущий баланс", "Current balance"],
+  "Bekor": ["Отмена", "Cancel"],
+  "🗑 Kartani o'chirish": ["🗑 Удалить карту", "🗑 Delete card"],
+  "💳 Yangi karta qo'shish": ["💳 Добавить новую карту", "💳 Add new card"],
+  "Bank yoki karta turi": ["Банк или тип карты", "Bank or card type"],
+  "Masalan: Humo, Uzcard, Kapitalbank...": ["Например: Humo, Uzcard, Kapitalbank...", "E.g.: Humo, Uzcard, Kapitalbank..."],
+  "Oxirgi 4 raqami (ixtiyoriy)": ["Последние 4 цифры (необязательно)", "Last 4 digits (optional)"],
+  "Boshlang'ich qoldiq (so'm)": ["Начальный баланс (сум)", "Initial balance (UZS)"],
+  "✏️ Yozuvni tahrirlash": ["✏️ Редактировать запись", "✏️ Edit transaction"],
+  "Hisob / Karta": ["Счёт / Карта", "Account / Card"],
+  "Kategoriya": ["Категория", "Category"],
+  "Izoh": ["Заметка", "Note"],
+  "Izoh...": ["Заметка...", "Note..."],
+  "🗑 Yozuvni o'chirish": ["🗑 Удалить запись", "🗑 Delete entry"],
+  "🤝 Qarz yozuvi": ["🤝 Запись долга", "🤝 Debt entry"],
+  "🤝 Yangi qarz yozuvi": ["🤝 Новая запись долга", "🤝 New debt entry"],
+  "✏️ Qarzni tahrirlash": ["✏️ Редактировать долг", "✏️ Edit debt"],
+  "Bu summa hisob qoldig'iga ta'sir qilmaydi — faqat shu kishi bilan oldi-berdini belgilaydi.": ["Эта сумма не влияет на баланс счетов — она фиксирует только расчёты с этим человеком.", "This amount does not affect account balances — it only tracks debt with this person."],
+  "Ism": ["Имя", "Name"],
+  "Kishi ismi": ["Имя человека", "Person's name"],
+  "Valyuta": ["Валюта", "Currency"],
+  "Qaytarish sanasi (ixtiyoriy)": ["Дата возврата (необязательно)", "Due date (optional)"],
+  "📋 SMS yoki Chek matnini tashlang": ["📋 Вставьте текст SMS или чека", "📋 Paste SMS or receipt text"],
+  "Payme, Click yoki bankdan kelgan SMS xabarni shu yerga qo'ying — summa, karta va kategoriya o'zi aniqlanadi.": ["Вставьте SMS от Payme, Click или банка — сумма, карта и категория определятся автоматически.", "Paste an SMS from Payme, Click or bank — amount, card and category will be detected automatically."],
+  "Masalan: To'lov: 45 000 so'm, Karta: Humo ••1234, Korzinka...": ["Например: Оплата: 45 000 сум, Карта: Humo ••1234, Korzinka...", "E.g.: Payment: 45 000 UZS, Card: Humo ••1234, Korzinka..."],
+  "Aniqlash va to'ldirish": ["Распознать и заполнить", "Detect & Fill"],
+  "Tur bo'yicha filtr": ["Фильтр по типу", "Filter by type"],
+  "Belgilangan turlar ko'rsatiladi.": ["Отображаются выбранные типы операций.", "Selected transaction types will be shown."],
+  "Tozalash": ["Сбросить", "Reset"],
+  "Qo'llash": ["Применить", "Apply"],
+  "⏰ Taymer sozlamalari": ["⏰ Настройки таймера", "⏰ Timer settings"],
+  "Ish vaqti (daqiqa)": ["Время работы (минуты)", "Work duration (minutes)"],
+  "Dam olish vaqti (daqiqa)": ["Время отдыха (минуты)", "Break duration (minutes)"],
+  "⇄ Hisoblararo o'tkazma": ["⇄ Перевод между счетами", "⇄ Account transfer"],
+  "Qayerdan": ["Откуда", "From account"],
+  "Qayerga": ["Куда", "To account"],
+  "O'tkazish": ["Перевести", "Transfer"],
+  "💰 Daromad / Oylik qo'shish": ["💰 Добавить доход / зарплату", "💰 Add income / salary"],
+  "Qaysi kartaga / hamyonga": ["На какую карту / кошелёк", "To which card / wallet"],
+  "Sana": ["Дата", "Date"],
+  "Izoh (masalan: Noyabr oyligi)": ["Заметка (например: Зарплата за ноябрь)", "Note (e.g. November salary)"],
+  "⚡ Tezkor harajat shabloni": ["⚡ Шаблон быстрого расхода", "⚡ Quick expense template"],
+  "Belgi (Emoji)": ["Значок (Emoji)", "Icon (Emoji)"],
+  "Nomi": ["Название", "Name"],
+  "Masalan: Taksi": ["Например: Такси", "E.g.: Taxi"],
+  "Tasdiqlash": ["Подтвердить", "Confirm"],
+  "Oziq-ovqat": ["Продукты", "Food"],
+  "Transport": ["Транспорт", "Transport"],
+  "Kommunal": ["Коммуналка", "Utilities"],
+  "Kiyim": ["Одежда", "Clothes"],
+  "Salomatlik": ["Здоровье", "Health"],
+  "Ta'lim": ["Образование", "Education"],
+  "Ko'ngilochar": ["Развлечения", "Entertainment"],
+  "Boshqa": ["Другое", "Other"],
+  "Oylik": ["Зарплата", "Salary"],
+  "Maosh": ["Зарплата", "Salary"],
+  "Avans": ["Аванс", "Advance"],
+  "Mukofot": ["Премия", "Bonus"],
+  "Qo'shimcha daromad": ["Доп. доход", "Extra income"],
+  "Yo'lkira": ["Проезд", "Transit"],
+  "Non": ["Хлеб", "Bread"],
+  "Qahva/Tushlik": ["Кофе/Обед", "Coffee/Lunch"],
+  "Bozorlik": ["Покупки", "Groceries"],
+  "Maxfiy rejim yoqildi 🙈": ["Скрытый режим включён 🙈", "Privacy mode enabled 🙈"],
+  "Mablag'lar ko'rsatildi 👁": ["Суммы отображены 👁", "Amounts visible 👁"],
+  "Valyuta o'zgardi:": ["Валюта изменена:", "Currency changed:"],
+  "JM Logotip uslubi yangilandi ✨": ["Стиль логотипа JM обновлён ✨", "JM Logo style updated ✨"],
+  "Tezkor tugma qo'shildi ⚡": ["Быстрая кнопка добавлена ⚡", "Quick button added ⚡"],
+  "Karta qo'shildi 💳": ["Карта добавлена 💳", "Card added 💳"],
+  "Karta qoldig'i yangilandi ✔": ["Баланс карты обновлён ✔", "Card balance updated ✔"],
+  "Bu kartani va uning amallarini o'chirasizmi?": ["Удалить эту карту и её операции?", "Delete this card and its transactions?"],
+  "Karta o'chirildi": ["Карта удалена", "Card deleted"],
+  "O'tkazma uchun avval kamida 1 ta karta qo'shing": ["Для перевода сначала добавьте хотя бы 1 карту", "Add at least 1 card first to make a transfer"],
+  "Bir xil hisob tanlangan!": ["Выбран один и тот же счёт!", "Same account selected!"],
+  "O'tkazma bajarildi ⇄": ["Перевод выполнен ⇄", "Transfer completed ⇄"],
+  "Summani to'g'ri kiriting": ["Введите корректную сумму", "Enter a valid amount"],
+  "Yozuv saqlandi ✔": ["Запись сохранена ✔", "Entry saved ✔"],
+  "Yozuv o'zgartirildi ✔": ["Запись изменена ✔", "Entry updated ✔"],
+  "Yozuv o'chirildi": ["Запись удалена", "Entry deleted"],
+  "Matn kiritilmadi": ["Текст не введён", "No text entered"],
+  "📋 Matndan aniqlandi! «Qo'shish»ni bosing": ["📋 Распознано из текста! Нажмите «Добавить»", "📋 Detected from text! Tap 'Add'"],
+  "Bu brauzerda ovoz tanish yo'q": ["В этом браузере нет голосового ввода", "Speech recognition not supported in this browser"],
+  "🎤 Ayting: «Taksiga 25 ming ketdi»": ["🎤 Скажите: «Такси 25 тысяч»", "🎤 Say: 'Taxi 25 thousand'"],
+  "🎤 Tushunildi:": ["🎤 Распознано:", "🎤 Recognized:"],
+  "🎤 Gapiring...": ["🎤 Говорите...", "🎤 Speak..."],
+  "Oylik har oyning nechanchi kuni tushadi? (1-31)": ["В какой день месяца приходит зарплата? (1-31)", "On what day of the month is payday? (1-31)"],
+  "Oylik kuni belgilandi 📅": ["День зарплаты сохранён 📅", "Payday saved 📅"],
+  "Daromad qo'shildi 🎉": ["Доход добавлен 🎉", "Income added 🎉"],
+  "Vazifa bajarildi! 🎉": ["Задача выполнена! 🎉", "Task completed! 🎉"],
+  "Keyingi muddatga o'tdi ✔": ["Перенесено на следующий срок ✔", "Moved to next occurrence ✔"],
+  "Vazifa qo'shildi ✔": ["Задача добавлена ✔", "Task added ✔"],
+  "Qayd saqlandi 📝": ["Заметка сохранена 📝", "Note saved 📝"],
+  "Taymer sozlandi ✔": ["Таймер настроен ✔", "Timer configured ✔"],
+  "Avval summani hisoblang": ["Сначала вычислите сумму", "Calculate an amount first"],
+  "Summa xato": ["Ошибка в сумме", "Invalid amount"],
+  "Qarz yozuvi saqlandi ✔": ["Запись долга сохранена ✔", "Debt entry saved ✔"],
+  "Shu oy uchun maksimal harajat limitini kiriting (so'm):": ["Введите максимальный лимит расходов на этот месяц (сум):", "Enter maximum expense limit for this month (UZS):"],
+  "Oylik limit o'rnatildi 🛡️": ["Месячный лимит установлен 🛡️", "Monthly limit set 🛡️"],
+  "Sarflandi:": ["Потрачено:", "Spent:"],
+  "Limit:": ["Лимит:", "Limit:"],
+  "Maqsad qo'shildi 🎯": ["Цель добавлена 🎯", "Goal added 🎯"],
+  "Qancha pul qo'shasiz?": ["Какую сумму добавить?", "How much to add?"],
+  "Maqsadga yetdingiz! 🎉": ["Вы достигли цели! 🎉", "Goal reached! 🎉"],
+  "Takroriy to'lov qo'shildi 🔁": ["Регулярный платёж добавлен 🔁", "Recurring payment added 🔁"],
+  "Kamida 1 ta kategoriya qolishi kerak": ["Должна остаться хотя бы 1 категория", "At least 1 category must remain"],
+  "Yangi kategoriya nomini kiriting:": ["Введите название новой категории:", "Enter new category name:"],
+  "Kategoriya qo'shildi ✔": ["Категория добавлена ✔", "Category added ✔"],
+  "PIN noto'g'ri ❌": ["Неверный PIN ❌", "Wrong PIN ❌"],
+  "PIN-kodni o'chirasizmi?": ["Отключить PIN-код?", "Remove PIN code?"],
+  "PIN o'chirildi": ["PIN отключён", "PIN removed"],
+  "4 xonali yangi PIN kiriting:": ["Введите новый 4-значный PIN:", "Enter new 4-digit PIN:"],
+  "Aynan 4 ta raqam kiriting": ["Введите ровно 4 цифры", "Enter exactly 4 digits"],
+  "PIN o'rnatildi 🔒": ["PIN установлен 🔒", "PIN set 🔒"],
+  "📊 Excel (.csv) yuklandi ✔": ["📊 Excel (.csv) скачан ✔", "📊 Excel (.csv) downloaded ✔"],
+  "⬇️ Zaxira nusxa olindi ✔": ["⬇️ Резервная копия создана ✔", "⬇️ Backup downloaded ✔"],
+  "Fayl o'qildi. «Zaxiradan tiklash»ni bosing": ["Файл прочитан. Нажмите «Восстановить из копии»", "File read. Tap 'Restore from backup'"],
+  "Zaxira matni noto'g'ri ❌": ["Неверный формат резервной копии ❌", "Invalid backup text ❌"],
+  "Barcha ma'lumotlar zaxiradagilar bilan almashtiriladi. Tasdiqlaysizmi?": ["Все текущие данные будут заменены данными из копии. Подтверждаете?", "All current data will be replaced with backup data. Confirm?"],
+  "DIQQAT! Barcha kartalar, yozuvlar va qarzlar butunlay o'chiriladi. Davom etamizmi?": ["ВНИМАНИЕ! Все карты, записи и долги будут полностью удалены. Продолжить?", "WARNING! All cards, entries and debts will be permanently deleted. Continue?"]
+};
 
-// Maxfiy rejim
+const DKeys = Object.keys(DICT).sort((a, b) => b.length - a.length);
+
+function tx(s) {
+  if (!s || typeof s !== 'string') return s;
+  if (LG === 'uz') return s;
+  const idx = LG === 'ru' ? 0 : 1;
+  const trimmed = s.trim();
+  if (DICT[trimmed]) return s.replace(trimmed, DICT[trimmed][idx]);
+  let out = s;
+  for (let i = 0; i < DKeys.length; i++) {
+    const k = DKeys[i];
+    if (out.includes(k)) out = out.split(k).join(DICT[k][idx]);
+  }
+  if (LG === 'ru') {
+    out = out
+      .replace(/O'rtacha:/g, 'В среднем:')
+      .replace(/Keyingi oylik:/g, 'Следующая зарплата:')
+      .replace(/kundan keyin/g, 'дн.')
+      .replace(/-sana\)/g, '-е число)')
+      .replace(/Har oyning (\d+)-sanasi/g, 'Каждое $1-е число месяца')
+      .replace(/Muddati:/g, 'Срок:')
+      .replace(/marta/g, 'раз')
+      .replace(/Limitdan yana (.+) qoldi/g, 'До лимита осталось $1')
+      .replace(/⚠️ Limitdan (.+) oshib ketdi!/g, '⚠️ Лимит превышен на $1!')
+      .replace(/O'tkazma/g, 'Перевод')
+      .replace(/yozildi/g, 'записано');
+  } else if (LG === 'en') {
+    out = out
+      .replace(/O'rtacha:/g, 'Average:')
+      .replace(/Keyingi oylik:/g, 'Next payday:')
+      .replace(/kundan keyin/g, 'days left')
+      .replace(/-sana\)/g, 'th)')
+      .replace(/Har oyning (\d+)-sanasi/g, 'Every month on day $1')
+      .replace(/Muddati:/g, 'Due:')
+      .replace(/marta/g, 'times')
+      .replace(/Limitdan yana (.+) qoldi/g, '$1 remaining in limit')
+      .replace(/⚠️ Limitdan (.+) oshib ketdi!/g, '⚠️ Exceeded limit by $1!')
+      .replace(/O'tkazma/g, 'Transfer')
+      .replace(/yozildi/g, 'logged');
+  }
+  return out;
+}
+
+function translateNode(n) {
+  const p = n.parentNode && n.parentNode.nodeName;
+  if (p === 'SCRIPT' || p === 'STYLE' || p === 'TEXTAREA') return;
+  if (n.__o === undefined) n.__o = n.data;
+  const v = tx(n.__o);
+  if (n.data !== v) n.data = v;
+}
+
+function ta(root) {
+  if (!root) return;
+  if (root.nodeType === 3) { translateNode(root); return; }
+  if (root.nodeType !== 1) return;
+  const walker = document.createTreeWalker(root, 4);
+  let n;
+  while ((n = walker.nextNode())) translateNode(n);
+
+  const phEls = (root.matches && root.matches('[placeholder]') ? [root] : []).concat([...root.querySelectorAll('[placeholder]')]);
+  phEls.forEach(e => {
+    if (e.__po === undefined) e.__po = e.placeholder;
+    const v = tx(e.__po);
+    if (e.placeholder !== v) e.placeholder = v;
+  });
+
+  const tlEls = (root.matches && root.matches('[title]') ? [root] : []).concat([...root.querySelectorAll('[title]')]);
+  tlEls.forEach(e => {
+    if (e.__ptl === undefined) e.__ptl = e.title;
+    const v = tx(e.__ptl);
+    if (e.title !== v) e.title = v;
+  });
+}
+
+let CUR = "so'm";
+let hideBal = false;
+try {
+  CUR = localStorage.getItem('cur') || "so'm";
+  hideBal = localStorage.getItem('hb_hide') === '1';
+} catch (e) {}
+
 function updatePrivacyUI() {
   if ($('privacyBtn')) $('privacyBtn').textContent = hideBal ? '🙈' : '👁';
   if ($('eyeBtn')) $('eyeBtn').textContent = hideBal ? '🙈' : '👁';
@@ -1355,7 +1713,9 @@ function togglePrivacy() {
 
 const fm = (n, customCur) => {
   if (hideBal) return '••••••';
-  const u = customCur || CUR;
+  let u = customCur || CUR;
+  if (u === "so'm" && LG === 'ru') u = 'сум';
+  if (u === "so'm" && LG === 'en') u = 'UZS';
   return Number(n || 0).toLocaleString('ru-RU') + ' ' + u;
 };
 const fd = s => new Date(s).toLocaleString(LC(), { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
@@ -1363,7 +1723,7 @@ const esc = s => String(s || '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '
 function toast(m) {
   const t = $('toast');
   if (!t) return;
-  t.textContent = m;
+  t.textContent = tx(m);
   t.classList.add('s');
   clearTimeout(window.__tTimer);
   window.__tTimer = setTimeout(() => t.classList.remove('s'), 3200);
@@ -1375,14 +1735,12 @@ function iso(d) {
 }
 if ($('td')) $('td').value = iso(new Date());
 
-// Ma'lumotlar bazasi
 function ld(k, d) {
   try {
     const v = JSON.parse(localStorage.getItem(k));
     return v !== null && v !== undefined ? v : d;
   } catch (e) { return d; }
 }
-let cT;
 function sv(k, v) {
   try {
     localStorage.setItem(k, JSON.stringify(v));
@@ -1410,7 +1768,6 @@ if (!A.find(a => a.k === 'cash')) {
   sv('a', A);
 }
 
-// Kategoriyalar
 let IN = ld('cat_in', ['Oylik', 'Avans', 'Mukofot', "Qo'shimcha daromad", 'Boshqa']);
 let OUT = ld('cat_out', ['Oziq-ovqat', 'Transport', 'Kommunal', 'Kiyim', 'Salomatlik', "Ta'lim", "Ko'ngilochar", 'Boshqa']);
 const EM = {
@@ -1419,7 +1776,6 @@ const EM = {
   'Salomatlik': '💊', 'Kiyim': '👕', "Ta'lim": '🎓', 'Boshqa': '📦'
 };
 
-// Bo'limlar navigatsiyasi
 function goSec(s) {
   document.querySelectorAll('nav button, .sec').forEach(e => e.classList.remove('on'));
   const nb = document.querySelector(`nav button[data-s="${s}"]`);
@@ -1430,6 +1786,7 @@ function goSec(s) {
   if (s === 'wal') { rw(); ra(); }
   if (s === 'home') { rh(); ra(); }
   if (s === 'more') { renderCatMgr(); }
+  ta(document.body);
 }
 
 function openQuickTx() {
@@ -1441,7 +1798,6 @@ function openQuickTx() {
   }, 120);
 }
 
-// Mavzu, Shrift, Valyuta va JM Logotip
 function setTheme(t) {
   document.documentElement.dataset.theme = t;
   try { localStorage.setItem('th', t); } catch (e) {}
@@ -1470,7 +1826,8 @@ function setCur(c) {
 }
 try { if (CUR) document.querySelectorAll('#curPills button').forEach(b => b.classList.toggle('on', b.dataset.c === CUR)); } catch (e) {}
 
-let curJmStyle = localStorage.getItem('jm_st') || 'gold';
+let curJmStyle = 'gold';
+try { curJmStyle = localStorage.getItem('jm_st') || 'gold'; } catch (e) {}
 function setJmStyle(st, btn) {
   curJmStyle = st;
   try { localStorage.setItem('jm_st', st); } catch (e) {}
@@ -1503,7 +1860,7 @@ function renderQuickBtns() {
   box.innerHTML = Q.map(q => `
     <div class="q-btn" onclick="quickExpense(${q.id})">
       <i>${esc(q.ic)}</i>
-      <b>${esc(q.n)}</b>
+      <b>${esc(tx(q.n))}</b>
       <small>${Number(q.a).toLocaleString('ru-RU')}</small>
     </div>
   `).join('');
@@ -1526,7 +1883,7 @@ function quickExpense(id) {
   toast(`⚡ ${q.n}: -${fm(q.a)} yozildi`);
 }
 function openAddQuickModal() {
-  $('qa-c').innerHTML = OUT.map(c => `<option value="${esc(c)}">${esc(c)}</option>`).join('');
+  $('qa-c').innerHTML = OUT.map(c => `<option value="${esc(c)}">${esc(tx(c))}</option>`).join('');
   openModal('dQuickAdd');
 }
 $('fQuickAdd').onsubmit = e => {
@@ -1545,7 +1902,7 @@ $('fQuickAdd').onsubmit = e => {
   toast("Tezkor tugma qo'shildi ⚡");
 };
 
-/* KARTALAR VA BALANSNI TAHRIRLASH (100% ISHLAYDIGAN) */
+/* KARTALAR VA BALANSNI TAHRIRLASH */
 const bal = a => Number(a.i || 0) + W.filter(w => (w.acc || 'cash') === a.id).reduce((s, w) => s + (w.t === 'in' ? Number(w.a) : -Number(w.a)), 0);
 const COL = ['#e11d48,#f43f5e', '#6c5ce7,#a29bfe', '#0ea5e9,#22d3ee', '#059669,#34d399', '#7c3aed,#ec4899', '#1e293b,#475569'];
 
@@ -1554,13 +1911,13 @@ function ra() {
     <div class="bc" onclick="ec('${a.id}')" style="background:linear-gradient(135deg,${a.c})">
       <div class="jm-card-watermark">JM</div>
       <div class="t">
-        <span>${a.k === 'cash' ? '💵 ' : '<i class="chip"></i>'}${esc(a.bank)}</span>
+        <span>${a.k === 'cash' ? '💵 ' : '<i class="chip"></i>'}${esc(tx(a.bank))}</span>
         <div class="card-act">
-          <button type="button" class="edit-pill" onclick="event.stopPropagation();ec('${a.id}')">✏️ Tahrirlash</button>
-          ${a.k === 'cash' ? '' : `<button type="button" class="del" onclick="event.stopPropagation();da('${a.id}')" title="O'chirish">✕</button>`}
+          <button type="button" class="edit-pill" onclick="event.stopPropagation();ec('${a.id}')">${tx('✏️ Tahrirlash')}</button>
+          ${a.k === 'cash' ? '' : `<button type="button" class="del" onclick="event.stopPropagation();da('${a.id}')" title="${tx("O'chirish")}">✕</button>`}
         </div>
       </div>
-      <div class="n">${a.k === 'cash' ? 'NAQD HAMYON' : '•••• •••• •••• ' + esc(a.l || '0000')}</div>
+      <div class="n">${a.k === 'cash' ? tx('NAQD HAMYON') : '•••• •••• •••• ' + esc(a.l || '0000')}</div>
       <div class="b-wrap">
         <div class="b">${fm(bal(a))}</div>
       </div>
@@ -1570,7 +1927,7 @@ function ra() {
   if ($('cs')) $('cs').innerHTML = cardHtml;
   if ($('csHome')) $('csHome').innerHTML = cardHtml;
 
-  const opts = A.map(a => `<option value="${a.id}">${esc(a.bank)}${a.l ? ' ••' + esc(a.l) : ''} (${fm(bal(a))})</option>`).join('');
+  const opts = A.map(a => `<option value="${a.id}">${esc(tx(a.bank))}${a.l ? ' ••' + esc(a.l) : ''} (${fm(bal(a))})</option>`).join('');
   if ($('wa2')) $('wa2').innerHTML = opts;
   if ($('q-k')) $('q-k').innerHTML = opts;
   if ($('sk')) $('sk').innerHTML = opts;
@@ -1582,7 +1939,7 @@ function ra() {
   }
   if ($('txAccFilter')) {
     const curVal = $('txAccFilter').value || 'all';
-    $('txAccFilter').innerHTML = `<option value="all">💳 Barcha hisoblar</option>` + A.map(a => `<option value="${a.id}">${esc(a.bank)}${a.l ? ' ••' + esc(a.l) : ''}</option>`).join('');
+    $('txAccFilter').innerHTML = `<option value="all">${tx('💳 Barcha hisoblar')}</option>` + A.map(a => `<option value="${a.id}">${esc(tx(a.bank))}${a.l ? ' ••' + esc(a.l) : ''}</option>`).join('');
     $('txAccFilter').value = curVal;
   }
 }
@@ -1627,7 +1984,6 @@ $('fe').onsubmit = e => {
   if (!EA) return;
   const newTargetBal = Number($('e-m').value || 0);
   const currentCalculatedBal = bal(EA);
-  // Boshlang'ich qoldiqni farqqa qarab korreksiya qilamiz — shunda karta balansi aynan foydalanuvchi yozgan summaga teng bo'ladi!
   EA.i = Number(EA.i || 0) + (newTargetBal - currentCalculatedBal);
   if (EA.k !== 'cash') {
     EA.bank = $('e-b').value.trim() || EA.bank;
@@ -1653,7 +2009,6 @@ function da(id) {
   });
 }
 
-// Hisoblararo O'tkazma
 function openTransfer() {
   if (A.length < 2) {
     toast("O'tkazma uchun avval kamida 1 ta karta qo'shing");
@@ -1667,7 +2022,7 @@ $('fTrf').onsubmit = e => {
   e.preventDefault();
   const f = $('trf-from').value, t = $('trf-to').value, amt = Number($('trf-amt').value || 0);
   if (f === t) return toast("Bir xil hisob tanlangan!");
-  if (amt <= 0) return toast("Summani kiriting");
+  if (amt <= 0) return toast("Summani to'g'ri kiriting");
   const fa = A.find(x => x.id === f), ta2 = A.find(x => x.id === t);
   const now = new Date().toISOString();
   W.unshift(
@@ -1681,13 +2036,13 @@ $('fTrf').onsubmit = e => {
   toast("O'tkazma bajarildi ⇄");
 };
 
-/* TRANZAKSIYALAR (KIRIM / CHIQIM QO'SHISH VA TAHRIRLASH) */
+/* TRANZAKSIYALAR */
 function fc() {
   const isIn = $('wt').value === 'in';
   const list = isIn ? IN : OUT;
-  if ($('wc')) $('wc').innerHTML = list.map(c => `<option value="${esc(c)}">${EM[c] || '🏷️'} ${esc(c)}</option>`).join('');
-  if ($('sc')) $('sc').innerHTML = IN.map(c => `<option value="${esc(c)}">${EM[c] || '💼'} ${esc(c)}</option>`).join('');
-  if ($('q-c')) $('q-c').innerHTML = OUT.map(c => `<option value="${esc(c)}">${EM[c] || '🏷️'} ${esc(c)}</option>`).join('');
+  if ($('wc')) $('wc').innerHTML = list.map(c => `<option value="${esc(c)}">${EM[c] || '🏷️'} ${esc(tx(c))}</option>`).join('');
+  if ($('sc')) $('sc').innerHTML = IN.map(c => `<option value="${esc(c)}">${EM[c] || '💼'} ${esc(tx(c))}</option>`).join('');
+  if ($('q-c')) $('q-c').innerHTML = OUT.map(c => `<option value="${esc(c)}">${EM[c] || '🏷️'} ${esc(tx(c))}</option>`).join('');
 }
 function setTxType(v) {
   $('wt').value = v;
@@ -1717,12 +2072,11 @@ $('fw').onsubmit = e => {
   toast("Yozuv saqlandi ✔");
 };
 
-// Tranzaksiyani Tahrirlash (Xato yozilgan summani o'zgartirish)
 function setEditTxType(v) {
   $('et-t').value = v;
   document.querySelectorAll('#etSeg button').forEach(b => b.classList.toggle('on', b.dataset.v === v));
   const list = v === 'in' ? IN : OUT;
-  $('et-c').innerHTML = list.map(c => `<option value="${esc(c)}">${EM[c] || '🏷️'} ${esc(c)}</option>`).join('');
+  $('et-c').innerHTML = list.map(c => `<option value="${esc(c)}">${EM[c] || '🏷️'} ${esc(tx(c))}</option>`).join('');
 }
 function ew(id) {
   const w = W.find(x => x.id === id);
@@ -1733,7 +2087,7 @@ function ew(id) {
   $('et-a').value = w.a;
   $('et-acc').value = w.acc || 'cash';
   if (![...$('et-c').options].some(o => o.value === w.c)) {
-    $('et-c').innerHTML += `<option value="${esc(w.c)}">${esc(w.c)}</option>`;
+    $('et-c').innerHTML += `<option value="${esc(w.c)}">${esc(tx(w.c))}</option>`;
   }
   $('et-c').value = w.c;
   $('et-n').value = w.n || '';
@@ -1766,7 +2120,6 @@ function dw(id) {
   toast("Yozuv o'chirildi");
 }
 
-// Tranzaksiyalar ro'yxati va Filtrlar
 let txPeriod = 'month', txOffsetMonth = 0;
 let txFilterState = { in: true, out: true, trf: true };
 
@@ -1819,7 +2172,7 @@ function rw() {
     if (w.isTrf && !txFilterState.trf) return false;
     if (!w.isTrf && w.t === 'in' && !txFilterState.in) return false;
     if (!w.isTrf && w.t === 'out' && !txFilterState.out) return false;
-    if (q && !(`${w.c} ${w.n || ''} ${w.a}`.toLowerCase().includes(q))) return false;
+    if (q && !(`${w.c} ${tx(w.c)} ${w.n || ''} ${w.a}`.toLowerCase().includes(q))) return false;
     return true;
   }).sort((a, b) => b.d.localeCompare(a.d));
 
@@ -1835,7 +2188,7 @@ function rw() {
   }
 
   if (!filtered.length) {
-    if ($('wl')) $('wl').innerHTML = '<div class="empty">Bu davr uchun yozuv topilmadi</div>';
+    if ($('wl')) $('wl').innerHTML = `<div class="empty">${tx('Bu davr uchun yozuv topilmadi')}</div>`;
     return;
   }
 
@@ -1853,19 +2206,19 @@ function rw() {
         const a = A.find(x => x.id === (w.acc || 'cash'));
         return `<div class="row">
           <div class="ic ${w.t === 'in' ? 'i' : ''}" onclick="ew(${w.id})">${EM[w.c] || '📦'}</div>
-          <div class="m" onclick="ew(${w.id})" title="Tahrirlash uchun bosing">
-            <b>${esc(w.c)}${w.n ? ' · ' + esc(w.n) : ''}</b>
-            <span>${a ? esc(a.bank) : 'Naqd'} · ${new Date(w.d).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+          <div class="m" onclick="ew(${w.id})" title="${tx('✏️ Yozuvni tahrirlash')}">
+            <b>${esc(tx(w.c))}${w.n ? ' · ' + esc(tx(w.n)) : ''}</b>
+            <span>${a ? esc(tx(a.bank)) : tx('Naqd')} · ${new Date(w.d).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
           </div>
           <span class="${w.t === 'in' ? 'in' : 'out'}" onclick="ew(${w.id})" style="cursor:pointer">${w.t === 'in' ? '+' : '−'}${fm(w.a)}</span>
-          <button type="button" class="act-btn" onclick="ew(${w.id})" title="Tahrirlash">✏️</button>
-          <button type="button" class="x" onclick="dw(${w.id})" title="O'chirish">✕</button>
+          <button type="button" class="act-btn" onclick="ew(${w.id})" title="${tx('✏️ Tahrirlash')}">✏️</button>
+          <button type="button" class="x" onclick="dw(${w.id})" title="${tx("O'chirish")}">✕</button>
         </div>`;
       }).join('');
   }).join('');
 }
 
-/* SMART PASTE (SMS / CHEKDAN OVOZ YOKI MATN ORQALI OLISH) */
+/* SMART PASTE */
 function openSmartPaste() {
   $('spText').value = '';
   openModal('dSmartPaste');
@@ -1916,56 +2269,60 @@ const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
 let curRec = null;
 
 function startSmartVoiceTx() {
-  if (curRec) { curRec.stop(); return; }
+  if (curRec) { try { curRec.stop(); } catch (e) {} return; }
   if (!SR) return toast("Bu brauzerda ovoz tanish yo'q");
-  const r = new SR(); curRec = r;
-  r.lang = LC();
-  $('voiceTxBtn').classList.add('rec');
-  toast("🎤 Ayting: «Taksiga 25 ming ketdi»");
-  r.onresult = e => {
-    const text = e.results[0][0].transcript.toLowerCase();
-    $('voiceTxBtn').classList.remove('rec');
-    let sum = 0;
-    const numM = text.match(/(\d+)\s*(?:ming|k)?/);
-    if (numM) {
-      sum = parseInt(numM[1], 10);
-      if (text.includes('ming') && sum < 1000) sum *= 1000;
-    }
-    if (sum > 0) $('wa').value = sum;
-    if (/taxi|taksi|yo'l|metro|benzin/.test(text)) { $('wc').value = 'Transport'; $('wn').value = 'Transport / Taksi'; }
-    else if (/ovqat|tushlik|non|bozor|kafe|choy/.test(text)) { $('wc').value = 'Oziq-ovqat'; $('wn').value = 'Oziq-ovqat'; }
-    else if (/svet|gaz|suv|internet/.test(text)) { $('wc').value = 'Kommunal'; $('wn').value = 'Kommunal'; }
-    else { $('wn').value = text; }
-    toast("🎤 Tushunildi: " + text);
-  };
-  r.onerror = () => $('voiceTxBtn').classList.remove('rec');
-  r.onend = () => { $('voiceTxBtn').classList.remove('rec'); curRec = null; };
-  try { r.start(); } catch (x) { $('voiceTxBtn').classList.remove('rec'); }
+  try {
+    const r = new SR(); curRec = r;
+    r.lang = LC();
+    $('voiceTxBtn').classList.add('rec');
+    toast("🎤 Ayting: «Taksiga 25 ming ketdi»");
+    r.onresult = e => {
+      const text = e.results[0][0].transcript.toLowerCase();
+      $('voiceTxBtn').classList.remove('rec');
+      let sum = 0;
+      const numM = text.match(/(\d+)\s*(?:ming|тысяч|thousand|k)?/);
+      if (numM) {
+        sum = parseInt(numM[1], 10);
+        if ((text.includes('ming') || text.includes('тысяч') || text.includes('thousand')) && sum < 1000) sum *= 1000;
+      }
+      if (sum > 0) $('wa').value = sum;
+      if (/taxi|taksi|yo'l|metro|benzin|такси|метро/.test(text)) { $('wc').value = 'Transport'; $('wn').value = 'Transport / Taksi'; }
+      else if (/ovqat|tushlik|non|bozor|kafe|choy|еда|обед|хлеб/.test(text)) { $('wc').value = 'Oziq-ovqat'; $('wn').value = 'Oziq-ovqat'; }
+      else if (/svet|gaz|suv|internet|свет|газ|интернет/.test(text)) { $('wc').value = 'Kommunal'; $('wn').value = 'Kommunal'; }
+      else { $('wn').value = text; }
+      toast("🎤 Tushunildi: " + text);
+    };
+    r.onerror = () => $('voiceTxBtn').classList.remove('rec');
+    r.onend = () => { $('voiceTxBtn').classList.remove('rec'); curRec = null; };
+    r.start();
+  } catch (x) { $('voiceTxBtn').classList.remove('rec'); }
 }
 
 function startVoiceInput(targetId) {
-  if (curRec) { curRec.stop(); return; }
+  if (curRec) { try { curRec.stop(); } catch (e) {} return; }
   if (!SR) return toast("Bu brauzerda ovoz tanish yo'q");
-  const r = new SR(); curRec = r;
-  r.lang = LC();
-  toast("🎤 Gapiring...");
-  r.onresult = e => {
-    const t = e.results[0][0].transcript;
-    $(targetId).value = t;
-    if (targetId === 'tn') parseTimeFromVoice(t);
-    toast("🎤 " + t);
-  };
-  r.onend = () => { curRec = null; };
-  try { r.start(); } catch (x) {}
+  try {
+    const r = new SR(); curRec = r;
+    r.lang = LC();
+    toast("🎤 Gapiring...");
+    r.onresult = e => {
+      const t = e.results[0][0].transcript;
+      $(targetId).value = t;
+      if (targetId === 'tn') parseTimeFromVoice(t);
+      toast("🎤 " + t);
+    };
+    r.onend = () => { curRec = null; };
+    r.start();
+  } catch (x) {}
 }
 
 function parseTimeFromVoice(t) {
   t = t.toLowerCase();
   const d = new Date(); let ch = 0;
-  if (/ertaga/.test(t)) { d.setDate(d.getDate() + 1); ch = 1; }
-  if (/indinga/.test(t)) { d.setDate(d.getDate() + 2); ch = 1; }
-  const m = t.match(/(?:soat\s*)?(\d{1,2})(?:[:.](\d{2}))?\s*(?:da|dan|ga|\b)/);
-  if (/soat/.test(t) && m) { d.setHours(+m[1], +(m[2] || 0), 0, 0); ch = 1; }
+  if (/ertaga|завтра|tomorrow/.test(t)) { d.setDate(d.getDate() + 1); ch = 1; }
+  if (/indinga|послезавтра/.test(t)) { d.setDate(d.getDate() + 2); ch = 1; }
+  const m = t.match(/(?:soat|в|at\s*)?(\d{1,2})(?:[:.](\d{2}))?\s*(?:da|dan|ga|\b)/);
+  if (/soat|в|at/.test(t) && m) { d.setHours(+m[1], +(m[2] || 0), 0, 0); ch = 1; }
   if (ch) $('td').value = iso(d);
 }
 
@@ -1978,7 +2335,7 @@ function nextPay() {
 function setPaydayPrompt() {
   ask("Oylik har oyning nechanchi kuni tushadi? (1-31)", { inp: 1, type: 'number', def: S.day || 5 }, v => {
     if (!v) return;
-    S = { day: Math.min(31, Math.max(1, +v || 5)) };
+    S.day = Math.min(31, Math.max(1, +v || 5));
     sv('s', S); rh();
     toast("Oylik kuni belgilandi 📅");
   });
@@ -2012,7 +2369,8 @@ function cycleHomePeriod() {
   const order = ['month', 'day', 'week', 'all'];
   const labels = { month: '📅 Shu oy', day: '📅 Bugun', week: '📅 Shu hafta', all: '📅 Barcha vaqt' };
   homePeriod = order[(order.indexOf(homePeriod) + 1) % order.length];
-  $('homePeriodBtn').textContent = labels[homePeriod];
+  $('homePeriodBtn').__o = labels[homePeriod];
+  $('homePeriodBtn').textContent = tx(labels[homePeriod]);
   rh();
 }
 
@@ -2040,19 +2398,18 @@ function rh() {
   if (sl.length) {
     const l = sl[0], r = sl.slice(0, 6), av = Math.round(r.reduce((x, w) => x + Number(w.a), 0) / r.length);
     $('sv').textContent = fm(l.a);
-    $('sa').textContent = `O'rtacha: ${fm(av)} · ${sl.length} marta`;
+    $('sa').textContent = tx(`O'rtacha: ${fm(av)} · ${sl.length} marta`);
   } else {
-    $('sv').textContent = "Hali yo'q";
+    $('sv').textContent = tx("Hali yo'q");
     $('sa').textContent = "";
   }
   if (S.day) {
     const n = nextPay();
-    $('sd').textContent = n === 0 ? "Bugun oylik kuni! 🎉" : `Keyingi oylik: ${n} kundan keyin (${S.day}-sana)`;
+    $('sd').textContent = n === 0 ? tx("Bugun oylik kuni! 🎉") : tx(`Keyingi oylik: ${n} kundan keyin (${S.day}-sana)`);
   } else {
-    $('sd').textContent = "📅 tugmasi bilan oylik kunini belgilang";
+    $('sd').textContent = tx("📅 tugmasi bilan oylik kunini belgilang");
   }
 
-  // Kunlik rejalar
   const u = [...T].sort((a, b) => a.d.localeCompare(b.d)).slice(0, 4);
   $('up').innerHTML = u.length ? u.map(t => `
     <div class="row">
@@ -2060,9 +2417,8 @@ function rh() {
       <div class="m"><b>${esc(t.n)}</b><span>${fd(t.d)}</span></div>
       <button type="button" class="x" onclick="delTsk(${t.id})">✕</button>
     </div>
-  `).join('') : `<div class="empty">Yaqin kunlarga reja yo'q</div>`;
+  `).join('') : `<div class="empty">${tx("Yaqin kunlarga reja yo'q")}</div>`;
 
-  // Kategoriya bo'yicha chiqimlar (Home)
   const pOut = W.filter(w => {
     if (w.t !== 'out') return false;
     const d = new Date(w.d);
@@ -2080,27 +2436,26 @@ function rh() {
       const pct = Math.round((byCat[k] / totalOut) * 100);
       return `<div style="margin-bottom:10px">
         <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px">
-          <b>${EM[k] || '📦'} ${esc(k)}</b>
+          <b>${EM[k] || '📦'} ${esc(tx(k))}</b>
           <span>${fm(byCat[k])} (${pct}%)</span>
         </div>
         <div class="bar"><i style="width:${pct}%"></i></div>
       </div>`;
-    }).join('') : `<div class="empty">Bu davrda chiqimlar yo'q</div>`;
+    }).join('') : `<div class="empty">${tx("Bu davrda chiqimlar yo'q")}</div>`;
   }
 
-  // Oxirgi amallar (Tahrirlash tugmasi bilan)
   const l = W.slice(0, 5);
   $('lt').innerHTML = l.length ? l.map(w => `
     <div class="row">
       <div class="ic ${w.t === 'in' ? 'i' : ''}" onclick="ew(${w.id})">${EM[w.c] || '📦'}</div>
       <div class="m" onclick="ew(${w.id})">
-        <b>${esc(w.c)}${w.n ? ' · ' + esc(w.n) : ''}</b>
+        <b>${esc(tx(w.c))}${w.n ? ' · ' + esc(tx(w.n)) : ''}</b>
         <span>${fd(w.d)}</span>
       </div>
       <span class="${w.t === 'in' ? 'in' : 'out'}" onclick="ew(${w.id})" style="cursor:pointer">${w.t === 'in' ? '+' : '−'}${fm(w.a)}</span>
-      <button type="button" class="act-btn" onclick="ew(${w.id})" title="Tahrirlash">✏️</button>
+      <button type="button" class="act-btn" onclick="ew(${w.id})" title="${tx('✏️ Tahrirlash')}">✏️</button>
     </div>
-  `).join('') : `<div class="empty">Hozircha amallar yo'q</div>`;
+  `).join('') : `<div class="empty">${tx("Hozircha amallar yo'q")}</div>`;
 }
 
 /* VOSITALAR: VAZIFALAR, RANGLI QAYDLAR, TAYMER, SEKUNDOMER, KALKULYATOR, KONVERTOR */
@@ -2110,6 +2465,7 @@ function openTool(name) {
   const pane = $('tl-' + name);
   if (pane) pane.style.display = 'block';
   if (name === 'conv') runConv();
+  ta(document.body);
 }
 
 let flt = 'all';
@@ -2125,11 +2481,11 @@ function rt() {
   $('tl').innerHTML = l.length ? l.map(t => `
     <div class="row">
       <button type="button" class="chk" onclick="chkTsk(${t.id})">✓</button>
-      <div class="m"><b>${esc(t.n)}</b><span>${fd(t.d)} · ${t.done || 0} marta</span></div>
-      <span class="tag">${P[t.p] || 'Bir marta'}</span>
+      <div class="m"><b>${esc(t.n)}</b><span>${fd(t.d)} · ${t.done || 0} ${tx('marta')}</span></div>
+      <span class="tag">${tx(P[t.p] || 'Bir marta')}</span>
       <button type="button" class="x" onclick="delTsk(${t.id})">✕</button>
     </div>
-  `).join('') : `<div class="empty">Vazifalar yo'q</div>`;
+  `).join('') : `<div class="empty">${tx("Vazifalar yo'q")}</div>`;
 }
 function chkTsk(id) {
   const t = T.find(x => x.id === id);
@@ -2174,9 +2530,9 @@ function rNotes() {
         </div>
       </div>
       <div style="font-size:13px;margin-top:6px;white-space:pre-wrap">${esc(n.b)}</div>
-      <div style="font-size:11px;color:var(--mut);margin-top:6px">${new Date(n.d).toLocaleDateString()}</div>
+      <div style="font-size:11px;color:var(--mut);margin-top:6px">${new Date(n.d).toLocaleDateString(LC())}</div>
     </div>
-  `).join('') : `<div class="empty">Hozircha qaydlar yo'q</div>`;
+  `).join('') : `<div class="empty">${tx("Hozircha qaydlar yo'q")}</div>`;
 }
 function editNote(id) {
   const n = N.find(x => x.id === id);
@@ -2185,7 +2541,8 @@ function editNote(id) {
   $('nt-t').value = n.t;
   $('nt-b').value = n.b;
   selectedNoteColor = n.c || '#10b981';
-  $('ntFormTitle').textContent = "✏️ Qaydni tahrirlash";
+  $('ntFormTitle').__o = "✏️ Qaydni tahrirlash";
+  $('ntFormTitle').textContent = tx("✏️ Qaydni tahrirlash");
   $('nt-t').focus();
 }
 $('f-nt').onsubmit = e => {
@@ -2195,7 +2552,8 @@ $('f-nt').onsubmit = e => {
     const n = N.find(x => x.id === editId);
     if (n) { n.t = $('nt-t').value; n.b = $('nt-b').value; n.c = selectedNoteColor; }
     $('nt-edit-id').value = '';
-    $('ntFormTitle').textContent = "📝 Yangi qayd";
+    $('ntFormTitle').__o = "📝 Yangi qayd";
+    $('ntFormTitle').textContent = tx("📝 Yangi qayd");
   } else {
     N.unshift({ id: Date.now(), t: $('nt-t').value, b: $('nt-b').value, c: selectedNoteColor, d: new Date().toISOString() });
   }
@@ -2217,7 +2575,8 @@ function playBeep() {
 function setTmrMode(m) {
   tmrMode = m;
   clearInterval(tmrInterval); tmrInterval = null;
-  $('tmrStart').textContent = 'Boshlash';
+  $('tmrStart').__o = 'Boshlash';
+  $('tmrStart').textContent = tx('Boshlash');
   if (m === 'work') {
     $('tmrModeWork').className = 'on in-m'; $('tmrModeRest').className = '';
     tmrTotalSec = tmrCurSec = tmrWorkMin * 60;
@@ -2239,24 +2598,28 @@ function updateTmrDisp() {
 function toggleTmr() {
   if (tmrInterval) {
     clearInterval(tmrInterval); tmrInterval = null;
-    $('tmrStart').textContent = 'Davom etish';
+    $('tmrStart').__o = 'Davom etish';
+    $('tmrStart').textContent = tx('Davom etish');
     return;
   }
-  $('tmrStart').textContent = "To'xtatish";
+  $('tmrStart').__o = "To'xtatish";
+  $('tmrStart').textContent = tx("To'xtatish");
   tmrInterval = setInterval(() => {
     if (tmrCurSec > 0) {
       tmrCurSec--; updateTmrDisp();
     } else {
       clearInterval(tmrInterval); tmrInterval = null;
-      $('tmrStart').textContent = 'Boshlash';
+      $('tmrStart').__o = 'Boshlash';
+      $('tmrStart').textContent = tx('Boshlash');
       playBeep();
-      toast(`⏰ ${tmrMode === 'work' ? 'Ish' : 'Dam olish'} vaqti tugadi!`);
+      toast("⏰ Taymer yakunlandi!");
     }
   }, 1000);
 }
 function resetTmr() {
   clearInterval(tmrInterval); tmrInterval = null;
-  $('tmrStart').textContent = 'Boshlash';
+  $('tmrStart').__o = 'Boshlash';
+  $('tmrStart').textContent = tx('Boshlash');
   tmrCurSec = tmrTotalSec;
   updateTmrDisp();
 }
@@ -2278,10 +2641,12 @@ function fmtSw(t) {
 function toggleSw() {
   if (swInt) {
     clearInterval(swInt); swInt = null;
-    $('swStart').textContent = 'Davom etish';
+    $('swStart').__o = 'Davom etish';
+    $('swStart').textContent = tx('Davom etish');
     return;
   }
-  $('swStart').textContent = "To'xtatish";
+  $('swStart').__o = "To'xtatish";
+  $('swStart').textContent = tx("To'xtatish");
   swInt = setInterval(() => {
     swTenths++;
     $('swDisp').textContent = fmtSw(swTenths);
@@ -2290,12 +2655,13 @@ function toggleSw() {
 function lapSw() {
   if (!swTenths) return;
   swLapList.unshift(fmtSw(swTenths));
-  $('swLaps').innerHTML = swLapList.map((l, i) => `<div class="row"><b>#${swLapList.length - i} Aylana</b><span style="margin-left:auto;font-family:monospace">${l}</span></div>`).join('');
+  $('swLaps').innerHTML = swLapList.map((l, i) => `<div class="row"><b>#${swLapList.length - i} ${tx('Aylana')}</b><span style="margin-left:auto;font-family:monospace">${l}</span></div>`).join('');
 }
 function resetSw() {
   clearInterval(swInt); swInt = null; swTenths = 0; swLapList = [];
   $('swDisp').textContent = '00:00.0';
-  $('swStart').textContent = 'Boshlash';
+  $('swStart').__o = 'Boshlash';
+  $('swStart').textContent = tx('Boshlash');
   $('swLaps').innerHTML = '';
 }
 
@@ -2333,13 +2699,13 @@ function runConv() {
   if (from === 'USD') inUzs = amt * usd;
   if (from === 'KRW') inUzs = amt * krw;
   $('convRes').innerHTML = `
-    <div>🇺🇿 UZS (So'm)<b>${Math.round(inUzs).toLocaleString('ru-RU')} so'm</b></div>
+    <div>🇺🇿 UZS (So'm)<b>${Math.round(inUzs).toLocaleString('ru-RU')} ${tx("so'm")}</b></div>
     <div>🇺🇸 USD (Dollar)<b>$${(inUzs / usd).toFixed(2)}</b></div>
     <div style="grid-column:1/-1">🇰🇷 KRW (Won)<b>₩${Math.round(inUzs / krw).toLocaleString('ru-RU')}</b></div>
   `;
 }
 
-/* QARZLAR (QO'SHISH, TAHRIRLASH, TO'LASH) */
+/* QARZLAR */
 let dmKind = 't', dmCurVal = "so'm";
 function setDebtKind(k) {
   dmKind = k;
@@ -2353,7 +2719,8 @@ function pickDmCur(btn) {
 function openNewDebtModal() {
   $('fDebtModal').reset();
   $('dm-id').value = '';
-  $('dDebtTitle').textContent = "🤝 Yangi qarz yozuvi";
+  $('dDebtTitle').__o = "🤝 Yangi qarz yozuvi";
+  $('dDebtTitle').textContent = tx("🤝 Yangi qarz yozuvi");
   openModal('dDebt');
 }
 function editDebt(id) {
@@ -2367,7 +2734,8 @@ function editDebt(id) {
   $('dm-n').value = x.n || '';
   dmCurVal = x.cur || "so'm";
   document.querySelectorAll('#dmCur button').forEach(b => b.classList.toggle('on', b.dataset.c === dmCurVal));
-  $('dDebtTitle').textContent = "✏️ Qarzni tahrirlash";
+  $('dDebtTitle').__o = "✏️ Qarzni tahrirlash";
+  $('dDebtTitle').textContent = tx("✏️ Qarzni tahrirlash");
   openModal('dDebt');
 }
 function swDebtTab(k, btn) {
@@ -2417,14 +2785,14 @@ function rd() {
           <div class="ic ${k === 'g' ? 'i' : ''}" onclick="editDebt(${x.id})">${k === 'g' ? '📤' : '📥'}</div>
           <div class="m" onclick="editDebt(${x.id})">
             <b>${esc(x.w)} · ${fm(x.a, x.cur)}</b>
-            <span>${x.due ? 'Muddati: ' + x.due : ''}${x.n ? ' · ' + esc(x.n) : ''}</span>
+            <span>${x.due ? tx('Muddati: ' + x.due) : ''}${x.n ? ' · ' + esc(x.n) : ''}</span>
           </div>
-          <button type="button" class="act-btn" onclick="shareDebtReminder(${x.id})" title="Telegram orqali eslatish">📤</button>
-          <button type="button" class="act-btn" onclick="editDebt(${x.id})" title="Tahrirlash">✏️</button>
-          ${x.p ? '<span class="tag">To\'langan</span>' : `<button type="button" class="btn s" onclick="payDebt(${x.id})">To'landi</button>`}
+          <button type="button" class="act-btn" onclick="shareDebtReminder(${x.id})" title="Telegram">📤</button>
+          <button type="button" class="act-btn" onclick="editDebt(${x.id})" title="${tx('✏️ Tahrirlash')}">✏️</button>
+          ${x.p ? `<span class="tag">${tx("To'langan")}</span>` : `<button type="button" class="btn s" onclick="payDebt(${x.id})">${tx("To'landi")}</button>`}
           <button type="button" class="x" onclick="delDebt(${x.id})">✕</button>
         </div>
-      `).join('') : '<div class="empty">Qarzlar yo\'q</div>';
+      `).join('') : `<div class="empty">${tx("Qarzlar yo'q")}</div>`;
     }
   });
 }
@@ -2461,18 +2829,18 @@ function renderBudget() {
   }).reduce((s, w) => s + Number(w.a), 0);
 
   if (!S.budget || S.budget <= 0) {
-    box.innerHTML = `<div class="empty">Oylik harajat limiti belgilanmagan. Yuqoridagi «✏️ Limit o'rnatish» tugmasini bosing.</div>`;
+    box.innerHTML = `<div class="empty">${tx("Oylik harajat limiti belgilanmagan. Yuqoridagi «✏️ Limit o'rnatish» tugmasini bosing.")}</div>`;
     return;
   }
   const pct = Math.min(100, Math.round((spent / S.budget) * 100));
   const color = pct >= 90 ? 'var(--no)' : pct >= 75 ? 'var(--warn)' : 'var(--ok)';
   box.innerHTML = `
     <div style="display:flex;justify-content:space-between;font-size:13.5px;margin-bottom:6px">
-      <b>Sarflandi: ${fm(spent)}</b>
-      <span>Limit: ${fm(S.budget)} (${pct}%)</span>
+      <b>${tx('Sarflandi:')} ${fm(spent)}</b>
+      <span>${tx('Limit:')} ${fm(S.budget)} (${pct}%)</span>
     </div>
     <div class="bar"><i style="width:${pct}%;background:${color}"></i></div>
-    <div class="hint">${S.budget > spent ? `Limitdan yana ${fm(S.budget - spent)} qoldi` : `⚠️ Limitdan ${fm(spent - S.budget)} oshib ketdi!`}</div>
+    <div class="hint">${S.budget > spent ? tx(`Limitdan yana ${fm(S.budget - spent)} qoldi`) : tx(`⚠️ Limitdan ${fm(spent - S.budget)} oshib ketdi!`)}</div>
   `;
 }
 
@@ -2491,11 +2859,11 @@ function rg() {
       <div class="bar"><i style="width:${p}%"></i></div>
       <div class="row" style="border:0;padding:8px 0 0">
         <span class="m" style="font-size:12px;color:var(--mut)">${fm(g.s)} / ${fm(g.t)}</span>
-        <button type="button" class="btn s" onclick="ag(${g.id})">+ Pul qo'shish</button>
+        <button type="button" class="btn s" onclick="ag(${g.id})">${tx("+ Pul qo'shish")}</button>
         <button type="button" class="x" onclick="xg(${g.id})">✕</button>
       </div>
     </div>`;
-  }).join('') : `<div class="empty">Jamg'arma maqsadlari yo'q</div>`;
+  }).join('') : `<div class="empty">${tx("Jamg'arma maqsadlari yo'q")}</div>`;
 }
 function ag(id) {
   ask("Qancha pul qo'shasiz?", { inp: 1, type: 'number' }, v => {
@@ -2523,14 +2891,14 @@ function rr() {
   $('rl').innerHTML = R.length ? R.map(r => `
     <div class="row">
       <div class="ic">🔁</div>
-      <div class="m"><b>${esc(r.n)} · ${fm(r.a)}</b><span>Har oyning ${r.d}-sanasi (${esc(r.c)})</span></div>
+      <div class="m"><b>${esc(r.n)} · ${fm(r.a)}</b><span>${tx(`Har oyning ${r.d}-sanasi`)} (${esc(tx(r.c))})</span></div>
       <button type="button" class="x" onclick="xr(${r.id})">✕</button>
     </div>
-  `).join('') : `<div class="empty">Takroriy to'lovlar yo'q</div>`;
+  `).join('') : `<div class="empty">${tx("Takroriy to'lovlar yo'q")}</div>`;
 }
 function xr(id) { R = R.filter(x => x.id !== id); sv('r', R); rr(); }
 
-/* GRAFIKLAR (PIE VA 6 OYLIK BAR) */
+/* GRAFIKLAR */
 const PC = ['#6c5ce7', '#0ea5e9', '#f43f5e', '#10b981', '#f59e0b', '#ec4899', '#64748b'];
 function rc() {
   const n = new Date(), by = {};
@@ -2542,7 +2910,7 @@ function rc() {
   });
   const ks = Object.keys(by).sort((a, b) => by[b] - by[a]), tot = ks.reduce((s, k) => s + by[k], 0);
   if (!tot) {
-    if ($('pie')) $('pie').innerHTML = '<div class="empty">Shu oy harajat yo\'q</div>';
+    if ($('pie')) $('pie').innerHTML = `<div class="empty">${tx("Shu oy harajat yo'q")}</div>`;
   } else {
     let off = 0; const C = 2 * Math.PI * 40;
     const arcs = ks.map((k, i) => {
@@ -2551,7 +2919,7 @@ function rc() {
       off += L; return x;
     }).join('');
     if ($('pie')) {
-      $('pie').innerHTML = `<div class="pw"><svg viewBox="0 0 120 120" width="160" height="160">${arcs}<text x="60" y="64" text-anchor="middle" font-size="9" font-weight="800" fill="var(--tx)">${Math.round(tot / 1000)}k</text></svg><div class="lg">${ks.map((k, i) => `<div><i style="background:${PC[i % 7]}"></i>${EM[k] || ''} ${esc(k)}<b>${Math.round((by[k] / tot) * 100)}%</b></div>`).join('')}</div></div>`;
+      $('pie').innerHTML = `<div class="pw"><svg viewBox="0 0 120 120" width="160" height="160">${arcs}<text x="60" y="64" text-anchor="middle" font-size="9" font-weight="800" fill="var(--tx)">${Math.round(tot / 1000)}k</text></svg><div class="lg">${ks.map((k, i) => `<div><i style="background:${PC[i % 7]}"></i>${EM[k] || ''} ${esc(tx(k))}<b>${Math.round((by[k] / tot) * 100)}%</b></div>`).join('')}</div></div>`;
     }
   }
 
@@ -2571,7 +2939,7 @@ function rc() {
   }
 }
 
-/* KATEGORIYALAR BOSHQARUVI (SOZLAMALARDA) */
+/* KATEGORIYALAR BOSHQARUVI */
 let curCatKind = 'out';
 function renderCatMgr(kind, btn) {
   curCatKind = kind || curCatKind;
@@ -2584,10 +2952,10 @@ function renderCatMgr(kind, btn) {
   $('catMgrList').innerHTML = arr.map((c, i) => `
     <div class="row">
       <div class="ic ${curCatKind === 'in' ? 'i' : ''}">${EM[c] || '🏷️'}</div>
-      <div class="m"><b>${esc(c)}</b></div>
-      <button type="button" class="act-btn" onclick="mvCat(${i},-1)" title="Yuqoriga">⌃</button>
-      <button type="button" class="act-btn" onclick="mvCat(${i},1)" title="Pastga">⌄</button>
-      <button type="button" class="act-btn" onclick="delCat(${i})" title="O'chirish">✕</button>
+      <div class="m"><b>${esc(tx(c))}</b></div>
+      <button type="button" class="act-btn" onclick="mvCat(${i},-1)">⌃</button>
+      <button type="button" class="act-btn" onclick="mvCat(${i},1)">⌄</button>
+      <button type="button" class="act-btn" onclick="delCat(${i})">✕</button>
     </div>
   `).join('');
 }
@@ -2623,14 +2991,17 @@ async function hs(p) {
   } catch (e) { return btoa('jm' + p); }
 }
 function lockUp() {
-  const p = localStorage.getItem('pin');
+  let p = null;
+  try { p = localStorage.getItem('pin'); } catch (e) {}
   if (p) {
     $('lk').style.display = 'flex';
     $('lp').value = '';
   }
 }
 async function checkPinUnlock() {
-  if (await hs($('lp').value) === localStorage.getItem('pin')) {
+  let saved = null;
+  try { saved = localStorage.getItem('pin'); } catch (e) {}
+  if (await hs($('lp').value) === saved) {
     $('lk').style.display = 'none';
   } else {
     $('lp').value = '';
@@ -2639,28 +3010,35 @@ async function checkPinUnlock() {
 }
 $('lp').oninput = () => { if ($('lp').value.length === 4) checkPinUnlock(); };
 function pl() {
-  const has = !!localStorage.getItem('pin');
-  if ($('pb')) $('pb').textContent = has ? "🔓 PIN-kodni o'chirish" : "🔒 PIN-kod o'rnatish";
+  let has = false;
+  try { has = !!localStorage.getItem('pin'); } catch (e) {}
+  if ($('pb')) {
+    const raw = has ? "🔓 PIN-kodni o'chirish" : "🔒 PIN-kod o'rnatish";
+    $('pb').__o = raw;
+    $('pb').textContent = tx(raw);
+  }
   if ($('pinTgl')) $('pinTgl').classList.toggle('on', has);
 }
 function togglePinSetting() {
-  if (localStorage.getItem('pin')) {
+  let has = false;
+  try { has = !!localStorage.getItem('pin'); } catch (e) {}
+  if (has) {
     ask("PIN-kodni o'chirasizmi?", {}, () => {
-      localStorage.removeItem('pin');
+      try { localStorage.removeItem('pin'); } catch (e) {}
       toast("PIN o'chirildi"); pl();
     });
   } else {
     ask("4 xonali yangi PIN kiriting:", { inp: 1, type: 'password' }, async p => {
       if (!/^\d{4}$/.test(p || '')) return toast("Aynan 4 ta raqam kiriting");
-      localStorage.setItem('pin', await hs(p));
+      try { localStorage.setItem('pin', await hs(p)); } catch (e) {}
       toast("PIN o'rnatildi 🔒"); pl();
     });
   }
 }
 
-// Universal Ask Dialog
 function ask(m, o, cb) {
-  $('dqm').textContent = m;
+  $('dqm').__o = m;
+  $('dqm').textContent = tx(m);
   const i = $('dqi');
   i.style.display = o.inp ? 'block' : 'none';
   i.type = o.type || 'text';
@@ -2668,15 +3046,22 @@ function ask(m, o, cb) {
   $('dqo').onclick = () => { closeModal('dq'); cb(o.inp ? i.value : true); };
   $('dqc').onclick = () => closeModal('dq');
   openModal('dq');
+  ta($('dq'));
   if (o.inp) setTimeout(() => i.focus(), 80);
 }
 
 /* ZAXIRA, EXCEL VA TOZALASH */
+const RK = ['w', 't', 'a', 's', 'nt', 'd', 'g', 'r', 'qa', 'cat_in', 'cat_out'];
+function snap() {
+  const o = {};
+  RK.forEach(k => { o[k] = ld(k, k === 's' ? {} : []); });
+  return o;
+}
 function exportCsv() {
   const rows = [['Sana', 'Tur', 'Kategoriya', 'Summa', 'Hisob', 'Izoh']];
   W.forEach(w => {
     const a = A.find(x => x.id === (w.acc || 'cash'));
-    rows.push([new Date(w.d).toLocaleString(), w.t === 'in' ? 'Kirim' : 'Chiqim', w.c, w.a, a ? a.bank : 'Naqd', w.n || '']);
+    rows.push([new Date(w.d).toLocaleString('ru-RU'), w.t === 'in' ? 'Kirim' : 'Chiqim', w.c, w.a, a ? a.bank : 'Naqd', w.n || '']);
   });
   const csv = '\uFEFF' + rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(';')).join('\n');
   const a = document.createElement('a');
@@ -2686,9 +3071,8 @@ function exportCsv() {
   toast("📊 Excel (.csv) yuklandi ✔");
 }
 function exportJson() {
-  const o = { w: W, t: T, a: A, s: S, nt: N, d: D, g: G, r: R, qa: Q };
-  const j = JSON.stringify(o);
-  $('bk').value = j;
+  const j = JSON.stringify(snap());
+  if ($('bk')) $('bk').value = j;
   try {
     const a = document.createElement('a');
     a.href = URL.createObjectURL(new Blob([j], { type: 'application/json' }));
@@ -2697,41 +3081,75 @@ function exportJson() {
   } catch (e) {}
   toast("⬇️ Zaxira nusxa olindi ✔");
 }
-$('bf').onchange = e => {
-  const f = e.target.files[0];
-  if (f) f.text().then(t => { $('bk').value = t; toast("Fayl o'qildi. «Zaxiradan tiklash»ni bosing"); });
-};
+if ($('bf')) {
+  $('bf').onchange = e => {
+    const f = e.target.files[0];
+    if (f) f.text().then(t => { $('bk').value = t; toast("Fayl o'qildi. «Zaxiradan tiklash»ni bosing"); });
+  };
+}
 function importJson() {
   let o;
-  try { o = JSON.parse($('bk').value); } catch (x) { return toast("Zaxira matni noto'g'ri ❌"); }
+  try { o = JSON.parse($('bk').value); } catch (e) { return toast("Zaxira matni noto'g'ri ❌"); }
   ask("Barcha ma'lumotlar zaxiradagilar bilan almashtiriladi. Tasdiqlaysizmi?", {}, () => {
-    ['w', 't', 'a', 's', 'nt', 'd', 'g', 'r', 'qa'].forEach(k => {
-      if (o[k] !== undefined) localStorage.setItem(k, JSON.stringify(o[k]));
-    });
+    RK.forEach(k => { if (o[k] !== undefined) sv(k, o[k]); });
     location.reload();
   });
 }
 function resetAllData() {
   ask("DIQQAT! Barcha kartalar, yozuvlar va qarzlar butunlay o'chiriladi. Davom etamizmi?", {}, () => {
-    localStorage.clear();
+    try { localStorage.clear(); } catch (e) {}
     location.reload();
   });
+}
+
+function applyLang() {
+  document.documentElement.lang = LG;
+  if ($('lgb')) $('lgb').textContent = LG.toUpperCase();
+  if ($('dt')) $('dt').textContent = new Date().toLocaleDateString(LC(), { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  fc();
+  pl();
+  renderQuickBtns();
+  ra();
+  rw();
+  rt();
+  rh();
+  rd();
+  rg();
+  rr();
+  rNotes();
+  rc();
+  renderBudget();
+  renderCatMgr();
+  ta(document.body);
 }
 
 function cycleLang() {
   LG = { uz: 'ru', ru: 'en', en: 'uz' }[LG] || 'uz';
   try { localStorage.setItem('lg', LG); } catch (e) {}
-  $('lgb').textContent = LG.toUpperCase();
-  $('dt').textContent = new Date().toLocaleDateString(LC(), { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-  rw(); rh();
-  toast("Til: " + LG.toUpperCase());
+  applyLang();
+  const langNames = { uz: "O'zbek tili 🇺🇿", ru: "Русский язык 🇷🇺", en: "English 🇬🇧" };
+  toast(langNames[LG]);
 }
 
-// Start Up
-$('lgb').textContent = LG.toUpperCase();
-$('dt').textContent = new Date().toLocaleDateString(LC(), { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-lockUp(); pl(); renderQuickBtns(); ra(); rw(); rt(); rh(); rd(); rg(); rr(); rNotes(); rc(); renderBudget(); renderCatMgr(); updateTmrDisp(); updatePrivacyUI();
-window.addEventListener('load', () => { try { Telegram.WebApp.ready(); Telegram.WebApp.expand(); } catch (e) {} });
+// Boshlang'ich ishga tushirish
+try {
+  lockUp();
+  updateTmrDisp();
+  updatePrivacyUI();
+  applyLang();
+} catch (e) {
+  hideSplash();
+}
+window.addEventListener('load', () => {
+  hideSplash();
+  try {
+    if (window.Telegram && Telegram.WebApp) {
+      Telegram.WebApp.ready();
+      Telegram.WebApp.expand();
+    }
+  } catch (e) {}
+});
 </script>
 </body>
 </html>
+```
