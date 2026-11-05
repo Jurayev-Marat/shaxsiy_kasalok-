@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Shaxsiy Reja</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#6c5ce7">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -74,6 +75,22 @@ input,select{width:100%;padding:12px;border-radius:13px;border:1px solid var(--b
 dialog{background:var(--card);color:var(--tx);border:1px solid var(--bd);border-radius:22px;padding:20px;width:min(92vw,420px);margin:auto;box-shadow:var(--sh)}
 dialog::backdrop{background:rgba(10,10,30,.55);backdrop-filter:blur(4px)}
 dialog h2{margin-bottom:14px}.btn.g{background:var(--bg);color:var(--tx);box-shadow:none;border:1px solid var(--bd)}
+.ic{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;font-size:20px;background:rgba(244,63,94,.12);flex:none}
+.ic.i{background:rgba(16,185,129,.14)}
+.dh{display:flex;justify-content:space-between;font-size:12px;color:var(--mut);font-weight:700;margin:16px 0 2px;padding-bottom:6px;border-bottom:1px dashed var(--bd)}
+.dh:first-child{margin-top:0}
+.ms{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.ms div{padding:12px;border-radius:16px;background:var(--bg);font-size:12px;color:var(--mut)}
+.ms b{display:block;font-size:16px;margin-top:2px}
+nav button{padding:7px 12px;font-size:18px;line-height:1.1}nav button small{display:block;font-size:10px;margin-top:2px}
+.bar{height:10px;border-radius:99px;background:var(--bg);overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--pr),var(--ok));border-radius:99px}
+.pw{display:flex;gap:16px;align-items:center;flex-wrap:wrap;justify-content:center}.lg{flex:1;min-width:150px;font-size:13px}.lg div{display:flex;align-items:center;gap:8px;padding:5px 0}.lg i{width:10px;height:10px;border-radius:50%;flex:none}.lg b{margin-left:auto}
+.bars{display:flex;gap:8px;align-items:flex-end;height:190px}.bc2{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%}.bb{flex:1;width:100%;display:flex;gap:3px;align-items:flex-end}.bb i{flex:1;border-radius:6px 6px 0 0;min-height:2px}
+.gi{background:var(--ok)}.ro{background:var(--no)}.bc2 span{font-size:11px;color:var(--mut)}.bc2 small{font-size:10px;color:var(--mut);min-height:12px}
+.lgd{font-size:11px;font-weight:400;color:var(--mut)}.lgd i{display:inline-block;width:8px;height:8px;border-radius:50%;margin:0 3px 0 8px}
+textarea{width:100%;padding:12px;border-radius:13px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);font-size:12px;min-height:80px;font-family:monospace}
+#lk{position:fixed;inset:0;background:var(--bg);z-index:30;display:none;align-items:center;justify-content:center}
+.bt{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
 </style>
 </head>
 <body>
@@ -105,7 +122,10 @@ dialog h2{margin-bottom:14px}.btn.g{background:var(--bg);color:var(--tx);box-sha
  <select id="wc"></select>
  <div class="ig full"><input id="wn" placeholder="Izoh (yozing yoki 🎤 ayting)"><button type="button" class="mic" data-for="wn">🎤</button></div>
  <button class="btn full">Qo'shish</button></form></div>
- <div class="card"><h2>Tarix</h2><div id="wl"></div></div>
+ <div class="card"><h2>🧾 Tarix</h2>
+ <div class="ms"><div>Shu oy kirim<b class="in" id="mi">0</b></div><div>Shu oy chiqim<b class="out" id="mo">0</b></div></div>
+ <div class="tabs" id="wf"><button data-f="all" class="on">Hammasi</button><button data-f="in">Kirim</button><button data-f="out">Chiqim</button></div>
+ <div id="wl"></div></div>
 </section>
 
 <section class="sec" id="s-tsk">
@@ -118,9 +138,26 @@ dialog h2{margin-bottom:14px}.btn.g{background:var(--bg);color:var(--tx);box-sha
  <div class="tabs" id="tb"><button data-f="all" class="on">Hammasi</button><button data-f="d">Kunlik</button><button data-f="m">Oylik</button><button data-f="y">Yillik</button></div>
  <div class="card" id="tl"></div>
 </section>
+<section class="sec" id="s-rep">
+ <div class="card"><h2>🥧 Shu oy harajatlari</h2><div id="pie"></div></div>
+ <div class="card"><h2>📈 Oxirgi 6 oy <span class="lgd"><i class="gi"></i>kirim<i class="ro"></i>chiqim</span></h2><div class="bars" id="bars"></div></div>
+</section>
+<section class="sec" id="s-more">
+ <div class="card"><h2>🤝 Qarz daftari</h2><div class="ms" id="dsum"></div>
+  <form id="f-d"><input id="b-w" placeholder="Kim bilan?" required><input id="b-a" type="number" min="1" placeholder="Summa" required>
+  <select id="b-k"><option value="g">Men qarz berdim</option><option value="t">Men qarz oldim</option></select><input id="b-d" type="date">
+  <div class="ig full"><input id="b-n" placeholder="Izoh"><button type="button" class="mic" data-for="b-n">🎤</button></div><button class="btn full">Qo'shish</button></form><div id="dl2" style="margin-top:12px"></div></div>
+ <div class="card"><h2>🎯 Jamg'arma maqsadlari</h2><form id="f-g"><input id="g-n" placeholder="Nima uchun? (telefon)" required><input id="g-t" type="number" min="1" placeholder="Maqsad summasi" required><button class="btn full">Maqsad qo'shish</button></form><div id="gl" style="margin-top:14px"></div></div>
+ <div class="card"><h2>🔁 Takroriy to'lovlar</h2><form id="f-r"><input id="q-n" placeholder="Nomi (kredit, internet)" required><input id="q-a" type="number" min="1" placeholder="Summa" required>
+  <input id="q-d" type="number" min="1" max="31" placeholder="Oyning nechanchi kuni" required><select id="q-k"></select><select id="q-c" class="full"></select><button class="btn full">Qo'shish</button></form><div id="rl" style="margin-top:12px"></div></div>
+ <div class="card"><h2>🛡️ Zaxira va xavfsizlik</h2><div class="bt"><button class="btn s" id="be">⬇️ Zaxira nusxa olish</button><button class="btn s" id="bi">⬆️ Tiklash</button><button class="btn s g" id="pb"></button></div>
+  <input type="file" id="bf" accept=".json,application/json" style="margin-bottom:10px"><textarea id="bk" placeholder="Zaxira matni shu yerda chiqadi. Tiklash uchun matnni shu yerga qo'ying yoki fayl tanlang."></textarea>
+  <div class="hint" id="cst"></div><div class="hint">PIN-kod ilovani begonalardan yashiradi, lekin ma'lumotlarni shifrlamaydi.</div></div>
+</section>
 </div>
+<div id="lk"><div class="card" style="width:min(86vw,320px);text-align:center;margin:0"><h2>🔒 PIN-kodni kiriting</h2><input id="lp" type="password" inputmode="numeric" maxlength="4" style="text-align:center;font-size:24px;letter-spacing:10px;margin-bottom:12px"><button class="btn" id="lb" style="width:100%">Ochish</button></div></div>
 
-<nav><button data-s="home" class="on">🏠 Bosh</button><button data-s="wal">💳 Kartalar</button><button data-s="tsk">✅ Vazifalar</button></nav>
+<nav><button data-s="home" class="on">🏠<small>Bosh</small></button><button data-s="wal">💳<small>Kartalar</small></button><button data-s="tsk">✅<small>Vazifa</small></button><button data-s="rep">📊<small>Hisobot</small></button><button data-s="more">⚙️<small>Yana</small></button></nav>
 <dialog id="dl"><h2>💰 Daromad qo'shish</h2><form id="fs">
 <input class="full" id="sm" type="number" min="1" placeholder="Summa (so'm)" required>
 <select id="sc"><option>Oylik</option><option>Avans</option><option>Mukofot</option><option>Qo'shimcha daromad</option><option>Boshqa</option></select>
@@ -135,9 +172,9 @@ const $=id=>document.getElementById(id);
 const P={d:'Kunlik',m:'Oylik',y:'Yillik'};
 const COL=['#6c5ce7,#a29bfe','#0ea5e9,#22d3ee','#f43f5e,#fb923c','#059669,#34d399','#7c3aed,#ec4899','#1e293b,#475569'];
 function ld(k,d){try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}}
-function sv(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+let cT;function sv(k,v){try{localStorage.setItem(k,JSON.stringify(v));localStorage.setItem('ts',Date.now())}catch(e){}clearTimeout(cT);cT=setTimeout(()=>cs(),1500)}
 let W=ld('w',[]),T=ld('t',[]),A=ld('a',[]),S=ld('s',{}),flt='all';
-if(!A.find(a=>a.k==='cash')){A.unshift({id:'cash',k:'cash',bank:'Naqd pul',l:'',i:0,c:'#f59e0b,#fbbf24'});sv('a',A)}
+if(!A.find(a=>a.k==='cash')){A.unshift({id:'cash',k:'cash',bank:'Naqd pul',l:'',i:0,c:'#f59e0b,#fbbf24'});try{localStorage.setItem('a',JSON.stringify(A))}catch(e){}}
 try{const th=localStorage.getItem('th');if(th)document.documentElement.dataset.theme=th}catch(e){}
 const fm=n=>Number(n).toLocaleString('ru-RU')+" so'm";
 const fd=s=>new Date(s).toLocaleString('uz-UZ',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
@@ -149,7 +186,7 @@ const bal=a=>a.i+W.filter(w=>(w.acc||'cash')===a.id).reduce((s,w)=>s+(w.t==='in'
 
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{
  document.querySelectorAll('nav button,.sec').forEach(e=>e.classList.remove('on'));
- b.classList.add('on');$('s-'+b.dataset.s).classList.add('on');
+ b.classList.add('on');$('s-'+b.dataset.s).classList.add('on');if(b.dataset.s==='rep')rc();
  if('Notification' in window&&Notification.permission==='default')Notification.requestPermission().catch(()=>{});
 });
 $('th').onclick=()=>{const r=document.documentElement;const dark=r.dataset.theme==='dark'||(!r.dataset.theme&&matchMedia('(prefers-color-scheme:dark)').matches);r.dataset.theme=dark?'light':'dark';try{localStorage.setItem('th',r.dataset.theme)}catch(e){}};
@@ -192,8 +229,19 @@ function da(id){if(!confirm('Kartani o\'chirasizmi?'))return;A=A.filter(a=>a.id!
 const IN=['Oylik','Avans','Mukofot',"Qo'shimcha daromad",'Boshqa'],OUT=['Oziq-ovqat','Transport','Kommunal',"Ko'ngilochar",'Salomatlik','Kiyim','Boshqa'];
 function fc(){$('wc').innerHTML=($('wt').value==='in'?IN:OUT).map(c=>`<option>${c}</option>`).join('')}
 $('wt').onchange=fc;fc();
-function wrow(w){const a=A.find(x=>x.id===(w.acc||'cash'));return `<div class="row"><div class="m"><b>${esc(w.c)}${w.n?' · '+esc(w.n):''}</b><span>${a?esc(a.bank):''} · ${fd(w.d)}</span></div><span class="${w.t==='in'?'in':'out'}">${w.t==='in'?'+':'−'}${fm(w.a)}</span>`}
-function rw(){$('wl').innerHTML=W.length?W.map(w=>wrow(w)+`<button class="x" onclick="dw(${w.id})">✕</button></div>`).join(''):'<div class="empty">Hozircha yozuv yo\'q</div>'}
+const EM={'Oylik':'💼','Avans':'💵','Mukofot':'🎁',"Qo'shimcha daromad":'✨','Maosh':'💼','Oziq-ovqat':'🍽️','Transport':'🚕','Kommunal':'💡',"Ko'ngilochar":'🎬','Salomatlik':'💊','Kiyim':'👕','Boshqa':'📦'};
+let wfl='all';
+const tm=x=>new Date(x).toLocaleTimeString('uz-UZ',{hour:'2-digit',minute:'2-digit'});
+function wrow(w,t){const a=A.find(x=>x.id===(w.acc||'cash'));return `<div class="row"><div class="ic ${w.t==='in'?'i':''}">${EM[w.c]||'📦'}</div><div class="m"><b>${esc(w.c)}${w.n?' · '+esc(w.n):''}</b><span>${a?esc(a.bank)+(a.l?' ••'+esc(a.l):''):''} · ${t?tm(w.d):fd(w.d)}</span></div><span class="${w.t==='in'?'in':'out'}">${w.t==='in'?'+':'−'}${fm(w.a)}</span>`}
+function dlab(k){const d=new Date(k),n=new Date(),y=new Date();y.setDate(n.getDate()-1);const same=(a,b)=>a.toDateString()===b.toDateString();return same(d,n)?'Bugun':same(d,y)?'Kecha':d.toLocaleDateString('uz-UZ',{day:'numeric',month:'long',year:'numeric'})}
+function rw(){
+ const n=new Date(),mo=W.filter(w=>{const d=new Date(w.d);return d.getMonth()===n.getMonth()&&d.getFullYear()===n.getFullYear()});
+ $('mi').textContent=fm(mo.filter(w=>w.t==='in').reduce((s,w)=>s+w.a,0));$('mo').textContent=fm(mo.filter(w=>w.t==='out').reduce((s,w)=>s+w.a,0));
+ const l=W.filter(w=>wfl==='all'||w.t===wfl).sort((a,b)=>b.d.localeCompare(a.d));
+ if(!l.length){$('wl').innerHTML='<div class="empty">Hozircha yozuv yo\'q</div>';return}
+ const g={};l.forEach(w=>{(g[new Date(w.d).toDateString()]=g[new Date(w.d).toDateString()]||[]).push(w)});
+ $('wl').innerHTML=Object.keys(g).map(k=>{const r=g[k],net=r.reduce((s,w)=>s+(w.t==='in'?w.a:-w.a),0);return `<div class="dh"><span>${dlab(k)}</span><span class="${net>=0?'in':'out'}">${net>=0?'+':'−'}${fm(Math.abs(net))}</span></div>`+r.map(w=>wrow(w,1)+`<button class="x" onclick="dw(${w.id})">✕</button></div>`).join('')}).join('')}
+document.querySelectorAll('#wf button').forEach(b=>b.onclick=()=>{wfl=b.dataset.f;document.querySelectorAll('#wf button').forEach(x=>x.classList.toggle('on',x===b));rw()});
 function dw(id){W=W.filter(x=>x.id!==id);sv('w',W);rw();ra();rh()}
 $('fw').onsubmit=e=>{e.preventDefault();W.unshift({id:Date.now(),t:$('wt').value,acc:$('wa2').value,a:+$('wa').value,c:$('wc').value,n:$('wn').value,d:new Date().toISOString()});sv('w',W);e.target.reset();fc();rw();ra();rh();toast('Yozuv qo\'shildi ✔')};
 
@@ -228,10 +276,72 @@ function rh(){
  $('lt').innerHTML=l.length?l.map(w=>wrow(w)+'</div>').join(''):'<div class="empty">Harajat yo\'q</div>';
 }
 function tick(){const n=new Date();T.forEach(t=>{if(!t.al&&new Date(t.d)<=n){t.al=1;sv('t',T);toast('⏰ Eslatma: '+t.n);try{if('Notification' in window&&Notification.permission==='granted')new Notification('Eslatma',{body:t.n})}catch(e){}rt();rh()}})}
+/* Qarz, maqsad, takroriy, grafik, zaxira, PIN, bulut */
+const RK=['w','t','a','s','d','g','r'];
+let D=ld('d',[]),G=ld('g',[]),R=ld('r',[]);
+const CS=(()=>{try{const g=Telegram.WebApp;return g.CloudStorage&&g.isVersionAtLeast('6.9')?g.CloudStorage:null}catch(e){return null}})();
+function snap(){const o={};RK.forEach(k=>o[k]=ld(k,k==='s'?{}:[]));return o}
+function cs(){if(!CS)return;const j=JSON.stringify(snap()),n=Math.ceil(j.length/3500);for(let i=0;i<n;i++)CS.setItem('p'+i,j.slice(i*3500,(i+1)*3500));CS.setItem('pm',JSON.stringify({n,ts:+localStorage.getItem('ts')||0}))}
+function cl(){if(!CS)return;CS.getItem('pm',(e,v)=>{if(e||!v)return cs();let m;try{m=JSON.parse(v)}catch(x){return}const mine=+localStorage.getItem('ts')||0;if(m.ts<=mine){if(m.ts<mine)cs();return}
+ const ks=[...Array(m.n).keys()].map(i=>'p'+i);CS.getItems(ks,(e2,r)=>{if(e2)return;try{const o=JSON.parse(ks.map(k=>r[k]).join(''));RK.forEach(k=>localStorage.setItem(k,JSON.stringify(o[k])));localStorage.setItem('ts',m.ts);location.reload()}catch(x){}})})}
+$('cst').textContent=CS?'☁️ Ma\'lumotlar Telegram bulutiga avtomatik saqlanadi':'☁️ Bulutga saqlash faqat Telegram ichida ishlaydi';
+
+/* Zaxira */
+$('be').onclick=()=>{const j=JSON.stringify(snap());$('bk').value=j;try{navigator.clipboard.writeText(j)}catch(e){}try{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([j],{type:'application/json'}));a.download='reja-zaxira-'+new Date().toISOString().slice(0,10)+'.json';a.click()}catch(e){}toast('Zaxira tayyor: yuklandi va nusxalandi')};
+$('bf').onchange=e=>{const f=e.target.files[0];if(f)f.text().then(t=>{$('bk').value=t;toast('Fayl o\'qildi. «Tiklash»ni bosing')})};
+$('bi').onclick=()=>{let o;try{o=JSON.parse($('bk').value)}catch(x){return toast('Zaxira matni noto\'g\'ri')}if(!confirm('Hozirgi ma\'lumotlar zaxiradagilar bilan almashtiriladi. Davom etamizmi?'))return;RK.forEach(k=>{if(o[k]!==undefined)localStorage.setItem(k,JSON.stringify(o[k]))});localStorage.setItem('ts',Date.now());cs();setTimeout(()=>location.reload(),600)};
+
+/* Qarzlar */
+$('f-d').onsubmit=e=>{e.preventDefault();D.push({id:Date.now(),w:$('b-w').value,a:+$('b-a').value,k:$('b-k').value,due:$('b-d').value,n:$('b-n').value,p:0,al:0});sv('d',D);e.target.reset();rd();toast('Qarz yozildi ✔')};
+function rd(){const o=D.filter(x=>!x.p),g=o.filter(x=>x.k==='g').reduce((s,x)=>s+x.a,0),t=o.filter(x=>x.k==='t').reduce((s,x)=>s+x.a,0);
+ $('dsum').innerHTML=`<div>Menga qaytarishi kerak<b class="in">${fm(g)}</b></div><div>Men qaytarishim kerak<b class="out">${fm(t)}</b></div>`;
+ const l=[...D].sort((a,b)=>a.p-b.p||(a.due||'9').localeCompare(b.due||'9'));
+ $('dl2').innerHTML=l.length?l.map(x=>{const late=!x.p&&x.due&&new Date(x.due+'T23:59')<new Date();return `<div class="row ${late?'late':''}" style="${x.p?'opacity:.5':''}"><div class="ic ${x.k==='g'?'i':''}">${x.k==='g'?'📤':'📥'}</div><div class="m"><b>${esc(x.w)} · ${fm(x.a)}</b><span>${x.k==='g'?'Menga qaytaradi':'Men qaytaraman'}${x.due?' · '+x.due:''}${x.n?' · '+esc(x.n):''}</span></div>${x.p?'<span class="tag">To\'langan</span>':`<button class="btn s" onclick="pd(${x.id})">To'landi</button>`}<button class="x" onclick="xd(${x.id})">✕</button></div>`}).join(''):'<div class="empty">Qarzlar yo\'q</div>'}
+function pd(id){D.find(x=>x.id===id).p=1;sv('d',D);rd()}
+function xd(id){D=D.filter(x=>x.id!==id);sv('d',D);rd()}
+
+/* Maqsadlar */
+$('f-g').onsubmit=e=>{e.preventDefault();G.push({id:Date.now(),n:$('g-n').value,t:+$('g-t').value,s:0});sv('g',G);e.target.reset();rg()};
+function rg(){$('gl').innerHTML=G.length?G.map(g=>{const p=Math.min(100,Math.round(g.s/g.t*100));return `<div style="margin-bottom:16px"><div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:6px"><b>🎯 ${esc(g.n)}</b><span>${p}%</span></div><div class="bar"><i style="width:${p}%"></i></div><div class="row" style="border:0;padding:8px 0 0"><span class="m" style="font-size:12px;color:var(--mut)">${fm(g.s)} / ${fm(g.t)}</span><button class="btn s" onclick="ag(${g.id})">+ Qo'shish</button><button class="x" onclick="xg(${g.id})">✕</button></div></div>`}).join(''):'<div class="empty">Maqsad qo\'ying, masalan «telefon» — 5 000 000</div>'}
+function ag(id){const a=+prompt("Qancha qo'shasiz? (so'm)");if(!a)return;const g=G.find(x=>x.id===id);g.s+=a;sv('g',G);rg();if(g.s>=g.t)toast('Maqsadga yetdingiz! 🎉')}
+function xg(id){G=G.filter(x=>x.id!==id);sv('g',G);rg()}
+
+/* Takroriy to'lovlar */
+const ra0=ra;ra=function(){ra0();$('q-k').innerHTML=$('wa2').innerHTML};
+$('q-c').innerHTML=OUT.map(c=>`<option>${c}</option>`).join('');
+$('f-r').onsubmit=e=>{e.preventDefault();const d=new Date(),p=new Date(d.getFullYear(),d.getMonth()-1,1);R.push({id:Date.now(),n:$('q-n').value,a:+$('q-a').value,d:Math.min(31,Math.max(1,+$('q-d').value)),acc:$('q-k').value,c:$('q-c').value,l:p.getFullYear()*12+p.getMonth()});sv('r',R);e.target.reset();runR();rr();toast('Qo\'shildi ✔')};
+function runR(){const n=new Date(),cur=n.getFullYear()*12+n.getMonth();let ch=0;R.forEach(r=>{for(let m=r.l+1;m<=cur;m++){const y=Math.floor(m/12),mo=m%12,t=new Date(y,mo,Math.min(r.d,new Date(y,mo+1,0).getDate()),9);if(t>n)break;W.push({id:Date.now()*1000+Math.floor(Math.random()*1000),t:'out',acc:r.acc,a:r.a,c:r.c||'Boshqa',n:r.n+' (avto)',d:t.toISOString()});r.l=m;ch=1}});if(ch){sv('r',R);sv('w',W);rw();ra();rh()}}
+function rr(){$('rl').innerHTML=R.length?R.map(r=>`<div class="row"><div class="ic">🔁</div><div class="m"><b>${esc(r.n)} · ${fm(r.a)}</b><span>Har oyning ${r.d}-sanasi</span></div><button class="x" onclick="xr(${r.id})">✕</button></div>`).join(''):'<div class="empty">Takroriy to\'lov yo\'q</div>'}
+function xr(id){R=R.filter(x=>x.id!==id);sv('r',R);rr()}
+const t0=tick;tick=function(){t0();runR();D.forEach(x=>{if(!x.p&&!x.al&&x.due&&new Date(x.due+'T09:00')<=new Date()){x.al=1;sv('d',D);toast('💸 Qarz muddati keldi: '+x.w);rd()}})};
+
+/* Grafiklar */
+const PC=['#6c5ce7','#0ea5e9','#f43f5e','#10b981','#f59e0b','#ec4899','#64748b'];
+function rc(){const n=new Date(),by={};
+ W.forEach(w=>{const d=new Date(w.d);if(w.t==='out'&&d.getMonth()===n.getMonth()&&d.getFullYear()===n.getFullYear())by[w.c]=(by[w.c]||0)+w.a});
+ const ks=Object.keys(by).sort((a,b)=>by[b]-by[a]),tot=ks.reduce((s,k)=>s+by[k],0);
+ if(!tot)$('pie').innerHTML='<div class="empty">Shu oy harajat yo\'q</div>';else{let off=0;const C=2*Math.PI*40;
+  const arcs=ks.map((k,i)=>{const L=by[k]/tot*C,x=`<circle r="40" cx="60" cy="60" fill="none" stroke="${PC[i%7]}" stroke-width="22" stroke-dasharray="${L} ${C-L}" stroke-dashoffset="${-off}" transform="rotate(-90 60 60)"/>`;off+=L;return x}).join('');
+  $('pie').innerHTML=`<div class="pw"><svg viewBox="0 0 120 120" width="170" height="170">${arcs}<text x="60" y="58" text-anchor="middle" font-size="8" fill="var(--mut)">Jami</text><text x="60" y="70" text-anchor="middle" font-size="9" font-weight="800" fill="var(--tx)">${Math.round(tot/1000)} ming</text></svg><div class="lg">${ks.map((k,i)=>`<div><i style="background:${PC[i%7]}"></i>${EM[k]||''} ${esc(k)}<b>${Math.round(by[k]/tot*100)}%</b></div>`).join('')}</div></div>`}
+ const M=[];for(let i=5;i>=0;i--){const d=new Date(n.getFullYear(),n.getMonth()-i,1);M.push({l:d.toLocaleDateString('uz-UZ',{month:'short'}),i:0,o:0,y:d.getFullYear(),m:d.getMonth()})}
+ W.forEach(w=>{const d=new Date(w.d),x=M.find(q=>q.y===d.getFullYear()&&q.m===d.getMonth());if(x)x[w.t==='in'?'i':'o']+=w.a});
+ const mx=Math.max(1,...M.map(x=>Math.max(x.i,x.o)));
+ $('bars').innerHTML=M.map(x=>`<div class="bc2"><div class="bb"><i class="gi" style="height:${x.i/mx*100}%"></i><i class="ro" style="height:${x.o/mx*100}%"></i></div><span>${x.l}</span><small>${x.i?Math.round(x.i/1000)+'k':''}</small></div>`).join('')}
+
+/* PIN */
+async function hs(p){try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('reja'+p));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}catch(e){return btoa('reja'+p)}}
+function lockUp(){let p=null;try{p=localStorage.getItem('pin')}catch(e){}if(p){$('lk').style.display='flex';$('lp').value='';setTimeout(()=>$('lp').focus(),100)}}
+$('lb').onclick=async()=>{if(await hs($('lp').value)===localStorage.getItem('pin'))$('lk').style.display='none';else{$('lp').value='';toast('PIN noto\'g\'ri')}};
+$('lp').oninput=()=>{if($('lp').value.length===4)$('lb').click()};
+function pl(){$('pb').textContent=localStorage.getItem('pin')?'🔓 PIN-kodni o\'chirish':'🔒 PIN-kod o\'rnatish'}
+$('pb').onclick=async()=>{if(localStorage.getItem('pin')){if(!confirm('PIN-kodni o\'chiramizmi?'))return;localStorage.removeItem('pin');toast('PIN o\'chirildi')}else{const p=prompt('4 xonali PIN kiriting');if(!/^\d{4}$/.test(p||''))return toast('Aynan 4 ta raqam kerak');localStorage.setItem('pin',await hs(p));toast('PIN o\'rnatildi 🔒')}pl()};
+document.addEventListener('visibilitychange',()=>{if(document.hidden)lockUp()});
+lockUp();pl();rd();rg();rr();runR();cl();
 const h=new Date().getHours();
 $('hi').firstChild.textContent=(h<5?'Xayrli tun':h<12?'Xayrli tong':h<18?'Xayrli kun':'Xayrli kech')+' 👋';
 $('dt').textContent=new Date().toLocaleDateString('uz-UZ',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
 ra();rw();rt();rh();tick();setInterval(tick,30000);
+window.addEventListener('load',()=>{try{const g=Telegram.WebApp;g.ready();g.expand();g.setHeaderColor('#6c5ce7')}catch(e){}});
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script>
 </body>
