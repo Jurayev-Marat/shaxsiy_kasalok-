@@ -1,18 +1,15 @@
 <!DOCTYPE html>
-<html lang="uz">
+<html lang="uz" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>JM Hamyon</title>
+<title>JM Hamyon & Reja</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#6c5ce7">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="JM Hamyon">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="apple-touch-icon" href="icons/icon-192.png">
-<link rel="icon" href="icons/icon-192.png">
 
 <style>
 :root {
@@ -24,6 +21,8 @@
   --pr2: #a29bfe;
   --ok: #10b981;
   --no: #f43f5e;
+  --warn: #f59e0b;
+  --gold: #fbbf24;
   --bd: #242849;
   --sh: 0 14px 36px rgba(0, 0, 0, .48);
   --fs: 14px;
@@ -37,7 +36,7 @@
   --card: #ffffff;
   --tx: #161829;
   --mut: #7a7f98;
-  --bd: #e7e9f4;
+  --bd: #e4e7f5;
   --sh: 0 12px 34px rgba(70, 70, 140, .09);
 }
 :root[data-theme="dark"] {
@@ -80,7 +79,7 @@ body {
     radial-gradient(circle at 90% -10%, color-mix(in srgb, var(--pr) 20%, transparent), transparent 42%),
     radial-gradient(circle at -10% 30%, color-mix(in srgb, var(--pr2) 12%, transparent), transparent 38%);
 }
-.wrap { max-width: 960px; margin: 0 auto; padding: 18px 18px 115px; }
+.wrap { max-width: 960px; margin: 0 auto; padding: 18px 18px 118px; }
 
 /* 1.5s JM Splash Screen */
 #splash {
@@ -89,8 +88,11 @@ body {
   z-index: 2000; display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   transition: opacity .45s ease, visibility .45s ease;
+  cursor: pointer;
+  animation: splashAutoHide .4s ease 1.55s forwards;
 }
-#splash.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+#splash.hide { opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; display: none !important; }
+@keyframes splashAutoHide { to { opacity: 0; visibility: hidden; pointer-events: none; } }
 .sp-box {
   width: 92px; height: 92px; border-radius: 26px;
   background: linear-gradient(145deg, rgba(108,92,231,.25), rgba(15,17,35,.95));
@@ -151,7 +153,7 @@ header { display: flex; justify-content: space-between; align-items: center; mar
 }
 .ib:active { transform: scale(.93); }
 
-/* Hero Balance Card (Aynan 2-rasmdagidek) */
+/* Hero Balance Card */
 .hero {
   background: linear-gradient(135deg, #372b86 0%, #4c3db5 55%, #3d3296 100%);
   border: 1px solid rgba(162, 155, 254, .28);
@@ -176,7 +178,16 @@ header { display: flex; justify-content: space-between; align-items: center; mar
   width: 26px; height: 26px; border-radius: 8px; cursor: pointer;
   display: inline-grid; place-items: center; font-size: 12px;
 }
-.hero .big { font-size: 34px; font-weight: 900; margin: 6px 0 12px; letter-spacing: -.8px; cursor: pointer; }
+.hero .big { font-size: 34px; font-weight: 900; margin: 6px 0 10px; letter-spacing: -.8px; cursor: pointer; }
+.cbu-ticker {
+  display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  background: rgba(11, 12, 26, .36); border: 1px solid rgba(255,255,255,.16);
+  padding: 5px 11px; border-radius: 99px; font-size: 11.5px; font-weight: 700;
+  color: #fde68a; margin-bottom: 12px; cursor: pointer; transition: background .2s;
+}
+.cbu-ticker:hover { background: rgba(11, 12, 26, .55); }
+.cbu-dot { width: 7px; height: 7px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px #10b981; display: inline-block; }
+
 .hero-flow { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
 .flow-pill {
   display: inline-flex; align-items: center; gap: 7px;
@@ -207,33 +218,54 @@ header { display: flex; justify-content: space-between; align-items: center; mar
 .pill-btn {
   border: 1px solid var(--bd); background: var(--card); color: var(--tx);
   padding: 7px 13px; border-radius: 11px; font-size: 12px; font-weight: 700;
-  cursor: pointer; display: inline-flex; align-items: center; gap: 5px;
+  cursor: pointer; display: inline-flex; align-items: center; gap: 5px; transition: .15s;
 }
+.pill-btn:active { transform: scale(.95); }
 .pill-btn.pr {
   background: linear-gradient(135deg, var(--pr), var(--pr2));
   color: #fff; border: 0; box-shadow: 0 4px 14px color-mix(in srgb, var(--pr) 38%, transparent);
 }
 
-/* 1-Tap Quick Expenses (Aynan 2-rasmdagidek 4 ta ustun) */
+/* 1-Tap Editable Quick Expenses */
 .q-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
 @media(max-width:520px) { .q-grid { grid-template-columns: repeat(2, 1fr); } }
 .q-item {
-  background: var(--card); border: 1px solid var(--bd); border-radius: 16px;
-  padding: 16px 10px; text-align: center; cursor: pointer;
+  background: var(--card); border: 1px solid var(--bd); border-radius: 18px;
+  padding: 16px 10px 14px; text-align: center; cursor: pointer;
   display: flex; flex-direction: column; align-items: center; gap: 5px;
-  transition: transform .15s, border-color .2s;
+  transition: transform .15s, border-color .2s, box-shadow .2s;
+  position: relative; overflow: hidden;
 }
-.q-item:hover { border-color: var(--pr); }
-.q-item:active { transform: scale(.95); }
-.q-item i { font-size: 22px; font-style: normal; margin-bottom: 2px; }
-.q-item b { font-size: 12.5px; font-weight: 700; }
-.q-item small { font-size: 11px; color: var(--mut); font-weight: 600; }
+.q-item:hover { border-color: var(--pr); box-shadow: 0 8px 22px rgba(108, 92, 231, .16); }
+.q-item:active { transform: scale(.96); }
+.q-item .q-edit {
+  position: absolute; top: 7px; right: 7px;
+  width: 25px; height: 25px; border-radius: 8px;
+  border: 1px solid var(--bd); background: color-mix(in srgb, var(--bg) 85%, transparent);
+  color: var(--mut); font-size: 11px; display: grid; place-items: center;
+  cursor: pointer; transition: .15s; z-index: 2;
+}
+.q-item .q-edit:hover { border-color: var(--pr); color: var(--tx); background: var(--pr); }
+.q-item i { font-size: 23px; font-style: normal; margin-bottom: 2px; }
+.q-item b { font-size: 12.5px; font-weight: 800; }
+.q-item small {
+  font-size: 11.5px; color: var(--pr2); font-weight: 700;
+  background: color-mix(in srgb, var(--pr) 12%, var(--bg));
+  padding: 2px 9px; border-radius: 99px;
+}
+
+.emo-pills { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 4px; }
+.emo-pill {
+  width: 36px; height: 36px; border-radius: 10px; border: 1px solid var(--bd);
+  background: var(--bg); font-size: 18px; cursor: pointer; display: grid; place-items: center;
+}
+.emo-pill.on { border-color: var(--pr); background: color-mix(in srgb, var(--pr) 20%, var(--bg)); transform: scale(1.08); }
 
 /* Bank Cards Carousel (Hisoblarim) */
 .cards { display: flex; gap: 14px; overflow-x: auto; padding: 2px 2px 14px; scroll-snap-type: x mandatory; scrollbar-width: none; }
 .cards::-webkit-scrollbar { display: none; }
 .bc {
-  flex: none; width: 268px; height: 158px; border-radius: 20px; padding: 16px 18px;
+  flex: none; width: 272px; height: 162px; border-radius: 20px; padding: 16px 18px;
   color: #fff; position: relative; scroll-snap-align: start;
   box-shadow: 0 12px 26px rgba(0,0,0,.28);
   display: flex; flex-direction: column; justify-content: space-between;
@@ -245,14 +277,15 @@ header { display: flex; justify-content: space-between; align-items: center; mar
   font-size: 34px; font-weight: 900; font-family: Georgia, serif;
   color: rgba(255,255,255,.22); pointer-events: none;
 }
-.bc .t { display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 14px; z-index: 1; }
+.bc .t { display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 14px; z-index: 1; gap: 6px; }
 .bc .edit-pill {
-  background: rgba(0,0,0,.26); border: 0; color: #fff;
+  background: rgba(0,0,0,.28); border: 1px solid rgba(255,255,255,.22); color: #fff;
   padding: 5px 10px; border-radius: 99px; font-size: 11px; font-weight: 700;
   cursor: pointer; display: inline-flex; align-items: center; gap: 4px;
 }
-.bc .n { font-size: 11.5px; opacity: .88; letter-spacing: 1.5px; z-index: 1; font-weight: 700; text-transform: uppercase; }
+.bc .n { font-size: 11.5px; opacity: .9; letter-spacing: 1.5px; z-index: 1; font-weight: 700; text-transform: uppercase; }
 .bc .b { font-size: 22px; font-weight: 900; z-index: 1; letter-spacing: -.5px; }
+.bc .b-sub { font-size: 11px; opacity: .85; font-weight: 600; display: block; margin-top: 2px; }
 
 /* Cards & Containers */
 .card {
@@ -262,7 +295,7 @@ header { display: flex; justify-content: space-between; align-items: center; mar
 .card h2 { font-size: 15.5px; font-weight: 800; margin-bottom: 12px; }
 .g2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
 
-/* Account Selector Pills (Cho'ntak va Kartalar) */
+/* Account Selector Pills */
 .acc-pills { display: flex; gap: 8px; overflow-x: auto; padding: 2px 0 6px; scrollbar-width: none; }
 .acc-pills::-webkit-scrollbar { display: none; }
 .acc-pill {
@@ -306,7 +339,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--pr); }
 .btn.g { background: var(--bg); color: var(--tx); box-shadow: none; border: 1px solid var(--bd); }
 .btn.dng { background: var(--no); box-shadow: 0 6px 16px rgba(244,63,94,.3); }
 
-/* Rows & Lists */
+/* Beautified Transaction Rows & Cards */
 .row { display: flex; align-items: center; gap: 11px; padding: 12px 0; border-bottom: 1px solid var(--bd); }
 .row:last-child { border: 0; }
 .row .m { flex: 1; min-width: 0; }
@@ -315,6 +348,45 @@ input:focus, select:focus, textarea:focus { border-color: var(--pr); }
 .in { color: var(--ok); font-weight: 700; }
 .out { color: var(--no); font-weight: 700; }
 .x { border: 0; background: none; color: var(--mut); cursor: pointer; font-size: 15px; padding: 4px; }
+
+.tx-day-group {
+  background: color-mix(in srgb, var(--bg) 55%, var(--card));
+  border: 1px solid var(--bd); border-radius: 18px;
+  padding: 12px 14px; margin-bottom: 12px;
+}
+.tx-day-hd {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-bottom: 8px; margin-bottom: 6px; border-bottom: 1px dashed var(--bd);
+  font-size: 12px; font-weight: 800; color: var(--mut);
+}
+.tx-item {
+  display: flex; align-items: center; gap: 12px; padding: 10px 6px;
+  border-radius: 14px; transition: background .15s; cursor: pointer;
+}
+.tx-item:hover { background: color-mix(in srgb, var(--pr) 8%, transparent); }
+.tx-ic {
+  width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center;
+  font-size: 20px; flex: none; position: relative;
+}
+.tx-ic.in-ic { background: rgba(16, 185, 129, .15); border: 1px solid rgba(16, 185, 129, .3); }
+.tx-ic.out-ic { background: rgba(244, 63, 94, .14); border: 1px solid rgba(244, 63, 94, .28); }
+.tx-body { flex: 1; min-width: 0; }
+.tx-top-line { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.tx-title { font-size: 14px; font-weight: 800; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tx-amt { font-size: 14.5px; font-weight: 900; white-space: nowrap; }
+.tx-meta { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 4px; font-size: 11.5px; color: var(--mut); }
+.tx-acc-badge {
+  background: var(--card); border: 1px solid var(--bd); padding: 2px 8px;
+  border-radius: 99px; font-size: 10.5px; font-weight: 700; color: var(--tx);
+}
+.tx-mini-bar { height: 4px; border-radius: 99px; background: var(--bd); overflow: hidden; margin-top: 6px; }
+.tx-mini-bar i { display: block; height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--pr), var(--no)); }
+.tx-acts { display: flex; gap: 4px; flex: none; }
+.tx-act-btn {
+  width: 30px; height: 30px; border-radius: 9px; border: 1px solid var(--bd);
+  background: var(--card); color: var(--mut); cursor: pointer; display: grid; place-items: center; font-size: 12px;
+}
+.tx-act-btn:hover { color: var(--tx); border-color: var(--pr); }
 
 /* Tabs & Segmented */
 .tabs { display: flex; gap: 7px; margin-bottom: 14px; flex-wrap: wrap; }
@@ -353,7 +425,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--pr); }
 .sal { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
 .sal .v { font-size: 22px; font-weight: 800; margin: 3px 0; }
 
-/* Bottom Navigation & FAB (Aynan 2-rasmdagidek) */
+/* Bottom Navigation & FAB */
 nav {
   position: fixed; left: 50%; transform: translateX(-50%);
   bottom: calc(12px + env(safe-area-inset-bottom, 0px));
@@ -442,7 +514,7 @@ textarea { min-height: 80px; font-family: monospace; font-size: 12px; }
 .bt { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
 
 /* Tools Grid (Vositalar) */
-.tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(115px, 1fr)); gap: 10px; margin-bottom: 16px; }
+.tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(105px, 1fr)); gap: 10px; margin-bottom: 16px; }
 .tool-box {
   background: var(--bg); border: 1px solid var(--bd); border-radius: 18px;
   padding: 14px 10px; text-align: center; cursor: pointer; transition: .2s;
@@ -460,9 +532,128 @@ textarea { min-height: 80px; font-family: monospace; font-size: 12px; }
 .nt-dot { width: 26px; height: 26px; border-radius: 50%; cursor: pointer; border: 2.5px solid transparent; }
 .nt-dot.on { border-color: var(--tx); transform: scale(1.12); }
 
-.ring-wrap { position: relative; width: 190px; height: 190px; margin: 10px auto 14px; display: grid; place-items: center; }
-.ring-wrap svg { position: absolute; inset: 0; transform: rotate(-90deg); }
-.tmr-disp { font-size: 36px; font-weight: 800; font-family: monospace; letter-spacing: 1px; z-index: 1; }
+/* Ultra-Modern Glassmorphic Pomodoro Timer & Stopwatch */
+.tmr-hero, .sw-hero {
+  background: radial-gradient(circle at 50% 18%, color-mix(in srgb, var(--pr) 28%, var(--card)), var(--card) 74%);
+  border: 1px solid color-mix(in srgb, var(--pr2) 32%, var(--bd));
+  border-radius: 28px; padding: 22px 18px; text-align: center;
+  position: relative; overflow: hidden; margin-bottom: 16px;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, .42), inset 0 1px 0 rgba(255, 255, 255, .08);
+}
+.sw-hero {
+  background: radial-gradient(circle at 50% 18%, rgba(14, 165, 233, .22), var(--card) 74%);
+  border-color: rgba(56, 189, 248, .3);
+}
+.ring-wrap {
+  position: relative; width: 236px; height: 236px; margin: 14px auto 18px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(108, 92, 231, .14), rgba(15, 17, 35, .65) 72%);
+  box-shadow: inset 0 0 28px rgba(0, 0, 0, .45), 0 8px 26px rgba(0, 0, 0, .25);
+  transition: box-shadow .3s ease, transform .25s ease;
+}
+.ring-wrap.running {
+  animation: ringPulse 2s infinite ease-in-out;
+}
+@keyframes ringPulse {
+  0%, 100% { box-shadow: inset 0 0 28px rgba(0,0,0,.45), 0 0 18px color-mix(in srgb, var(--pr) 35%, transparent); }
+  50% { box-shadow: inset 0 0 32px rgba(108,92,231,.25), 0 0 42px color-mix(in srgb, var(--pr) 65%, transparent); }
+}
+.ring-wrap.sw-dial.running {
+  animation: swPulse 1.8s infinite ease-in-out;
+}
+@keyframes swPulse {
+  0%, 100% { box-shadow: inset 0 0 28px rgba(0,0,0,.45), 0 0 18px rgba(14, 165, 233, .35); }
+  50% { box-shadow: inset 0 0 34px rgba(14, 165, 233, .28), 0 0 44px rgba(56, 189, 248, .65); }
+}
+.ring-wrap svg {
+  position: absolute; inset: 0; transform: rotate(-90deg);
+  filter: drop-shadow(0 0 10px rgba(108, 92, 231, .35));
+}
+.tmr-disp {
+  font-size: 44px; font-weight: 900;
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: 1px; z-index: 1; line-height: 1;
+  text-shadow: 0 4px 16px rgba(0, 0, 0, .45);
+}
+.sw-ms {
+  font-size: 23px; font-weight: 800; color: var(--gold);
+  margin-left: 2px; opacity: .95;
+}
+.tmr-sub-lbl {
+  font-size: 11px; color: var(--mut); font-weight: 800;
+  margin-top: 8px; z-index: 1; text-transform: uppercase; letter-spacing: 1.4px;
+  background: rgba(255, 255, 255, .06); padding: 4px 11px; border-radius: 99px;
+  border: 1px solid rgba(255, 255, 255, .08);
+}
+.tmr-presets { display: flex; gap: 7px; justify-content: center; flex-wrap: wrap; margin-bottom: 12px; }
+.tmr-preset {
+  padding: 8px 13px; border-radius: 99px; border: 1px solid var(--bd);
+  background: var(--bg); color: var(--tx); font-size: 12px; font-weight: 700; cursor: pointer; transition: .18s;
+}
+.tmr-preset.on {
+  background: linear-gradient(135deg, var(--pr), var(--pr2));
+  color: #fff; border-color: transparent;
+  box-shadow: 0 5px 14px color-mix(in srgb, var(--pr) 40%, transparent);
+}
+.ctrl-grid { display: flex; gap: 9px; justify-content: center; flex-wrap: wrap; margin-top: 8px; }
+.ctrl-btn {
+  border: 1px solid var(--bd); background: var(--bg); color: var(--tx);
+  padding: 12px 16px; border-radius: 15px; font-weight: 800; font-size: 13.5px;
+  cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  transition: transform .15s, box-shadow .2s, border-color .2s;
+}
+.ctrl-btn:active { transform: scale(.95); }
+.ctrl-btn.start {
+  background: linear-gradient(135deg, #10b981, #059669); color: #fff; border: 0;
+  box-shadow: 0 8px 20px rgba(16, 185, 129, .35); min-width: 135px;
+}
+.ctrl-btn.pause {
+  background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; border: 0;
+  box-shadow: 0 8px 20px rgba(245, 158, 11, .35); min-width: 135px;
+}
+.ctrl-btn.lap {
+  background: linear-gradient(135deg, var(--pr), var(--pr2)); color: #fff; border: 0;
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--pr) 38%, transparent);
+}
+.ctrl-btn.next-run {
+  background: rgba(14, 165, 233, .15); color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, .4);
+}
+.rec-card {
+  background: color-mix(in srgb, var(--bg) 60%, var(--card));
+  border: 1px solid var(--bd); border-radius: 16px;
+  padding: 11px 13px; margin-bottom: 9px;
+  display: flex; align-items: center; gap: 11px; transition: border-color .18s;
+}
+.rec-card:hover { border-color: var(--pr); }
+.rec-card.gold-1 {
+  border-color: rgba(251, 191, 36, .55);
+  background: linear-gradient(135deg, rgba(251, 191, 36, .1), color-mix(in srgb, var(--bg) 65%, var(--card)));
+}
+.rec-rank {
+  width: 36px; height: 36px; border-radius: 11px;
+  background: var(--card); border: 1px solid var(--bd);
+  display: grid; place-items: center; font-weight: 900; font-size: 15px; flex: none;
+}
+.rec-body { flex: 1; min-width: 0; text-align: left; }
+.rec-body b { font-size: 13.5px; font-weight: 800; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.rec-body small { font-size: 11.5px; color: var(--mut); display: block; margin-top: 2px; }
+.rec-time {
+  font-family: 'JetBrains Mono', monospace; font-size: 15.5px; font-weight: 900;
+  color: var(--tx); text-align: right;
+}
+.rec-diff { font-size: 11px; font-weight: 700; color: var(--mut); display: block; }
+.rec-diff.best { color: var(--ok); }
+
+/* Currency Converter Cards */
+.rate-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(135px, 1fr)); gap: 10px; margin-bottom: 14px; }
+.rate-box {
+  background: var(--bg); border: 1px solid var(--bd); border-radius: 16px;
+  padding: 12px; display: flex; flex-direction: column; gap: 4px;
+}
+.rate-box small { font-size: 11px; color: var(--mut); font-weight: 700; }
+.rate-box b { font-size: 15px; font-weight: 900; color: var(--gold); }
 
 .th-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
 .th-card { border: 2px solid var(--bd); border-radius: 16px; padding: 12px; cursor: pointer; display: flex; flex-direction: column; gap: 8px; }
@@ -485,7 +676,7 @@ textarea { min-height: 80px; font-family: monospace; font-size: 12px; }
 <body>
 
 <!-- 1.5s JM Splash Screen -->
-<div id="splash">
+<div id="splash" onclick="this.classList.add('hide')">
   <div class="sp-box">
     <svg class="sp-svg" width="58" height="58" viewBox="0 0 64 64" fill="none">
       <defs>
@@ -504,7 +695,7 @@ textarea { min-height: 80px; font-family: monospace; font-size: 12px; }
 </div>
 
 <div class="wrap">
-  <!-- Yuqori Header (Video tugmasiz, toza holatda) -->
+  <!-- Yuqori Header -->
   <header>
     <div class="brand">
       <div class="jm-badge" id="jmLogo" data-st="it" onclick="cycleLogoStyle()" title="Logotip uslubini almashtirish">JM</div>
@@ -520,7 +711,7 @@ textarea { min-height: 80px; font-family: monospace; font-size: 12px; }
     </div>
   </header>
 
-  <!-- 1. ASOSIY SAHIFA (Aynan 2-rasmdagidek, Video bannersiz) -->
+  <!-- 1. ASOSIY SAHIFA -->
   <section class="sec on" id="s-home">
     <div class="hero">
       <div class="vip-pill">JM VIP</div>
@@ -530,6 +721,10 @@ textarea { min-height: 80px; font-family: monospace; font-size: 12px; }
         <button type="button" class="eye-inline" id="eyeBtn" onclick="toggleHideBal()">👁</button>
       </div>
       <div class="big" id="hb" onclick="toggleHideBal()">0 so'm</div>
+      <div class="cbu-ticker" id="heroRateTicker" onclick="goSec('tsk');openTool('conv')" title="Markaziy bank kurslari va Konvertor">
+        <span class="cbu-dot"></span>
+        <span id="heroRateTxt">MB: 1$ = 12 850 so'm · 1€ = 13 800 so'm</span>
+      </div>
       <div class="hero-flow">
         <div class="flow-pill"><i class="up">↑</i> <span>Kirim:</span> <b id="h-in">0 so'm</b></div>
         <div class="flow-pill"><i class="dn">↓</i> <span>Chiqim:</span> <b id="h-out">0 so'm</b></div>
@@ -541,14 +736,14 @@ textarea { min-height: 80px; font-family: monospace; font-size: 12px; }
       </div>
     </div>
 
-    <!-- Tezkor harajatlar (1-bosishda) -->
+    <!-- Tezkor harajatlar (1-bosishda + narxini tahrirlash ✏️) -->
     <div class="sec-bar">
-      <h2>⚡ Tezkor harajatlar (1-bosishda)</h2>
-      <button type="button" class="pill-btn" onclick="addQuickTpl()">+ Shablon</button>
+      <h2>⚡ Tezkor harajatlar (1-bosishda) <small>(✏️ bosib narxni o'zgartiring)</small></h2>
+      <button type="button" class="pill-btn pr" onclick="openQuickTplModal(-1)">+ Shablon</button>
     </div>
     <div class="q-grid" id="qGrid"></div>
 
-    <!-- Hisoblarim (pulini o'zgartirish uchun ustiga bosing) -->
+    <!-- Hisoblarim -->
     <div class="sec-bar">
       <h2>💳 Hisoblarim <small>(pulini o'zgartirish uchun ustiga bosing)</small></h2>
       <div style="display:flex;gap:8px">
@@ -611,7 +806,7 @@ textarea { min-height: 80px; font-family: monospace; font-size: 12px; }
         <div class="full" style="font-size:12px;color:var(--mut);font-weight:700;margin-bottom:-4px">Qaysi hisobdan / hisobga (Cho'ntak yoki Karta):</div>
         <div class="acc-pills full" id="wa2Pills"></div>
         <select id="wa2" style="display:none"></select>
-        <input id="wa" type="number" min="1" placeholder="Summa (so'm)" required>
+        <input id="wa" type="number" step="any" min="0.01" placeholder="Summa" required>
         <select id="wc"></select>
         <div class="ig full">
           <input id="wn" placeholder="Izoh (yozing yoki 🎤 ayting)">
@@ -623,7 +818,7 @@ textarea { min-height: 80px; font-family: monospace; font-size: 12px; }
 
     <div class="card">
       <div class="sec-bar" style="margin-top:0">
-        <h2>🧾 Tranzaksiyalar</h2>
+        <h2>🧾 Tranzaksiyalar tarixi</h2>
         <button type="button" class="pill-btn" onclick="$('dTxFlt').showModal()">⚙️ Filtr</button>
       </div>
       <div class="tabs" id="perTabs">
@@ -643,12 +838,12 @@ textarea { min-height: 80px; font-family: monospace; font-size: 12px; }
         <button data-f="in">Kirim</button>
         <button data-f="out">Chiqim</button>
       </div>
-      <input id="txSearch" placeholder="🔍 Qidiruv (izoh yoki kategoriya)..." style="margin-bottom:12px" oninput="rw()">
+      <input id="txSearch" placeholder="🔍 Qidiruv (izoh, summa yoki kategoriya)..." style="margin-bottom:12px" oninput="rw()">
       <div id="wl"></div>
     </div>
   </section>
 
-  <!-- 3. QARZ & HISOB (QARZ KITOBI, HISOBOT, MAQSADLAR) -->
+  <!-- 3. QARZ & HISOB -->
   <section class="sec" id="s-rep">
     <div class="card">
       <div class="sec-bar" style="margin-top:0">
@@ -704,7 +899,7 @@ textarea { min-height: 80px; font-family: monospace; font-size: 12px; }
     </div>
   </section>
 
-  <!-- 4. VOSITALAR (VAZIFALAR, QAYDLAR, TAYMER, SEKUNDOMER, KALKULYATOR) -->
+  <!-- 4. VOSITALAR (VAZIFALAR, QAYDLAR, ZAMONAVIY TAYMER, SEKUNDOMER, KALKULYATOR, VALYUTA KONVERTORI) -->
   <section class="sec" id="s-tsk">
     <div class="card">
       <h2>🛠️ Foydali vositalar</h2>
@@ -714,6 +909,7 @@ textarea { min-height: 80px; font-family: monospace; font-size: 12px; }
         <div class="tool-box" data-tl="timer" onclick="openTool('timer')"><i>⏲️</i><b>Taymer</b></div>
         <div class="tool-box" data-tl="sw" onclick="openTool('sw')"><i>⏱️</i><b>Sekundomer</b></div>
         <div class="tool-box" data-tl="calc" onclick="openTool('calc')"><i>🧮</i><b>Kalkulyator</b></div>
+        <div class="tool-box" data-tl="conv" onclick="openTool('conv')"><i>💱</i><b>Valyuta</b></div>
       </div>
     </div>
 
@@ -768,38 +964,110 @@ textarea { min-height: 80px; font-family: monospace; font-size: 12px; }
       </div>
     </div>
 
+    <!-- Zamonaviy Taymer (Pomodoro & Deep Work + Saqlanadigan tarix) -->
     <div id="tl-timer" class="tl-pane" style="display:none">
-      <div class="card" style="text-align:center">
+      <div class="tmr-hero">
         <div class="sec-bar" style="margin-top:0">
-          <h2>⏲️ Taymer</h2>
-          <button type="button" class="pill-btn" onclick="$('dTmrSet').showModal()">⚙️ Sozlamalar</button>
+          <h2>⏲️ Fokus & Pomodoro</h2>
+          <div style="display:flex;gap:6px;align-items:center">
+            <span class="tag" id="tmrSessBadge">🔥 Bugun: 0 seans</span>
+            <button type="button" class="pill-btn" onclick="$('dTmrSet').showModal();ta($('dTmrSet'))">⚙️ Sozlash</button>
+          </div>
         </div>
-        <div class="seg" id="tmrModeSeg">
-          <button type="button" class="on in-m" onclick="swTmrMode('work',this)">Ish</button>
-          <button type="button" class="pr-m" onclick="swTmrMode('rest',this)">Dam olish</button>
+
+        <div class="seg" id="tmrModeSeg" style="margin-bottom:10px">
+          <button type="button" class="on in-m" data-m="work" onclick="swTmrMode('work',this)">🔥 Fokus (Ish)</button>
+          <button type="button" class="pr-m" data-m="rest" onclick="swTmrMode('rest',this)">☕ Tanaffus (Dam)</button>
         </div>
-        <div class="ring-wrap">
-          <svg width="190" height="190" viewBox="0 0 190 190">
-            <circle cx="95" cy="95" r="82" fill="none" stroke="var(--bd)" stroke-width="10"/>
-            <circle id="tmrRing" cx="95" cy="95" r="82" fill="none" stroke="var(--ok)" stroke-width="10" stroke-linecap="round" stroke-dasharray="515" stroke-dashoffset="0"/>
+
+        <div class="tmr-presets" id="tmrPresets">
+          <button type="button" class="tmr-preset" data-min="5" onclick="setTmrPreset(5,'work',this)">⚡ 5 daq</button>
+          <button type="button" class="tmr-preset" data-min="15" onclick="setTmrPreset(15,'work',this)">🎯 15 daq</button>
+          <button type="button" class="tmr-preset on" data-min="25" onclick="setTmrPreset(25,'work',this)">🍅 25 daq</button>
+          <button type="button" class="tmr-preset" data-min="45" onclick="setTmrPreset(45,'work',this)">🚀 45 daq</button>
+          <button type="button" class="tmr-preset" data-min="60" onclick="setTmrPreset(60,'work',this)">💎 60 daq</button>
+        </div>
+
+        <div style="max-width:320px;margin:0 auto 6px">
+          <input id="tmrLabelInp" placeholder="🎯 Mashg'ulot nomi (masalan: Kitob o'qish, Sport...)" oninput="saveTmrState()" style="text-align:center;font-size:13px;padding:9px 12px">
+        </div>
+
+        <div class="ring-wrap" id="tmrRingWrap">
+          <svg width="236" height="236" viewBox="0 0 236 236">
+            <defs>
+              <linearGradient id="tmrGrad" x1="0" y1="0" x2="236" y2="236" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#10b981"/>
+                <stop offset="50%" stop-color="#6c5ce7"/>
+                <stop offset="100%" stop-color="#fbbf24"/>
+              </linearGradient>
+            </defs>
+            <circle cx="118" cy="118" r="102" fill="none" stroke="var(--bd)" stroke-width="11"/>
+            <circle id="tmrRing" cx="118" cy="118" r="102" fill="none" stroke="url(#tmrGrad)" stroke-width="11" stroke-linecap="round" stroke-dasharray="641" stroke-dashoffset="0"/>
           </svg>
           <div class="tmr-disp" id="tmrDisp">25:00</div>
+          <div class="tmr-sub-lbl" id="tmrStatusLbl">FOKUS REJIMI</div>
         </div>
-        <div style="display:flex;gap:8px;justify-content:center">
-          <button class="btn" id="tmrStart" onclick="toggleTmr()">Boshlash</button>
-          <button class="btn g" onclick="resetTmr()">Qayta</button>
+
+        <div class="ctrl-grid">
+          <button type="button" class="ctrl-btn start" id="tmrStart" onclick="toggleTmr()">▶ Boshlash</button>
+          <button type="button" class="ctrl-btn lap" onclick="saveTmrSessionManual()">💾 Natijani saqlash</button>
+          <button type="button" class="ctrl-btn" onclick="resetTmr()">↺ Qayta (00:00)</button>
         </div>
+        <div class="hint">💡 Taymer tugaganda yoki «💾 Natijani saqlash» bosilganda natija pastdagi ro'yxatga tushadi va o'zingiz o'chirmaguncha saqlanib turadi.</div>
+      </div>
+
+      <div class="card">
+        <div class="sec-bar" style="margin-top:0">
+          <h2>📜 Saqlangan taymer seanslari <small>(qo'lda o'chirilmaguncha turadi)</small></h2>
+          <button type="button" class="pill-btn" onclick="clearTmrHist()">🗑 Tozalash</button>
+        </div>
+        <div id="tmrHistList"></div>
       </div>
     </div>
 
+    <!-- Zamonaviy Sekundomer (Ko'p ishtirokchi + O'chib ketmaydigan natijalar) -->
     <div id="tl-sw" class="tl-pane" style="display:none">
-      <div class="card" style="text-align:center">
-        <h2>⏱️ Sekundomer</h2>
-        <div class="tmr-disp" id="swDisp" style="margin:18px 0">00:00.0</div>
-        <div style="display:flex;gap:8px;justify-content:center">
-          <button class="btn" id="swStart" onclick="toggleSw()">Boshlash</button>
-          <button class="btn g" onclick="resetSw()">Nolga</button>
+      <div class="sw-hero">
+        <div class="sec-bar" style="margin-top:0">
+          <h2>⏱️ Professional Sekundomer</h2>
+          <span class="tag" id="swStateBadge">⏱ Tayyor</span>
         </div>
+
+        <div style="max-width:340px;margin:0 auto 8px">
+          <input id="swRunnerName" placeholder="🏃 Ishtirokchi ismi (masalan: 1-ishtirokchi, Ali...)" style="text-align:center;font-size:13px;padding:10px 14px">
+        </div>
+
+        <div class="ring-wrap sw-dial" id="swRingWrap">
+          <svg width="236" height="236" viewBox="0 0 236 236">
+            <defs>
+              <linearGradient id="swGrad" x1="0" y1="0" x2="236" y2="236" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#38bdf8"/>
+                <stop offset="50%" stop-color="#6c5ce7"/>
+                <stop offset="100%" stop-color="#10b981"/>
+              </linearGradient>
+            </defs>
+            <circle cx="118" cy="118" r="102" fill="none" stroke="var(--bd)" stroke-width="11"/>
+            <circle id="swRing" cx="118" cy="118" r="102" fill="none" stroke="url(#swGrad)" stroke-width="11" stroke-linecap="round" stroke-dasharray="641" stroke-dashoffset="641"/>
+          </svg>
+          <div class="tmr-disp"><span id="swMainDisp">00:00</span><span class="sw-ms" id="swMsDisp">.00</span></div>
+          <div class="tmr-sub-lbl" id="swLapCounterLbl">SAQLANGANLAR: 0 TA</div>
+        </div>
+
+        <div class="ctrl-grid">
+          <button type="button" class="ctrl-btn start" id="swStart" onclick="toggleSw()">▶ Boshlash</button>
+          <button type="button" class="ctrl-btn lap" onclick="recordSwLap(false)">🏁 Finish / Saqlash</button>
+          <button type="button" class="ctrl-btn next-run" onclick="nextRunnerSw()">🔄 Keyingi odam (00:00)</button>
+          <button type="button" class="ctrl-btn" onclick="resetSwClockOnly()">↺ Vaqtni 00:00 qilish</button>
+        </div>
+        <div class="hint">🔒 <b>Eslatma:</b> Vaqtni «00:00» qilsangiz yoki 2-ishtirokchi uchun qayta boshlasangiz ham, pastdagi saqlangan natijalar <b>hech qachon o'chib ketmaydi</b> — faqat o'zingiz qo'lda o'chirasiz!</div>
+      </div>
+
+      <div class="card">
+        <div class="sec-bar" style="margin-top:0">
+          <h2>🏆 Ishtirokchilar va Natijalar jadvali</h2>
+          <button type="button" class="pill-btn" onclick="clearAllSwLaps()">🗑 Ro'yxatni tozalash</button>
+        </div>
+        <div id="swLapsList"></div>
       </div>
     </div>
 
@@ -832,6 +1100,31 @@ textarea { min-height: 80px; font-family: monospace; font-size: 12px; }
           <button type="button" onclick="cIn('.')">.</button>
           <button type="button" class="eq" onclick="cIn('=')">=</button>
         </div>
+      </div>
+    </div>
+
+    <!-- Tool 6: Valyuta Konvertori va Markaziy Bank Kurslari -->
+    <div id="tl-conv" class="tl-pane" style="display:none">
+      <div class="card">
+        <div class="sec-bar" style="margin-top:0">
+          <h2>💱 O'zbekiston MB Valyuta Kurslari</h2>
+          <button type="button" class="pill-btn pr" onclick="fetchCBURates(true)">🔄 Yangilash (CBU)</button>
+        </div>
+        <div class="rate-grid" id="cbuRateCards"></div>
+        <div class="hint" id="cbuUpdTime" style="margin:-4px 0 14px">🌐 Markaziy bank (cbu.uz) kurslari avtomatik yangilanadi. Kurs ustiga bosib qo'lda ham o'zgartirish mumkin.</div>
+
+        <h2>🧮 Tezkor Valyuta Konvertori</h2>
+        <div style="display:grid;grid-template-columns:2fr 1fr;gap:8px;margin-bottom:12px">
+          <input id="cvAmt" type="number" step="any" value="100" oninput="runCurrencyConv()" placeholder="Miqdorni kiriting">
+          <select id="cvFrom" onchange="runCurrencyConv()">
+            <option value="USD">🇺🇸 USD ($)</option>
+            <option value="EUR">🇪🇺 EUR (€)</option>
+            <option value="UZS">🇺🇿 UZS (So'm)</option>
+            <option value="RUB">🇷🇺 RUB (₽)</option>
+            <option value="KRW">🇰🇷 KRW (₩)</option>
+          </select>
+        </div>
+        <div class="rate-grid" id="cvResultGrid"></div>
       </div>
     </div>
   </section>
@@ -877,6 +1170,7 @@ textarea { min-height: 80px; font-family: monospace; font-size: 12px; }
       <div class="cur-pills" id="curPills">
         <button type="button" data-c="so'm" class="on" onclick="setCur('so\'m')">So'm</button>
         <button type="button" data-c="$" onclick="setCur('$')">$ USD</button>
+        <button type="button" data-c="€" onclick="setCur('€')">€ EUR</button>
         <button type="button" data-c="₩" onclick="setCur('₩')">₩ Won</button>
       </div>
     </div>
@@ -907,7 +1201,7 @@ textarea { min-height: 80px; font-family: monospace; font-size: 12px; }
     </div>
 
     <div style="text-align:center;color:var(--mut);font-size:12px;padding:8px 0 4px;font-weight:700">
-      JM Digital · JM Hamyon v2.5 · Created by JM
+      JM Digital · JM Hamyon v2.6 · Created by JM
     </div>
   </section>
 </div>
@@ -925,7 +1219,7 @@ textarea { min-height: 80px; font-family: monospace; font-size: 12px; }
   </div>
 </div>
 
-<!-- Pastki 5 ta menyu (Aynan 2-rasmdagidek) -->
+<!-- Pastki 5 ta menyu -->
 <nav>
   <button data-s="home" class="on">📊<small>Asosiy</small></button>
   <button data-s="wal">⇄<small>Amallar</small></button>
@@ -934,18 +1228,49 @@ textarea { min-height: 80px; font-family: monospace; font-size: 12px; }
   <button data-s="more">⚙️<small>Sozlamalar</small></button>
 </nav>
 
-<!-- Dialog: Yangi Karta qo'shish -->
+<!-- Dialog: Tezkor Harajat Shablonini Tahrirlash / Qo'shish (#dQuickTpl) -->
+<dialog id="dQuickTpl">
+  <h2 id="qtTitle">⚡ Tezkor harajatni tahrirlash</h2>
+  <form id="fQuickTpl">
+    <div class="full" style="font-size:12px;color:var(--mut);font-weight:700;margin-bottom:-4px">Belgi (Emoji tanlang yoki yozing):</div>
+    <div class="emo-pills full" id="qtEmoPills">
+      <button type="button" class="emo-pill" onclick="pickQtEmo('🚇')">🚇</button>
+      <button type="button" class="emo-pill" onclick="pickQtEmo('🚕')">🚕</button>
+      <button type="button" class="emo-pill" onclick="pickQtEmo('🥖')">🥖</button>
+      <button type="button" class="emo-pill" onclick="pickQtEmo('☕')">☕</button>
+      <button type="button" class="emo-pill" onclick="pickQtEmo('🍽️')">🍽️</button>
+      <button type="button" class="emo-pill" onclick="pickQtEmo('🛒')">🛒</button>
+      <button type="button" class="emo-pill" onclick="pickQtEmo('⛽')">⛽</button>
+      <button type="button" class="emo-pill" onclick="pickQtEmo('💊')">💊</button>
+    </div>
+    <input id="qt-ic" placeholder="Emoji (🚕)" maxlength="4" required>
+    <input id="qt-n" placeholder="Nomi (Yo'lkira, Non...)" required>
+    <input id="qt-a" class="full" type="number" min="1" step="any" placeholder="Narxi / Summasi (so'm)" required>
+    <select id="qt-c" class="full"></select>
+    <button class="btn">💾 Saqlash</button>
+    <button type="button" class="btn g" onclick="$('dQuickTpl').close()">Bekor</button>
+    <button type="button" class="btn full dng" id="qtDelBtn" onclick="delQuickTpl()">🗑 Shablonni o'chirish</button>
+  </form>
+</dialog>
+
+<!-- Dialog: Yangi Karta qo'shish (Valyuta tanlash bilan) -->
 <dialog id="dAddCard">
-  <h2>💳 Yangi karta qo'shish</h2>
+  <h2>💳 Yangi karta / valyuta hisobi</h2>
   <form id="fa">
-    <input class="full" id="ab" list="bl" placeholder="Bank nomi (Humo, Uzcard, Kapital...)" required>
+    <input class="full" id="ab" list="bl" placeholder="Bank yoki hisob nomi (Humo, Visa, Dollar...)" required>
     <datalist id="bl">
       <option>Humo</option><option>Uzcard</option><option>Kapitalbank</option>
       <option>Xalq Banki</option><option>Ipoteka Bank</option><option>Agrobank</option>
-      <option>Anorbank</option><option>TBC Bank</option><option>Hamkorbank</option>
+      <option>Anorbank</option><option>TBC Bank</option><option>Visa USD</option>
     </datalist>
-    <input id="al" maxlength="4" inputmode="numeric" placeholder="Oxirgi 4 raqam" required>
-    <input id="ai" type="number" placeholder="Hozirgi qoldiq (so'm)" required>
+    <input id="al" maxlength="4" inputmode="numeric" placeholder="Oxirgi 4 raqam">
+    <select id="acur">
+      <option value="UZS">🇺🇿 UZS (So'm)</option>
+      <option value="USD">🇺🇸 USD ($ Dollar)</option>
+      <option value="EUR">🇪🇺 EUR (€ Yevro)</option>
+      <option value="RUB">🇷🇺 RUB (₽ Rubl)</option>
+    </select>
+    <input id="ai" class="full" type="number" step="any" placeholder="Hozirgi qoldiq" required>
     <button class="btn">+ Qo'shish</button>
     <button type="button" class="btn g" onclick="$('dAddCard').close()">Bekor</button>
   </form>
@@ -974,6 +1299,12 @@ textarea { min-height: 80px; font-family: monospace; font-size: 12px; }
   <form id="fe">
     <input class="full" id="e-b" placeholder="Bank nomi" required>
     <input id="e-l" maxlength="4" inputmode="numeric" placeholder="Oxirgi 4 raqam">
+    <select id="e-cur">
+      <option value="UZS">🇺🇿 UZS (So'm)</option>
+      <option value="USD">🇺🇸 USD ($ Dollar)</option>
+      <option value="EUR">🇪🇺 EUR (€ Yevro)</option>
+      <option value="RUB">🇷🇺 RUB (₽ Rubl)</option>
+    </select>
     <input id="e-m" class="full" type="number" step="any" placeholder="Hozirgi qoldiq" required>
     <button class="btn">Saqlash</button>
     <button type="button" class="btn g" id="e-x">Bekor</button>
@@ -990,7 +1321,7 @@ textarea { min-height: 80px; font-family: monospace; font-size: 12px; }
       <option value="in">➕ Kirim</option>
     </select>
     <select id="et-acc"></select>
-    <input id="et-a" class="full" type="number" min="1" placeholder="Summa" required>
+    <input id="et-a" class="full" type="number" step="any" min="0.01" placeholder="Summa" required>
     <input id="et-c" class="full" placeholder="Kategoriya" required>
     <input id="et-n" class="full" placeholder="Izoh">
     <button class="btn">Saqlash</button>
@@ -1008,13 +1339,13 @@ textarea { min-height: 80px; font-family: monospace; font-size: 12px; }
     <div class="full" style="font-size:12px;color:var(--mut);font-weight:700">Qaysi hisobga (Karta yoki Cho'ntak):</div>
     <div class="acc-pills full" id="trToPills"></div>
     <select id="tr-to" class="full" style="display:none"></select>
-    <input id="tr-a" class="full" type="number" min="1" placeholder="Summa" required>
+    <input id="tr-a" class="full" type="number" step="any" min="1" placeholder="Summa" required>
     <button class="btn">O'tkazish</button>
     <button type="button" class="btn g" onclick="$('dTrf').close()">Bekor</button>
   </form>
 </dialog>
 
-<!-- Dialog: Qarz qo'shish va tahrirlash (Cho'ntak va Karta balansiga bog'langan) -->
+<!-- Dialog: Qarz qo'shish va tahrirlash -->
 <dialog id="dDebt">
   <h2>JM Hamyon <small style="display:block;font-size:12px;color:var(--mut);font-weight:500">Qarz oldi-berdi oynasi</small></h2>
   <div class="hint" style="margin:-6px 0 12px">Tanlangan karta yoki naqd cho'ntak qoldig'i avtomatik ko'payadi yoki kamayadi.</div>
@@ -1026,7 +1357,7 @@ textarea { min-height: 80px; font-family: monospace; font-size: 12px; }
     <div class="full" style="font-size:12px;color:var(--mut);font-weight:700;margin-bottom:-4px">Ism</div>
     <input id="dm-w" class="full" placeholder="Kishi ismi" required>
     <div class="full" style="font-size:12px;color:var(--mut);font-weight:700;margin-bottom:-4px">Summa</div>
-    <input id="dm-a" class="full" type="number" min="1" placeholder="0" required>
+    <input id="dm-a" class="full" type="number" step="any" min="1" placeholder="0" required>
     <div class="full" style="font-size:12px;color:var(--mut);font-weight:700;margin-bottom:-4px">Valyuta</div>
     <div class="cur-pills full" id="dmCur">
       <button type="button" data-c="so'm" class="on" onclick="pickDmCur(this)">So'm</button>
@@ -1148,6 +1479,7 @@ const TS=`=Asosiy=>Главная|Home
 =Jami saldo=>Итого сальдо|Net balance
 =Saqlash=>Сохранить|Save
 =+ Saqlash=>+ Сохранить|+ Save
+=💾 Saqlash=>💾 Сохранить|💾 Save
 =Yaratish=>Создать|Create
 =Bekor=>Отмена|Cancel
 =Ochish=>Открыть|Open
@@ -1163,6 +1495,8 @@ const TS=`=Asosiy=>Главная|Home
 =Ish=>Работа|Work
 =Dam olish=>Отдых|Break
 =Boshlash=>Старт|Start
+=▶ Boshlash=>▶ Старт|▶ Start
+=↺ Qayta=>↺ Сброс|↺ Reset
 =Qayta=>Сброс|Reset
 =Nolga=>Сброс|Reset
 =Tozalash=>Сбросить|Clear
@@ -1192,6 +1526,13 @@ Chiqim:=>Расход:|Expense:
 💵 Cho'ntakda ✏️=>💵 В кармане ✏️|💵 In pocket ✏️
 ✅ Bugungi reja=>✅ План на сегодня|✅ Tasks today
 ⚡ Tezkor harajatlar (1-bosishda)=>⚡ Быстрые расходы (в 1 клик)|⚡ Quick expenses (1-tap)
+(✏️ bosib narxni o'zgartiring)=>(нажмите ✏️ для изменения цены)|(tap ✏️ to edit price)
+⚡ Tezkor harajatni tahrirlash=>⚡ Изменить быстрый расход|⚡ Edit quick expense
+⚡ Yangi tezkor harajat=>⚡ Новый быстрый расход|⚡ New quick expense
+Belgi (Emoji tanlang yoki yozing):=>Значок (выберите или введите):|Icon (pick or type):
+Nomi (Yo'lkira, Non...)=>Название (Проезд, Хлеб...)|Name (Fare, Bread...)
+Narxi / Summasi (so'm)=>Цена / Сумма (сум)|Price / Amount (UZS)
+🗑 Shablonni o'chirish=>🗑 Удалить шаблон|🗑 Delete template
 💳 Hisoblarim=>💳 Мои счета|💳 My accounts
 (pulini o'zgartirish uchun ustiga bosing)=>(нажмите, чтобы изменить баланс)|(tap a card to edit balance)
 ⇄ O'tkazma=>⇄ Перевод|⇄ Transfer
@@ -1204,6 +1545,7 @@ Oylik keldi ✓=>Зарплата пришла ✓|Salary received ✓
 ⏰ Yaqin eslatmalar=>⏰ Ближайшие напоминания|⏰ Upcoming reminders
 💸 Oxirgi harajatlar=>💸 Последние расходы|💸 Recent expenses
 Yangi yozuv=>Новая запись|New entry
+🧾 Tranzaksiyalar tarixi=>🧾 История транзакций|🧾 Transaction history
 📋 Matndan olish=>📋 Из текста|📋 Paste SMS
 🎤 Aqlli kassa=>🎤 Умная касса|🎤 Smart voice
 Qaysi hisobdan / hisobga (Cho'ntak yoki Karta):=>Счёт (Карман или Карта):|Account (Pocket or Card):
@@ -1212,6 +1554,46 @@ Men qarzdorman=>Я должен|I owe
 Men haqdorman=>Мне должны|Owed to me
 Kishi ismi=>Имя человека|Person's name
 Qaytarish sanasi (ixtiyoriy)=>Дата возврата (необязательно)|Due date (optional)
+⏲️ Fokus & Pomodoro=>⏲️ Фокус и Помодоро|⏲️ Focus & Pomodoro
+🔥 Fokus (Ish)=>🔥 Фокус (Работа)|🔥 Focus (Work)
+☕ Tanaffus (Dam)=>☕ Перерыв (Отдых)|☕ Break (Rest)
+⚡ 5 daq=>⚡ 5 мин|⚡ 5 min
+🎯 15 daq=>🎯 15 мин|🎯 15 min
+🍅 25 daq=>🍅 25 мин|🍅 25 min
+🚀 45 daq=>🚀 45 мин|🚀 45 min
+💎 60 daq=>💎 60 мин|💎 60 min
+🎯 Mashg'ulot nomi (masalan: Kitob o'qish, Sport...)=>🎯 Название занятия (например: Чтение, Спорт...)|🎯 Session label (e.g. Reading, Workout...)
+💾 Natijani saqlash=>💾 Сохранить результат|💾 Save session
+↺ Qayta (00:00)=>↺ Сброс (00:00)|↺ Reset (00:00)
+📜 Saqlangan taymer seanslari=>📜 Сохранённые сессии таймера|📜 Saved timer sessions
+(qo'lda o'chirilmaguncha turadi)=>(хранятся до ручного удаления)|(kept until manually deleted)
+🗑 Tozalash=>🗑 Очистить|🗑 Clear
+⏱️ Professional Sekundomer=>⏱️ Профессиональный секундомер|⏱️ Pro Stopwatch
+⏱ Tayyor=>⏱ Готов|⏱ Ready
+🟢 Ishlamoqda=>🟢 Идёт отсчёт|🟢 Running
+⏸ To'xtatilgan=>⏸ На паузе|⏸ Paused
+🏃 Ishtirokchi ismi (masalan: 1-ishtirokchi, Ali...)=>🏃 Имя участника (например: Участник 1, Али...)|🏃 Runner name (e.g. Runner #1, Ali...)
+🏁 Finish / Saqlash=>🏁 Финиш / Сохранить|🏁 Finish / Save
+🔄 Keyingi odam (00:00)=>🔄 Следующий (00:00)|🔄 Next runner (00:00)
+↺ Vaqtni 00:00 qilish=>↺ Сбросить часы 00:00|↺ Reset clock 00:00
+🏆 Ishtirokchilar va Natijalar jadvali=>🏆 Таблица участников и результатов|🏆 Runners & Results Leaderboard
+🗑 Ro'yxatni tozalash=>🗑 Очистить список|🗑 Clear list
+Hozircha saqlangan natijalar yo'q=>Сохранённых результатов пока нет|No saved results yet
+Hozircha saqlangan seanslar yo'q=>Сохранённых сессий пока нет|No saved sessions yet
+Ishtirokchi=>Участник|Runner
+Eng tez natija=>Лучший результат|Fastest time
+Ismni o'zgartirish:=>Изменить имя:|Rename runner:
+Barcha saqlangan natijalarni o'chirasizmi?=>Удалить все сохранённые результаты?|Delete all saved results?
+🍅 25m Fokus=>🍅 25м Фокус|🍅 25m Focus
+🚀 50m Chuqur ish=>🚀 50м Глубокая работа|🚀 50m Deep Work
+☕ 5m Tanaffus=>☕ 5м Перерыв|☕ 5m Break
+🌿 15m Dam=>🌿 15м Отдых|🌿 15m Rest
+FOKUS REJIMI=>РЕЖИМ ФОКУСА|FOCUS MODE
+DAM OLISH REJIMI=>РЕЖИМ ОТДЫХА|BREAK MODE
+💱 O'zbekiston MB Valyuta Kurslari=>💱 Курсы валют ЦБ Узбекистана|💱 CBU Exchange Rates
+🔄 Yangilash (CBU)=>🔄 Обновить (ЦБ)|🔄 Refresh (CBU)
+🧮 Tezkor Valyuta Konvertori=>🧮 Быстрый конвертер валют|🧮 Quick Currency Converter
+🌐 Markaziy bank (cbu.uz) kurslari avtomatik yangilanadi. Kurs ustiga bosib qo'lda ham o'zgartirish mumkin.=>🌐 Курсы ЦБ (cbu.uz) обновляются автоматически. Нажмите на курс для ручного изменения.|🌐 Central Bank (cbu.uz) rates update automatically. Tap any rate to override manually.
 so'm=>сум|UZS`;
 
 const EXm=Object.create(null),TT=[];
@@ -1245,7 +1627,7 @@ function ta(r){
   });
 }
 
-/* ================= MA'LUMOTLAR VA HOLAT ================= */
+/* ================= MA'LUMOTLAR, VALYUTA KURSLARI VA HOLAT ================= */
 const P={o:'Bir marta',d:'Kunlik',m:"Oy bo'yicha",y:'Yillik'};
 const COL=['#6c5ce7,#a29bfe','#0ea5e9,#22d3ee','#f43f5e,#fb923c','#059669,#34d399','#7c3aed,#ec4899'];
 function ld(k,d){try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}}
@@ -1262,17 +1644,112 @@ let Q=ld('q_tpl',[
   {ic:'☕',n:'Qahva/Tushlik',c:'Oziq-ovqat',a:25000},
   {ic:'🛒',n:'Bozorlik',c:'Oziq-ovqat',a:50000}
 ]);
+
+/* O'zbekiston Markaziy Banki (CBU) Valyuta Kurslari */
+let RATES = ld('cbu_rates', { USD: 12850, EUR: 13800, RUB: 135, KRW: 9.5, UZS: 1, date: '' });
+const CUR_SYM = { UZS: "so'm", USD: '$', EUR: '€', RUB: '₽', KRW: '₩' };
+
+function toUZS(amount, curCode) {
+  const c = (curCode || 'UZS').toUpperCase();
+  if (c === 'UZS' || c === "SO'M") return Number(amount || 0);
+  return Number(amount || 0) * (Number(RATES[c]) || 1);
+}
+
+function updateHeroTicker() {
+  if ($('heroRateTxt')) {
+    $('heroRateTxt').textContent = `MB: 1$ = ${Number(RATES.USD).toLocaleString('ru-RU')} so'm · 1€ = ${Number(RATES.EUR).toLocaleString('ru-RU')} so'm`;
+  }
+}
+
+function renderCBURates() {
+  updateHeroTicker();
+  const box = $('cbuRateCards');
+  if (!box) return;
+  const items = [
+    { k: 'USD', f: '🇺🇸 1 USD ($)' },
+    { k: 'EUR', f: '🇪🇺 1 EUR (€)' },
+    { k: 'RUB', f: '🇷🇺 1 RUB (₽)' },
+    { k: 'KRW', f: '🇰🇷 1 KRW (₩)' }
+  ];
+  box.innerHTML = items.map(x => `
+    <div class="rate-box" onclick="editManualRate('${x.k}')" style="cursor:pointer" title="Kursni qo'lda o'zgartirish">
+      <small>${x.f} ✏️</small>
+      <b>${Number(RATES[x.k] || 0).toLocaleString('ru-RU')} so'm</b>
+    </div>
+  `).join('');
+  if ($('cbuUpdTime') && RATES.date) {
+    $('cbuUpdTime').textContent = `🌐 O'zbekiston MB kursi (${RATES.date}). Kurs ustiga bosib tahrirlash mumkin.`;
+  }
+  runCurrencyConv();
+}
+
+function editManualRate(k) {
+  ask(`1 ${k} kursini kiriting (so'mda):`, { inp: 1, type: 'number', def: RATES[k] }, v => {
+    const num = parseFloat(v);
+    if (!num || num <= 0) return;
+    RATES[k] = num;
+    sv('cbu_rates', RATES);
+    renderCBURates();
+    ra(); rh();
+    toast(`${k} kursi yangilandi ✔`);
+  });
+}
+
+function runCurrencyConv() {
+  const box = $('cvResultGrid');
+  if (!box) return;
+  const amt = parseFloat($('cvAmt') ? $('cvAmt').value : 100) || 0;
+  const from = $('cvFrom') ? $('cvFrom').value : 'USD';
+  const uzsVal = toUZS(amt, from);
+  const targets = [
+    { k: 'UZS', lbl: "🇺🇿 UZS (So'm)", val: Math.round(uzsVal).toLocaleString('ru-RU') + " so'm" },
+    { k: 'USD', lbl: '🇺🇸 USD ($)', val: '$' + (uzsVal / (RATES.USD || 12850)).toLocaleString('ru-RU', { maximumFractionDigits: 2 }) },
+    { k: 'EUR', lbl: '🇪🇺 EUR (€)', val: '€' + (uzsVal / (RATES.EUR || 13800)).toLocaleString('ru-RU', { maximumFractionDigits: 2 }) },
+    { k: 'RUB', lbl: '🇷🇺 RUB (₽)', val: '₽' + (uzsVal / (RATES.RUB || 135)).toLocaleString('ru-RU', { maximumFractionDigits: 1 }) },
+    { k: 'KRW', lbl: '🇰🇷 KRW (₩)', val: '₩' + Math.round(uzsVal / (RATES.KRW || 9.5)).toLocaleString('ru-RU') }
+  ];
+  box.innerHTML = targets.filter(t => t.k !== from).map(t => `
+    <div class="rate-box">
+      <small>${t.lbl}</small>
+      <b style="color:var(--tx)">${t.val}</b>
+    </div>
+  `).join('');
+}
+
+async function fetchCBURates(manualToast) {
+  try {
+    const res = await fetch('https://cbu.uz/uz/arkhiv-kursov-valyut/json/');
+    if (!res.ok) throw new Error('CBU offline');
+    const data = await res.json();
+    ['USD', 'EUR', 'RUB', 'KRW'].forEach(code => {
+      const found = data.find(item => item.Ccy === code);
+      if (found && found.Rate) {
+        const nom = parseFloat(found.Nominal || 1);
+        RATES[code] = Math.round((parseFloat(found.Rate) / nom) * 100) / 100;
+        if (found.Date) RATES.date = found.Date;
+      }
+    });
+    sv('cbu_rates', RATES);
+    renderCBURates();
+    ra(); rh();
+    if (manualToast) toast('🌐 Markaziy bank kurslari yangilandi ✔');
+  } catch (e) {
+    renderCBURates();
+    if (manualToast) toast('🌐 Internet kursini olib bo\'lmadi, saqlangan kurs ishlatilmoqda');
+  }
+}
+
 let flt='all',wfl='all',perFlt='month';
 let fltTypes={in:true,out:true,tr:true,db:true};
 let CUR=localStorage.getItem('cur')||"so'm";
 let hideBal=localStorage.getItem('hb_hide')==='1';
 
 if(!A.find(a=>a.k==='cash')){
-  A.unshift({id:'cash',k:'cash',bank:'Naqd pul',l:'',i:0,c:'#f59e0b,#fbbf24'});
+  A.unshift({id:'cash',k:'cash',bank:'Naqd pul',l:'',i:0,cur:'UZS',c:'#f59e0b,#fbbf24'});
   try{localStorage.setItem('a',JSON.stringify(A))}catch(e){}
 }
 
-/* Mavzu (Standart: Tungi / Dark — 2-rasmdagidek) */
+/* Mavzu */
 function setTheme(t){
   document.documentElement.dataset.theme=t;
   try{localStorage.setItem('th',t)}catch(e){}
@@ -1308,15 +1785,18 @@ function setCur(c){
 
 const fm=(n,c)=>{
   if(hideBal)return '••• •••';
-  const u=tx(c||CUR);
-  return Number(n||0).toLocaleString('ru-RU')+' '+u;
+  const rawC = c || CUR;
+  const u = CUR_SYM[rawC] ? tx(CUR_SYM[rawC]) : tx(rawC);
+  return Number(n||0).toLocaleString('ru-RU', { maximumFractionDigits: 2 })+' '+u;
 };
 const fd=s=>new Date(s).toLocaleString(LC(),{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
 const esc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function toast(m){const t=$('toast');t.textContent=tx(m);t.classList.add('s');setTimeout(()=>t.classList.remove('s'),3400)}
 function iso(d){const x=new Date(d);x.setMinutes(x.getMinutes()-x.getTimezoneOffset());return x.toISOString().slice(0,16)}
 $('td').value=iso(new Date());
+
 const bal=a=>Number(a.i||0)+W.filter(w=>(w.acc||'cash')===a.id).reduce((s,w)=>s+(w.t==='in'?Number(w.a):-Number(w.a)),0);
+const balInUZS=a=>toUZS(bal(a), a.cur||'UZS');
 
 function toggleHideBal(){
   hideBal=!hideBal;
@@ -1347,32 +1827,78 @@ $('th').onclick=()=>{
   setTheme(order[(order.indexOf(cur)+1)%order.length]);
 };
 
-/* 1-Tap Tezkor Harajatlar + Shablon qo'shish */
+/* ================= 1. TAHRIRLANADIGAN TEZKOR HARAJATLAR (1-BOSISHDA) ================= */
+let editQtIdx = -1;
+
 function renderQuickGrid(){
   $('qGrid').innerHTML=Q.map((q,i)=>`<div class="q-item" onclick="quickTap(${i})">
-    <i>${q.ic||'⚡'}</i>
+    <button type="button" class="q-edit" onclick="event.stopPropagation();openQuickTplModal(${i})" title="Narx va nomni tahrirlash">✏️</button>
+    <i>${esc(q.ic||'⚡')}</i>
     <b>${esc(tx(q.n))}</b>
-    <small>${Number(q.a).toLocaleString('ru-RU')}</small>
+    <small>${Number(q.a).toLocaleString('ru-RU')} ${tx("so'm")}</small>
   </div>`).join('');
 }
+
 function quickTap(i){
   const q=Q[i];if(!q)return;
-  const defAcc=(A.find(a=>a.k==='card')||A[0]).id;
-  W.unshift({id:Date.now(),t:'out',acc:defAcc,a:Number(q.a),c:q.c||'Boshqa',n:q.n,d:new Date().toISOString()});
+  const defAcc=(A.find(a=>a.k==='card'&&(a.cur||'UZS')==='UZS')||A.find(a=>a.k==='card')||A[0]).id;
+  W.unshift({id:Date.now(),t:'out',acc:defAcc,a:Number(q.a),c:q.c||'Oziq-ovqat',n:q.n,d:new Date().toISOString()});
   sv('w',W);rw();ra();rh();
   toast(q.n+' (−'+fm(q.a)+') ✔');
 }
-function addQuickTpl(){
-  ask("Shablon nomi va summasi (masalan: Taksi 20000):",{inp:1},v=>{
-    if(!v)return;
-    const m=v.match(/(\d+)/);
-    const amt=m?Number(m[1]):10000;
-    const name=v.replace(/\d+/g,'').trim()||'Harajat';
-    Q.push({ic:'⚡',n:name,c:'Boshqa',a:amt});
-    sv('q_tpl',Q);renderQuickGrid();toast("Qo'shildi ✔");
-  });
+
+function pickQtEmo(emo){
+  $('qt-ic').value = emo;
+  document.querySelectorAll('#qtEmoPills .emo-pill').forEach(b=>b.classList.toggle('on', b.textContent===emo));
 }
-renderQuickGrid();
+
+function openQuickTplModal(idx){
+  editQtIdx = idx;
+  $('qt-c').innerHTML = OUT.map(c=>`<option value="${c}">${EM[c]||'🏷️'} ${ct(c)}</option>`).join('');
+  if(idx >= 0 && Q[idx]){
+    const q = Q[idx];
+    $('qtTitle').textContent = tx('⚡ Tezkor harajatni tahrirlash');
+    $('qt-ic').value = q.ic || '⚡';
+    $('qt-n').value = q.n || '';
+    $('qt-a').value = q.a || '';
+    $('qt-c').value = OUT.includes(q.c) ? q.c : OUT[0];
+    $('qtDelBtn').style.display = Q.length > 1 ? 'block' : 'none';
+    pickQtEmo(q.ic);
+  } else {
+    $('qtTitle').textContent = tx('⚡ Yangi tezkor harajat');
+    $('fQuickTpl').reset();
+    $('qt-ic').value = '🚕';
+    $('qtDelBtn').style.display = 'none';
+    pickQtEmo('🚕');
+  }
+  $('dQuickTpl').showModal();
+  ta($('dQuickTpl'));
+}
+
+$('fQuickTpl').onsubmit = e => {
+  e.preventDefault();
+  const item = {
+    ic: $('qt-ic').value.trim() || '⚡',
+    n: $('qt-n').value.trim() || 'Harajat',
+    a: Number($('qt-a').value) || 0,
+    c: $('qt-c').value || 'Boshqa'
+  };
+  if(editQtIdx >= 0 && Q[editQtIdx]) Q[editQtIdx] = item;
+  else Q.push(item);
+  sv('q_tpl', Q);
+  $('dQuickTpl').close();
+  renderQuickGrid();
+  toast('Saqlandi ✔');
+};
+
+function delQuickTpl(){
+  if(editQtIdx < 0 || Q.length <= 1) return;
+  Q.splice(editQtIdx, 1);
+  sv('q_tpl', Q);
+  $('dQuickTpl').close();
+  renderQuickGrid();
+  toast("O'chirildi");
+}
 
 /* Smart Paste & Aqlli Kassa */
 function smartPasteSMS(){
@@ -1419,12 +1945,12 @@ document.querySelectorAll('.mic').forEach(b=>b.onclick=()=>{
   try{r.start()}catch(e){b.classList.remove('rec')}
 });
 
-/* ================= HISOBLARIM (CHO'NTAK VA KARTALAR) ================= */
+/* ================= HISOBLARIM (KO'P VALYUTALI KARTALAR VA CHO'NTAK) ================= */
 function buildAccPills(pillsId,selectId,allowNone){
   const sel=$(selectId),wrap=$(pillsId);
   if(!sel||!wrap)return;
   const curVal=sel.value||(A[0]&&A[0].id)||'cash';
-  let opts=A.map(a=>`<option value="${a.id}">${a.k==='cash'?'💵 '+esc(tx("Cho'ntak (Naqd)")):'💳 '+esc(tx(a.bank))+(a.l?' ••'+esc(a.l):'')} (${fm(bal(a))})</option>`).join('');
+  let opts=A.map(a=>`<option value="${a.id}">${a.k==='cash'?'💵 '+esc(tx("Cho'ntak (Naqd)")):'💳 '+esc(tx(a.bank))+(a.l?' ••'+esc(a.l):'')} (${fm(bal(a), a.cur)})</option>`).join('');
   if(allowNone)opts+=`<option value="none">🚫 ${esc(tx("Balansga ta'sir qilmasin"))}</option>`;
   sel.innerHTML=opts;
   if([...sel.options].some(o=>o.value===curVal))sel.value=curVal;
@@ -1432,7 +1958,7 @@ function buildAccPills(pillsId,selectId,allowNone){
   let pillsHtml=A.map(a=>{
     const isOn=sel.value===a.id;
     const lbl=a.k==='cash'?'💵 '+esc(tx("Cho'ntak (Naqd)")):'💳 '+esc(tx(a.bank))+(a.l?' ••'+esc(a.l):'');
-    return `<button type="button" class="acc-pill ${isOn?'on':''}" onclick="pickAccPill('${selectId}','${a.id}','${pillsId}')">${lbl} <small>${fm(bal(a))}</small></button>`;
+    return `<button type="button" class="acc-pill ${isOn?'on':''}" onclick="pickAccPill('${selectId}','${a.id}','${pillsId}')">${lbl} <small>${fm(bal(a), a.cur)}</small></button>`;
   }).join('');
   if(allowNone){
     const isOn=sel.value==='none';
@@ -1448,14 +1974,19 @@ function pickAccPill(selectId,val,pillsId){
 }
 
 function ra(){
-  const html=A.map(a=>`<div class="bc" onclick="ec('${a.id}')" style="background:linear-gradient(135deg,${a.c})">
-    <div class="t">
-      <span>${a.k==='cash'?'💵 ':'💳 '}${esc(tx(a.bank))}</span>
-      <button type="button" class="edit-pill" onclick="event.stopPropagation();ec('${a.id}')">✏️ ${tx('Tahrirlash')}</button>
-    </div>
-    <div class="n">${a.k==='cash'?tx('NAQD HAMYON'):'•••• •••• •••• '+esc(a.l)}</div>
-    <div class="b">${fm(bal(a))}</div>
-  </div>`).join('');
+  const html=A.map(a=>{
+    const bVal = bal(a);
+    const ac = (a.cur || 'UZS').toUpperCase();
+    const eqUzs = ac !== 'UZS' ? `<span class="b-sub">≈ ${fm(toUZS(bVal, ac), 'UZS')}</span>` : '';
+    return `<div class="bc" onclick="ec('${a.id}')" style="background:linear-gradient(135deg,${a.c})">
+      <div class="t">
+        <span>${a.k==='cash'?'💵 ':'💳 '}${esc(tx(a.bank))} ${ac!=='UZS'?'('+ac+')':''}</span>
+        <button type="button" class="edit-pill" onclick="event.stopPropagation();ec('${a.id}')">✏️ ${tx('Tahrirlash')}</button>
+      </div>
+      <div class="n">${a.k==='cash'?tx('NAQD HAMYON'):'•••• •••• •••• '+esc(a.l||'0000')}</div>
+      <div class="b">${fm(bVal, ac)}${eqUzs}</div>
+    </div>`;
+  }).join('');
   if($('csHome'))$('csHome').innerHTML=html;
   const opts=A.map(a=>`<option value="${a.id}">${esc(tx(a.bank))}${a.l?' ••'+esc(a.l):''}</option>`).join('');
   if($('q-k'))$('q-k').innerHTML=opts;
@@ -1464,7 +1995,15 @@ function ra(){
 }
 $('fa').onsubmit=e=>{
   e.preventDefault();
-  A.push({id:'a'+Date.now(),k:'card',bank:$('ab').value,l:$('al').value.replace(/\D/g,'').slice(-4),i:Number($('ai').value)||0,c:COL[A.length%COL.length]});
+  A.push({
+    id:'a'+Date.now(),
+    k:'card',
+    bank:$('ab').value,
+    l:$('al').value.replace(/\D/g,'').slice(-4),
+    cur:$('acur')?$('acur').value:'UZS',
+    i:Number($('ai').value)||0,
+    c:COL[A.length%COL.length]
+  });
   sv('a',A);e.target.reset();$('dAddCard').close();ra();rh();toast("Karta qo'shildi 💳");
 };
 function da(id){
@@ -1479,6 +2018,7 @@ function ec(id){
   EA=A.find(a=>a.id===id);if(!EA)return;
   $('e-b').value=EA.bank;
   $('e-l').value=EA.l||'';
+  if($('e-cur'))$('e-cur').value=EA.cur||'UZS';
   $('e-m').value=bal(EA);
   const c=EA.k==='cash';
   $('e-l').style.display=$('e-d').style.display=c?'none':'';
@@ -1490,6 +2030,7 @@ $('fe').onsubmit=e=>{
   const newBal=Number($('e-m').value)||0;
   const txSum=W.filter(w=>(w.acc||'cash')===EA.id).reduce((s,w)=>s+(w.t==='in'?Number(w.a):-Number(w.a)),0);
   EA.i=newBal-txSum;
+  if($('e-cur'))EA.cur=$('e-cur').value||'UZS';
   if(EA.k!=='cash'){
     EA.bank=$('e-b').value.trim()||EA.bank;
     EA.l=$('e-l').value.replace(/\D/g,'').slice(-4);
@@ -1517,7 +2058,7 @@ $('fTrf').onsubmit=e=>{
   sv('w',W);e.target.reset();$('dTrf').close();ra();rw();rh();toast("O'tkazma bajarildi ✔");
 };
 
-/* ================= KATEGORIYALAR VA TRANZAKSIYALAR ================= */
+/* ================= KATEGORIYALAR VA CHIROYLI TRANZAKSIYALAR TARIXI ================= */
 let IN=ld('cat_in',['Oylik','Avans','Mukofot',"Qo'shimcha daromad",'Boshqa']);
 let OUT=ld('cat_out',['Oziq-ovqat','Transport','Kommunal',"Ko'ngilochar",'Salomatlik','Kiyim',"Ta'lim",'Boshqa']);
 const EM={'Oylik':'💼','Avans':'💵','Mukofot':'🎁',"Qo'shimcha daromad":'✨','Maosh':'💼','Oziq-ovqat':'🍽️','Transport':'🚕','Kommunal':'💡',"Ko'ngilochar":'🎬','Salomatlik':'💊','Kiyim':'👕',"Ta'lim":'🎓',"O'tkazma":'⇄','Qarz oldi-berdi':'🤝','Boshqa':'📦'};
@@ -1578,13 +2119,32 @@ function resetTxFilter(){
 }
 
 const tm=x=>new Date(x).toLocaleTimeString(LC(),{hour:'2-digit',minute:'2-digit'});
-function wrow(w,t){
+
+function wrow(w, showFull, maxOutAmt){
   const a=A.find(x=>x.id===(w.acc||'cash'));
-  return `<div class="row" onclick="openEditTx(${w.id})" style="cursor:pointer">
-    <div class="ic ${w.t==='in'?'i':''}">${EM[w.c]||'📦'}</div>
-    <div class="m"><b>${esc(ct(w.c))}${w.n?' · '+esc(w.n):''}</b><span>${a?esc(tx(a.bank))+(a.l?' ••'+esc(a.l):''):''} · ${t?tm(w.d):fd(w.d)}</span></div>
-    <span class="${w.t==='in'?'in':'out'}">${w.t==='in'?'+':'−'}${fm(w.a)}</span>`;
+  const accCur = a && a.cur ? a.cur : 'UZS';
+  const accBadge = a ? `${a.k==='cash'?'💵':'💳'} ${esc(tx(a.bank))}${a.l?' ••'+esc(a.l):''}` : '💵 Naqd';
+  const pct = (w.t==='out' && maxOutAmt > 0) ? Math.min(100, Math.max(6, Math.round((Number(w.a)/maxOutAmt)*100))) : 0;
+  return `<div class="tx-item" onclick="openEditTx(${w.id})">
+    <div class="tx-ic ${w.t==='in'?'in-ic':'out-ic'}">${EM[w.c]||'📦'}</div>
+    <div class="tx-body">
+      <div class="tx-top-line">
+        <div class="tx-title">${esc(ct(w.c))}${w.n?' · <span style="font-weight:500;color:var(--mut)">'+esc(w.n)+'</span>':''}</div>
+        <div class="tx-amt ${w.t==='in'?'in':'out'}">${w.t==='in'?'+':'−'}${fm(w.a, accCur)}</div>
+      </div>
+      <div class="tx-meta">
+        <span class="tx-acc-badge">${accBadge}</span>
+        <span>🕒 ${showFull?tm(w.d):fd(w.d)}</span>
+      </div>
+      ${pct > 0 && showFull ? `<div class="tx-mini-bar"><i style="width:${pct}%"></i></div>` : ''}
+    </div>
+    ${showFull ? `<div class="tx-acts">
+      <button type="button" class="tx-act-btn" onclick="event.stopPropagation();openEditTx(${w.id})" title="Tahrirlash">✏️</button>
+      <button type="button" class="tx-act-btn" onclick="event.stopPropagation();dw(${w.id})" title="O'chirish">✕</button>
+    </div>` : ''}
+  </div>`;
 }
+
 function dlab(k){
   const d=new Date(k),n=new Date(),y=new Date();y.setDate(n.getDate()-1);
   const same=(a,b)=>a.toDateString()===b.toDateString();
@@ -1600,11 +2160,16 @@ function inPeriod(dStr){
   return true;
 }
 
+function txInUZS(w){
+  const a=A.find(x=>x.id===(w.acc||'cash'));
+  return toUZS(w.a, a&&a.cur?a.cur:'UZS');
+}
+
 function rw(){
   const n=new Date();
   const mo=W.filter(w=>{const d=new Date(w.d);return d.getMonth()===n.getMonth()&&d.getFullYear()===n.getFullYear()});
-  const mIn=mo.filter(w=>w.t==='in').reduce((s,w)=>s+Number(w.a),0);
-  const mOut=mo.filter(w=>w.t==='out').reduce((s,w)=>s+Number(w.a),0);
+  const mIn=mo.filter(w=>w.t==='in').reduce((s,w)=>s+txInUZS(w),0);
+  const mOut=mo.filter(w=>w.t==='out').reduce((s,w)=>s+txInUZS(w),0);
   if($('h-in'))$('h-in').textContent=fm(mIn);
   if($('h-out'))$('h-out').textContent=fm(mOut);
 
@@ -1622,22 +2187,25 @@ function rw(){
       if(!isTr&&!isDb&&w.t==='in'&&!fltTypes.in)return false;
       if(!isTr&&!isDb&&w.t==='out'&&!fltTypes.out)return false;
     }
-    if(q&&!((w.n||'').toLowerCase().includes(q)||(w.c||'').toLowerCase().includes(q)||ct(w.c).toLowerCase().includes(q)))return false;
+    if(q&&!(`${w.n||''} ${w.c||''} ${ct(w.c)} ${w.a}`.toLowerCase().includes(q)))return false;
     return true;
   }).sort((a,b)=>b.d.localeCompare(a.d));
 
-  const pIn=l.filter(w=>w.t==='in').reduce((s,w)=>s+Number(w.a),0);
-  const pOut=l.filter(w=>w.t==='out').reduce((s,w)=>s+Number(w.a),0);
+  const pIn=l.filter(w=>w.t==='in').reduce((s,w)=>s+txInUZS(w),0);
+  const pOut=l.filter(w=>w.t==='out').reduce((s,w)=>s+txInUZS(w),0);
   $('mi').textContent=fm(pIn);
   $('mo').textContent=fm(pOut);
   if($('mnet'))$('mnet').textContent=(pIn-pOut>=0?'+':'−')+fm(Math.abs(pIn-pOut));
 
   if(!l.length){$('wl').innerHTML=`<div class="empty">${tx("Hozircha yozuv yo'q")}</div>`;return}
+  const maxOut = Math.max(1, ...l.filter(w=>w.t==='out').map(w=>Number(w.a)));
   const g={};l.forEach(w=>{(g[new Date(w.d).toDateString()]=g[new Date(w.d).toDateString()]||[]).push(w)});
   $('wl').innerHTML=Object.keys(g).map(k=>{
-    const r=g[k],net=r.reduce((s,w)=>s+(w.t==='in'?Number(w.a):-Number(w.a)),0);
-    return `<div class="dh"><span>${dlab(k)}</span><span class="${net>=0?'in':'out'}">${net>=0?'+':'−'}${fm(Math.abs(net))}</span></div>`+
-      r.map(w=>wrow(w,1)+`<button class="x" onclick="event.stopPropagation();dw(${w.id})">✕</button></div>`).join('');
+    const r=g[k],net=r.reduce((s,w)=>s+(w.t==='in'?txInUZS(w):-txInUZS(w)),0);
+    return `<div class="tx-day-group">
+      <div class="tx-day-hd"><span>📅 ${dlab(k)} (${r.length})</span><span class="${net>=0?'in':'out'}">${net>=0?'+':'−'}${fm(Math.abs(net))}</span></div>
+      ${r.map(w=>wrow(w, true, maxOut)).join('')}
+    </div>`;
   }).join('');
 }
 document.querySelectorAll('#wf button').forEach(b=>b.onclick=()=>{
@@ -1699,11 +2267,12 @@ $('fs').onsubmit=e=>{
   sv('w',W);e.target.reset();$('dl').close();rw();ra();rh();toast("Daromad qo'shildi 🎉");
 };
 
-/* ================= VOSITALAR ================= */
+/* ================= VOSITALAR VA ZAMONAVIY TAYMER ================= */
 function openTool(name){
   document.querySelectorAll('.tool-box').forEach(b=>b.classList.toggle('on',b.dataset.tl===name));
   document.querySelectorAll('.tl-pane').forEach(p=>p.style.display='none');
   $('tl-'+name).style.display='block';
+  if(name==='conv')renderCBURates();
 }
 document.querySelectorAll('#tb button').forEach(b=>b.onclick=()=>{
   flt=b.dataset.f;
@@ -1750,45 +2319,361 @@ $('f-nt').onsubmit=e=>{
 function delNote(id){N=N.filter(x=>x.id!==id);sv('nt',N);rNotes()}
 rNotes();
 
-let tmrCfg=ld('tmr_cfg',{w:25,r:5}),tmrMode='work',tmrTotal=tmrCfg.w*60,tmrSec=tmrTotal,tmrInt=null;
-function updTmrRing(){
-  const m=Math.floor(tmrSec/60),s=tmrSec%60;
-  $('tmrDisp').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
-  const off=515-(tmrSec/Math.max(1,tmrTotal))*515;
-  if($('tmrRing'))$('tmrRing').style.strokeDashoffset=off;
+/* ================= ZAMONAVIY TAYMER (SAQLANADIGAN TARIX BILAN) ================= */
+let tmrCfg=ld('tmr_cfg',{w:25,r:5,sess:0});
+let TMR_HIST=ld('tmr_hist',[]);
+let tmrState=ld('tmr_state',{mode:'work',total:25*60,rem:25*60,running:false,endAt:0,lbl:''});
+let tmrMode=tmrState.mode||'work';
+let tmrTotal=tmrState.total||tmrCfg.w*60;
+let tmrSec=tmrState.rem||tmrTotal;
+let tmrInt=null;
+
+if($('tmrLabelInp')&&tmrState.lbl)$('tmrLabelInp').value=tmrState.lbl;
+
+function saveTmrState(){
+  tmrState={
+    mode:tmrMode,
+    total:tmrTotal,
+    rem:tmrSec,
+    running:!!tmrInt,
+    endAt:tmrInt?Date.now()+tmrSec*1000:0,
+    lbl:$('tmrLabelInp')?$('tmrLabelInp').value.trim():''
+  };
+  try{localStorage.setItem('tmr_state',JSON.stringify(tmrState))}catch(e){}
 }
+
+function playTmrChime(){
+  try{
+    const ctx=new (window.AudioContext||window.webkitAudioContext)();
+    [523.25,659.25,783.99,1046.5].forEach((freq,idx)=>{
+      const osc=ctx.createOscillator(),gain=ctx.createGain();
+      osc.type='sine';osc.frequency.value=freq;
+      gain.gain.setValueAtTime(0.18,ctx.currentTime+idx*0.14);
+      gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+idx*0.14+0.45);
+      osc.connect(gain);gain.connect(ctx.destination);
+      osc.start(ctx.currentTime+idx*0.14);osc.stop(ctx.currentTime+idx*0.14+0.45);
+    });
+  }catch(e){}
+}
+
+function fmtMinSec(sec){
+  const m=Math.floor(sec/60),s=Math.max(0,sec%60);
+  return String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+}
+
+function updTmrRing(){
+  $('tmrDisp').textContent=fmtMinSec(tmrSec);
+  const C=641;
+  const off=C-(tmrSec/Math.max(1,tmrTotal))*C;
+  if($('tmrRing'))$('tmrRing').style.strokeDashoffset=off;
+  if($('tmrSessBadge'))$('tmrSessBadge').textContent=`🔥 ${tx('Bugun')}: ${tmrCfg.sess||0} seans`;
+  if($('tmrStatusLbl'))$('tmrStatusLbl').textContent=tx(tmrMode==='work'?'FOKUS REJIMI':'DAM OLISH REJIMI');
+  if($('tmrStart')){
+    $('tmrStart').textContent=tmrInt?'⏸ Pause':tx('▶ Boshlash');
+    $('tmrStart').className='ctrl-btn '+(tmrInt?'pause':'start');
+  }
+}
+
+function renderTmrHist(){
+  const box=$('tmrHistList');if(!box)return;
+  if(!TMR_HIST.length){
+    box.innerHTML=`<div class="empty">${tx("Hozircha saqlangan seanslar yo'q")}</div>`;
+    return;
+  }
+  box.innerHTML=TMR_HIST.map((h,idx)=>`<div class="rec-card">
+    <div class="rec-rank">${h.mode==='rest'?'☕':'🔥'}</div>
+    <div class="rec-body">
+      <b>${esc(h.lbl||tx('Fokus seansi'))} <span class="tag">${fmtMinSec(h.dur)}</span></b>
+      <small>🕒 ${fd(h.d)}</small>
+    </div>
+    <button type="button" class="tx-act-btn" onclick="delTmrHist(${h.id})" title="O'chirish">✕</button>
+  </div>`).join('');
+}
+
+function addTmrHistRecord(durSec,customNote){
+  if(durSec<1)return;
+  const lbl=($('tmrLabelInp')&&$('tmrLabelInp').value.trim())||customNote||(tmrMode==='work'?'Fokus seansi':'Tanaffus');
+  TMR_HIST.unshift({
+    id:Date.now(),
+    lbl,
+    mode:tmrMode,
+    dur:durSec,
+    d:new Date().toISOString()
+  });
+  sv('tmr_hist',TMR_HIST);
+  renderTmrHist();
+}
+
+function saveTmrSessionManual(){
+  const spent=tmrTotal-tmrSec;
+  const durToSave=spent>0?spent:tmrTotal;
+  addTmrHistRecord(durToSave);
+  toast('💾 Taymer natijasi saqlandi ✔');
+}
+
+function delTmrHist(id){
+  TMR_HIST=TMR_HIST.filter(x=>x.id!==id);
+  sv('tmr_hist',TMR_HIST);
+  renderTmrHist();
+}
+
+function clearTmrHist(){
+  if(!TMR_HIST.length)return;
+  ask("Barcha saqlangan natijalarni o'chirasizmi?",{},()=>{
+    TMR_HIST=[];sv('tmr_hist',TMR_HIST);renderTmrHist();toast("O'chirildi ✔");
+  });
+}
+
 function swTmrMode(m,btn){
   clearInterval(tmrInt);tmrInt=null;tmrMode=m;
   if(btn){document.querySelectorAll('#tmrModeSeg button').forEach(b=>b.classList.remove('on'));btn.classList.add('on')}
+  if($('tmrRingWrap'))$('tmrRingWrap').classList.remove('running');
   tmrTotal=(m==='work'?tmrCfg.w:tmrCfg.r)*60;tmrSec=tmrTotal;
-  $('tmrStart').textContent=tx('Boshlash');updTmrRing();
+  updTmrRing();saveTmrState();
 }
+
+function setTmrPreset(mins,mode,btn){
+  clearInterval(tmrInt);tmrInt=null;
+  tmrMode=mode;
+  document.querySelectorAll('#tmrModeSeg button').forEach(b=>b.classList.toggle('on',b.dataset.m===mode));
+  if(btn){document.querySelectorAll('#tmrPresets .tmr-preset').forEach(b=>b.classList.remove('on'));btn.classList.add('on')}
+  if($('tmrRingWrap'))$('tmrRingWrap').classList.remove('running');
+  tmrTotal=mins*60;tmrSec=tmrTotal;
+  updTmrRing();saveTmrState();
+}
+
 function toggleTmr(){
-  if(tmrInt){clearInterval(tmrInt);tmrInt=null;$('tmrStart').textContent=tx('Boshlash');return}
-  $('tmrStart').textContent='⏸';
+  if(tmrInt){
+    clearInterval(tmrInt);tmrInt=null;
+    if($('tmrRingWrap'))$('tmrRingWrap').classList.remove('running');
+    updTmrRing();saveTmrState();
+    return;
+  }
+  if(tmrSec<=0)tmrSec=tmrTotal;
+  if($('tmrRingWrap'))$('tmrRingWrap').classList.add('running');
+  const endTarget=Date.now()+tmrSec*1000;
   tmrInt=setInterval(()=>{
-    if(tmrSec>0){tmrSec--;updTmrRing()}
-    else{clearInterval(tmrInt);tmrInt=null;$('tmrStart').textContent=tx('Boshlash');toast('⏰ Taymer yakunlandi!')}
-  },1000);
+    const left=Math.max(0,Math.round((endTarget-Date.now())/1000));
+    tmrSec=left;
+    updTmrRing();
+    if(tmrSec<=0){
+      clearInterval(tmrInt);tmrInt=null;
+      if($('tmrRingWrap'))$('tmrRingWrap').classList.remove('running');
+      if(tmrMode==='work'){tmrCfg.sess=(tmrCfg.sess||0)+1;sv('tmr_cfg',tmrCfg)}
+      addTmrHistRecord(tmrTotal);
+      playTmrChime();
+      tmrSec=tmrTotal;
+      updTmrRing();saveTmrState();
+      toast('⏰ Taymer yakunlandi va tarixga saqlandi! 🎉');
+    }
+  },250);
+  updTmrRing();saveTmrState();
 }
-function resetTmr(){swTmrMode(tmrMode)}
+
+function resetTmr(){
+  clearInterval(tmrInt);tmrInt=null;
+  if($('tmrRingWrap'))$('tmrRingWrap').classList.remove('running');
+  tmrSec=tmrTotal;updTmrRing();saveTmrState();
+}
+
 $('fTmrSet').onsubmit=e=>{
   e.preventDefault();
-  tmrCfg={w:Math.max(1,+$('ts-w').value||25),r:Math.max(1,+$('ts-r').value||5)};
-  sv('tmr_cfg',tmrCfg);$('dTmrSet').close();resetTmr();toast('Saqlandi ✔');
+  tmrCfg.w=Math.max(1,+$('ts-w').value||25);
+  tmrCfg.r=Math.max(1,+$('ts-r').value||5);
+  sv('tmr_cfg',tmrCfg);$('dTmrSet').close();
+  setTmrPreset(tmrCfg.w,'work',document.querySelector('#tmrPresets .tmr-preset'));
+  toast('Saqlandi ✔');
 };
-updTmrRing();
 
-let swTenths=0,swInt=null;
-function toggleSw(){
-  if(swInt){clearInterval(swInt);swInt=null;$('swStart').textContent=tx('Boshlash');return}
-  $('swStart').textContent='⏸';
-  swInt=setInterval(()=>{
-    swTenths++;const s=Math.floor(swTenths/10),m=Math.floor(s/60);
-    $('swDisp').textContent=String(m).padStart(2,'0')+':'+String(s%60).padStart(2,'0')+'.'+(swTenths%10);
-  },100);
+if(tmrState.running&&tmrState.endAt>Date.now()){
+  tmrSec=Math.max(1,Math.round((tmrState.endAt-Date.now())/1000));
+  toggleTmr();
+}else{
+  updTmrRing();
 }
-function resetSw(){clearInterval(swInt);swInt=null;swTenths=0;$('swDisp').textContent='00:00.0';$('swStart').textContent=tx('Boshlash')}
+renderTmrHist();
+
+/* ================= ZAMONAVIY SEKUNDOMER (KO'P ISHTIROKCHI VA O'CHMAYDIGAN NATIJALAR) ================= */
+let SW_LAPS=ld('sw_laps',[]);
+let swState=ld('sw_state',{elapsedMs:0,running:false,startAt:0,lastSavedMs:0});
+let swElapsedMs=Number(swState.elapsedMs)||0;
+let swInt=null;
+let swLastSavedMs=Number(swState.lastSavedMs)||0;
+
+function saveSwState(){
+  try{
+    localStorage.setItem('sw_state',JSON.stringify({
+      elapsedMs:swElapsedMs,
+      running:!!swInt,
+      startAt:swInt?Date.now()-swElapsedMs:0,
+      lastSavedMs:swLastSavedMs
+    }));
+  }catch(e){}
+}
+
+function fmtSwParts(ms){
+  const totalCs=Math.floor(Math.max(0,ms)/10);
+  const cs=totalCs%100;
+  const totalSec=Math.floor(totalCs/100);
+  const s=totalSec%60;
+  const m=Math.floor(totalSec/60);
+  return {
+    main:String(m).padStart(2,'0')+':'+String(s).padStart(2,'0'),
+    ms:'.'+String(cs).padStart(2,'0'),
+    full:String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')+'.'+String(cs).padStart(2,'0')
+  };
+}
+
+function updSwUI(){
+  const p=fmtSwParts(swElapsedMs);
+  if($('swMainDisp'))$('swMainDisp').textContent=p.main;
+  if($('swMsDisp'))$('swMsDisp').textContent=p.ms;
+  const C=641;
+  const secProgress=(swElapsedMs%60000)/60000;
+  if($('swRing'))$('swRing').style.strokeDashoffset=C-(secProgress*C);
+  if($('swLapCounterLbl'))$('swLapCounterLbl').textContent=`${tx('Ishtirokchi')}: ${SW_LAPS.length} ta`;
+  if($('swStateBadge')){
+    $('swStateBadge').textContent=swInt?tx('🟢 Ishlamoqda'):(swElapsedMs>0?tx("⏸ To'xtatilgan"):tx('⏱ Tayyor'));
+  }
+  if($('swStart')){
+    $('swStart').textContent=swInt?'⏸ To\'xtatish':tx('▶ Boshlash');
+    $('swStart').className='ctrl-btn '+(swInt?'pause':'start');
+  }
+}
+
+function toggleSw(){
+  if(swInt){
+    clearInterval(swInt);swInt=null;
+    if($('swRingWrap'))$('swRingWrap').classList.remove('running');
+    updSwUI();saveSwState();
+    return;
+  }
+  const startOrigin=Date.now()-swElapsedMs;
+  if($('swRingWrap'))$('swRingWrap').classList.add('running');
+  swInt=setInterval(()=>{
+    swElapsedMs=Date.now()-startOrigin;
+    updSwUI();
+  },30);
+  updSwUI();saveSwState();
+}
+
+function recordSwLap(silent){
+  if(swElapsedMs<=0){
+    if(!silent)toast('⏱ Avval sekundomerni boshlang');
+    return false;
+  }
+  const inp=$('swRunnerName');
+  const num=SW_LAPS.length+1;
+  const name=(inp&&inp.value.trim())?inp.value.trim():`${tx('Ishtirokchi')} #${num}`;
+  const splitMs=swElapsedMs>swLastSavedMs?(swElapsedMs-swLastSavedMs):swElapsedMs;
+  SW_LAPS.unshift({
+    id:Date.now()+Math.floor(Math.random()*999),
+    name,
+    ms:swElapsedMs,
+    splitMs,
+    d:new Date().toISOString()
+  });
+  swLastSavedMs=swElapsedMs;
+  if(inp)inp.value='';
+  sv('sw_laps',SW_LAPS);
+  saveSwState();
+  renderSwLaps();
+  updSwUI();
+  if(!silent)toast(`🏁 ${name}: ${fmtSwParts(swElapsedMs).full} saqlandi ✔`);
+  return true;
+}
+
+/* Keyingi odam (00:00): Hozirgi yuguruvchini saqlab, sekundomerni 2-odam uchun 00:00 ga tushiradi, ro'yxat o'chmaydi! */
+function nextRunnerSw(){
+  if(swInt){clearInterval(swInt);swInt=null}
+  if($('swRingWrap'))$('swRingWrap').classList.remove('running');
+  if(swElapsedMs>0&&swElapsedMs!==swLastSavedMs){
+    recordSwLap(true);
+  }
+  swElapsedMs=0;
+  swLastSavedMs=0;
+  updSwUI();
+  saveSwState();
+  renderSwLaps();
+  toast('🔄 Natija saqlandi! Sekundomer keyingi ishtirokchi uchun 00:00 qilindi ✔');
+}
+
+/* Faqat soatni 00:00 qilish — pastdagi saqlangan natijalarga umuman tegmaydi! */
+function resetSwClockOnly(){
+  clearInterval(swInt);swInt=null;
+  if($('swRingWrap'))$('swRingWrap').classList.remove('running');
+  swElapsedMs=0;
+  swLastSavedMs=0;
+  updSwUI();
+  saveSwState();
+  toast('↺ Soat 00:00 qilindi (Saqlangan natijalar joyida qoldi)');
+}
+
+function renameSwLap(id){
+  const item=SW_LAPS.find(x=>x.id===id);if(!item)return;
+  ask('Ismni o\'zgartirish:',{inp:1,def:item.name},v=>{
+    if(!v||!v.trim())return;
+    item.name=v.trim();
+    sv('sw_laps',SW_LAPS);
+    renderSwLaps();
+    toast('Saqlandi ✔');
+  });
+}
+
+function delSwLap(id){
+  SW_LAPS=SW_LAPS.filter(x=>x.id!==id);
+  sv('sw_laps',SW_LAPS);
+  renderSwLaps();
+  updSwUI();
+}
+
+function clearAllSwLaps(){
+  if(!SW_LAPS.length)return;
+  ask("Barcha saqlangan natijalarni o'chirasizmi?",{},()=>{
+    SW_LAPS=[];
+    sv('sw_laps',SW_LAPS);
+    renderSwLaps();
+    updSwUI();
+    toast("Ro'yxat tozalandi ✔");
+  });
+}
+
+function renderSwLaps(){
+  const box=$('swLapsList');if(!box)return;
+  if(!SW_LAPS.length){
+    box.innerHTML=`<div class="empty">${tx("Hozircha saqlangan natijalar yo'q")}</div>`;
+    return;
+  }
+  const bestMs=Math.min(...SW_LAPS.map(x=>x.ms));
+  const sortedBySpeed=[...SW_LAPS].sort((a,b)=>a.ms-b.ms);
+
+  box.innerHTML=SW_LAPS.map((x,idx)=>{
+    const rankIdx=sortedBySpeed.findIndex(s=>s.id===x.id);
+    const medal=rankIdx===0?'🥇':rankIdx===1?'🥈':rankIdx===2?'🥉':'#'+(SW_LAPS.length-idx);
+    const diffMs=x.ms-bestMs;
+    const diffTxt=diffMs===0?`⚡ ${tx('Eng tez natija')}`:`+${(diffMs/1000).toFixed(2)} s`;
+    return `<div class="rec-card ${rankIdx===0?'gold-1':''}">
+      <div class="rec-rank">${medal}</div>
+      <div class="rec-body" onclick="renameSwLap(${x.id})" style="cursor:pointer" title="Ismni o'zgartirish">
+        <b>${esc(x.name)} <span style="font-size:11px;color:var(--mut)">✏️</span></b>
+        <small>🕒 ${tm(x.d)} · Oraliq: ${fmtSwParts(x.splitMs||x.ms).full}</small>
+      </div>
+      <div>
+        <div class="rec-time">${fmtSwParts(x.ms).full}</div>
+        <span class="rec-diff ${diffMs===0?'best':''}">${diffTxt}</span>
+      </div>
+      <button type="button" class="tx-act-btn" onclick="delSwLap(${x.id})" title="Qo'lda o'chirish">✕</button>
+    </div>`;
+  }).join('');
+}
+
+if(swState.running&&swState.startAt>0){
+  swElapsedMs=Math.max(0,Date.now()-swState.startAt);
+  toggleSw();
+}else{
+  updSwUI();
+}
+renderSwLaps();
 
 let cExpr='';
 function cIn(v){
@@ -1806,9 +2691,10 @@ function calcToTx(){
   openQuickTx();$('wa').value=val;
 }
 
-/* ================= BOSH SAHIFA YANGILANISHI ================= */
+/* ================= BOSH SAHIFA YANGILANISHI (KO'P VALYUTALI BALANS BILAN) ================= */
 function rh(){
-  const cards=A.filter(a=>a.k==='card').reduce((s,a)=>s+bal(a),0),cash=A.filter(a=>a.k==='cash').reduce((s,a)=>s+bal(a),0);
+  const cards=A.filter(a=>a.k==='card').reduce((s,a)=>s+balInUZS(a),0);
+  const cash=A.filter(a=>a.k==='cash').reduce((s,a)=>s+balInUZS(a),0);
   $('hb').textContent=fm(cards+cash);$('hc').textContent=fm(cards);$('hk').textContent=fm(cash);
   const end=new Date();end.setHours(23,59,59);$('ht').textContent=T.filter(t=>new Date(t.d)<=end).length;
   const sl=W.filter(isSal);
@@ -1824,7 +2710,7 @@ function rh(){
   const u=[...T].sort((a,b)=>a.d.localeCompare(b.d)).slice(0,4);
   $('up').innerHTML=u.length?u.map(t=>trow(t)+'</div>').join(''):`<div class="empty">${tx("Eslatma yo'q")}</div>`;
   const l=W.filter(w=>w.t==='out').slice(0,4);
-  $('lt').innerHTML=l.length?l.map(w=>wrow(w)+'</div>').join(''):`<div class="empty">${tx("Harajat yo'q")}</div>`;
+  $('lt').innerHTML=l.length?l.map(w=>wrow(w, false, 0)).join(''):`<div class="empty">${tx("Harajat yo'q")}</div>`;
 }
 
 function tick(){
@@ -1837,8 +2723,8 @@ function tick(){
   });
 }
 
-/* ================= QARZ KITOBI (CHO'NTAK VA KARTA BALANSIGA BOG'LANGAN) ================= */
-const RK=['w','t','a','s','d','g','r','nt'];
+/* ================= QARZ KITOBI ================= */
+const RK=['w','t','a','s','d','g','r','nt','q_tpl','cbu_rates','sw_laps','tmr_hist'];
 const CS=(()=>{try{const g=Telegram.WebApp;return g.CloudStorage&&g.isVersionAtLeast('6.9')?g.CloudStorage:null}catch(e){return null}})();
 function snap(){const o={};RK.forEach(k=>o[k]=ld(k,k==='s'?{}:[]));return o}
 function cs(){
@@ -2046,7 +2932,7 @@ function xr(id){R=R.filter(x=>x.id!==id);sv('r',R);rr()}
 const PC=['#6c5ce7','#0ea5e9','#f43f5e','#10b981','#f59e0b','#ec4899','#64748b'];
 function rc(){
   const n=new Date(),by={};
-  W.forEach(w=>{const d=new Date(w.d);if(w.t==='out'&&d.getMonth()===n.getMonth()&&d.getFullYear()===n.getFullYear())by[w.c]=(by[w.c]||0)+Number(w.a)});
+  W.forEach(w=>{const d=new Date(w.d);if(w.t==='out'&&d.getMonth()===n.getMonth()&&d.getFullYear()===n.getFullYear())by[w.c]=(by[w.c]||0)+txInUZS(w)});
   const ks=Object.keys(by).sort((a,b)=>by[b]-by[a]),tot=ks.reduce((s,k)=>s+by[k],0);
   if(!tot)$('pie').innerHTML=`<div class="empty">${tx("Shu oy harajat yo'q")}</div>`;
   else{
@@ -2056,7 +2942,7 @@ function rc(){
   }
   const M=[];
   for(let i=5;i>=0;i--){const d=new Date(n.getFullYear(),n.getMonth()-i,1);M.push({l:d.toLocaleDateString(LC(),{month:'short'}),i:0,o:0,y:d.getFullYear(),m:d.getMonth()})}
-  W.forEach(w=>{const d=new Date(w.d),x=M.find(q=>q.y===d.getFullYear()&&q.m===d.getMonth());if(x)x[w.t==='in'?'i':'o']+=Number(w.a)});
+  W.forEach(w=>{const d=new Date(w.d),x=M.find(q=>q.y===d.getFullYear()&&q.m===d.getMonth());if(x)x[w.t==='in'?'i':'o']+=txInUZS(w)});
   const mx=Math.max(1,...M.map(x=>Math.max(x.i,x.o)));
   $('bars').innerHTML=M.map(x=>`<div class="bc2"><div class="bb"><i class="gi" style="height:${x.i/mx*100}%"></i><i class="ro" style="height:${x.o/mx*100}%"></i></div><span>${x.l}</span><small>${x.i?Math.round(x.i/1000)+'k':''}</small></div>`).join('');
 }
@@ -2081,7 +2967,7 @@ $('pb').onclick=()=>{
 function ask(m,o,cb){
   $('dqm').textContent=tx(m);
   const i=$('dqi');i.style.display=o.inp?'block':'none';
-  i.type=o.type||'text';i.value=o.def||'';
+  i.type=o.type||'text';i.value=o.def!==undefined?o.def:'';
   $('dqo').onclick=()=>{$('dq').close();cb(o.inp?i.value:true)};
   $('dqc').onclick=()=>$('dq').close();
   $('dq').showModal();ta($('dq'));
@@ -2117,7 +3003,8 @@ function applyLang(){
   document.documentElement.lang=LG;
   $('lgb').textContent=LG.toUpperCase();
   $('dt').textContent=new Date().toLocaleDateString(LC(),{weekday:'short',day:'numeric',month:'short',year:'numeric'});
-  renderQuickGrid();fc();qc();sc2();renderCatMgr();rd();rg();rr();rw();rt();rh();ra();rNotes();rc();pl();
+  renderQuickGrid();renderCBURates();fc();qc();sc2();renderCatMgr();rd();rg();rr();rw();rt();rh();ra();rNotes();rc();pl();
+  updTmrRing();renderTmrHist();updSwUI();renderSwLaps();
   ta(document.body);
 }
 $('lgb').onclick=()=>{
@@ -2127,9 +3014,12 @@ $('lgb').onclick=()=>{
 };
 
 lockUp();runR();cl();
-applyLang();tick();setInterval(tick,30000);
+applyLang();
+fetchCBURates(false);
+tick();setInterval(tick,30000);
 pull();push();
 window.addEventListener('load',()=>{try{const g=Telegram.WebApp;g.ready();g.expand();g.setHeaderColor('#0b0c1a')}catch(e){}});
 </script>
 </body>
 </html>
+```
