@@ -534,57 +534,94 @@ textarea { min-height: 80px; font-family: monospace; font-size: 12px; }
 
 /* Ultra-Modern Glassmorphic Pomodoro Timer & Stopwatch */
 .tmr-hero, .sw-hero {
-  background: radial-gradient(circle at 50% 18%, color-mix(in srgb, var(--pr) 28%, var(--card)), var(--card) 74%);
-  border: 1px solid color-mix(in srgb, var(--pr2) 32%, var(--bd));
-  border-radius: 28px; padding: 22px 18px; text-align: center;
+  --acc: #10b981;
+  --acc2: #6c5ce7;
+  background:
+    radial-gradient(circle at 50% 15%, color-mix(in srgb, var(--acc) 32%, transparent), transparent 62%),
+    radial-gradient(circle at 85% 90%, color-mix(in srgb, var(--acc2) 22%, transparent), transparent 55%),
+    linear-gradient(160deg, color-mix(in srgb, var(--card) 94%, #000), var(--card));
+  border: 1px solid color-mix(in srgb, var(--acc) 42%, var(--bd));
+  border-radius: 30px; padding: 22px 18px; text-align: center;
   position: relative; overflow: hidden; margin-bottom: 16px;
-  box-shadow: 0 18px 42px rgba(0, 0, 0, .42), inset 0 1px 0 rgba(255, 255, 255, .08);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, .46), inset 0 1px 0 rgba(255, 255, 255, .1);
+  transition: border-color .35s ease, box-shadow .35s ease;
 }
 .sw-hero {
-  background: radial-gradient(circle at 50% 18%, rgba(14, 165, 233, .22), var(--card) 74%);
-  border-color: rgba(56, 189, 248, .3);
+  --acc: #06b6d4;
+  --acc2: #3b82f6;
+}
+.tmr-hero.fs-mode, .sw-hero.fs-mode {
+  position: fixed; inset: 0; z-index: 1950; margin: 0; border-radius: 0;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  padding: 24px 18px; overflow-y: auto;
+}
+.acc-bar {
+  display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  justify-content: center; background: rgba(0, 0, 0, .24);
+  border: 1px solid rgba(255, 255, 255, .08); padding: 6px 12px;
+  border-radius: 99px; margin: 4px auto 12px;
+}
+.acc-bar small { font-size: 11px; color: var(--mut); font-weight: 700; margin-right: 2px; }
+.acc-swatch {
+  width: 22px; height: 22px; border-radius: 50%; cursor: pointer;
+  border: 2px solid rgba(255,255,255,.22); transition: transform .18s, box-shadow .2s, border-color .2s;
+  position: relative;
+}
+.acc-swatch:hover { transform: scale(1.14); }
+.acc-swatch.on {
+  border-color: #fff; transform: scale(1.2);
+  box-shadow: 0 0 12px var(--sw-c, #fff);
 }
 .ring-wrap {
-  position: relative; width: 236px; height: 236px; margin: 14px auto 18px;
+  position: relative; width: 248px; height: 248px; margin: 12px auto 18px;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(108, 92, 231, .14), rgba(15, 17, 35, .65) 72%);
-  box-shadow: inset 0 0 28px rgba(0, 0, 0, .45), 0 8px 26px rgba(0, 0, 0, .25);
+  background:
+    radial-gradient(circle at 50% 35%, color-mix(in srgb, var(--acc) 18%, transparent), rgba(10, 12, 26, .78) 72%);
+  box-shadow:
+    inset 0 0 32px rgba(0, 0, 0, .55),
+    0 10px 30px rgba(0, 0, 0, .32),
+    0 0 24px color-mix(in srgb, var(--acc) 22%, transparent);
   transition: box-shadow .3s ease, transform .25s ease;
 }
 .ring-wrap.running {
   animation: ringPulse 2s infinite ease-in-out;
 }
 @keyframes ringPulse {
-  0%, 100% { box-shadow: inset 0 0 28px rgba(0,0,0,.45), 0 0 18px color-mix(in srgb, var(--pr) 35%, transparent); }
-  50% { box-shadow: inset 0 0 32px rgba(108,92,231,.25), 0 0 42px color-mix(in srgb, var(--pr) 65%, transparent); }
-}
-.ring-wrap.sw-dial.running {
-  animation: swPulse 1.8s infinite ease-in-out;
-}
-@keyframes swPulse {
-  0%, 100% { box-shadow: inset 0 0 28px rgba(0,0,0,.45), 0 0 18px rgba(14, 165, 233, .35); }
-  50% { box-shadow: inset 0 0 34px rgba(14, 165, 233, .28), 0 0 44px rgba(56, 189, 248, .65); }
+  0%, 100% {
+    box-shadow: inset 0 0 28px rgba(0,0,0,.5), 0 0 20px color-mix(in srgb, var(--acc) 35%, transparent);
+  }
+  50% {
+    box-shadow: inset 0 0 36px color-mix(in srgb, var(--acc) 28%, transparent), 0 0 48px color-mix(in srgb, var(--acc) 70%, transparent);
+  }
 }
 .ring-wrap svg {
   position: absolute; inset: 0; transform: rotate(-90deg);
-  filter: drop-shadow(0 0 10px rgba(108, 92, 231, .35));
+  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--acc) 45%, transparent));
+}
+.dial-ticks line {
+  stroke: rgba(255, 255, 255, .16);
+  stroke-linecap: round;
+}
+.dial-ticks line.maj {
+  stroke: color-mix(in srgb, var(--acc) 75%, #fff);
 }
 .tmr-disp {
-  font-size: 44px; font-weight: 900;
+  font-size: 46px; font-weight: 900;
   font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
   letter-spacing: 1px; z-index: 1; line-height: 1;
-  text-shadow: 0 4px 16px rgba(0, 0, 0, .45);
+  text-shadow: 0 0 22px color-mix(in srgb, var(--acc) 55%, transparent), 0 4px 16px rgba(0, 0, 0, .5);
 }
 .sw-ms {
-  font-size: 23px; font-weight: 800; color: var(--gold);
+  font-size: 23px; font-weight: 800; color: var(--acc);
   margin-left: 2px; opacity: .95;
 }
 .tmr-sub-lbl {
-  font-size: 11px; color: var(--mut); font-weight: 800;
-  margin-top: 8px; z-index: 1; text-transform: uppercase; letter-spacing: 1.4px;
-  background: rgba(255, 255, 255, .06); padding: 4px 11px; border-radius: 99px;
-  border: 1px solid rgba(255, 255, 255, .08);
+  font-size: 10.5px; color: #fff; font-weight: 800;
+  margin-top: 9px; z-index: 1; text-transform: uppercase; letter-spacing: 1.5px;
+  background: color-mix(in srgb, var(--acc) 24%, rgba(0,0,0,.4));
+  padding: 4px 12px; border-radius: 99px;
+  border: 1px solid color-mix(in srgb, var(--acc) 50%, transparent);
 }
 .tmr-presets { display: flex; gap: 7px; justify-content: center; flex-wrap: wrap; margin-bottom: 12px; }
 .tmr-preset {
@@ -592,9 +629,9 @@ textarea { min-height: 80px; font-family: monospace; font-size: 12px; }
   background: var(--bg); color: var(--tx); font-size: 12px; font-weight: 700; cursor: pointer; transition: .18s;
 }
 .tmr-preset.on {
-  background: linear-gradient(135deg, var(--pr), var(--pr2));
+  background: linear-gradient(135deg, var(--acc), var(--acc2));
   color: #fff; border-color: transparent;
-  box-shadow: 0 5px 14px color-mix(in srgb, var(--pr) 40%, transparent);
+  box-shadow: 0 5px 14px color-mix(in srgb, var(--acc) 42%, transparent);
 }
 .ctrl-grid { display: flex; gap: 9px; justify-content: center; flex-wrap: wrap; margin-top: 8px; }
 .ctrl-btn {
@@ -605,55 +642,49 @@ textarea { min-height: 80px; font-family: monospace; font-size: 12px; }
 }
 .ctrl-btn:active { transform: scale(.95); }
 .ctrl-btn.start {
-  background: linear-gradient(135deg, #10b981, #059669); color: #fff; border: 0;
-  box-shadow: 0 8px 20px rgba(16, 185, 129, .35); min-width: 135px;
+  background: linear-gradient(135deg, var(--acc), var(--acc2)); color: #fff; border: 0;
+  box-shadow: 0 8px 22px color-mix(in srgb, var(--acc) 42%, transparent); min-width: 140px;
 }
 .ctrl-btn.pause {
   background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; border: 0;
-  box-shadow: 0 8px 20px rgba(245, 158, 11, .35); min-width: 135px;
+  box-shadow: 0 8px 20px rgba(245, 158, 11, .35); min-width: 140px;
 }
 .ctrl-btn.lap {
-  background: linear-gradient(135deg, var(--pr), var(--pr2)); color: #fff; border: 0;
-  box-shadow: 0 8px 20px color-mix(in srgb, var(--pr) 38%, transparent);
+  background: color-mix(in srgb, var(--acc) 18%, var(--bg));
+  color: var(--tx); border: 1px solid color-mix(in srgb, var(--acc) 55%, var(--bd));
 }
 .ctrl-btn.next-run {
   background: rgba(14, 165, 233, .15); color: #38bdf8;
   border: 1px solid rgba(56, 189, 248, .4);
 }
 .rec-card {
-  background: color-mix(in srgb, var(--bg) 60%, var(--card));
-  border: 1px solid var(--bd); border-radius: 16px;
-  padding: 11px 13px; margin-bottom: 9px;
-  display: flex; align-items: center; gap: 11px; transition: border-color .18s;
+  display: flex; align-items: center; gap: 11px; padding: 11px 12px;
+  border: 1px solid var(--bd); border-radius: 16px; background: var(--bg);
+  margin-bottom: 8px; transition: border-color .15s, transform .15s;
 }
-.rec-card:hover { border-color: var(--pr); }
 .rec-card.gold-1 {
-  border-color: rgba(251, 191, 36, .55);
-  background: linear-gradient(135deg, rgba(251, 191, 36, .1), color-mix(in srgb, var(--bg) 65%, var(--card)));
+  border-color: rgba(251, 191, 36, .6);
+  background: linear-gradient(135deg, rgba(251, 191, 36, .12), var(--bg));
 }
 .rec-rank {
-  width: 36px; height: 36px; border-radius: 11px;
-  background: var(--card); border: 1px solid var(--bd);
-  display: grid; place-items: center; font-weight: 900; font-size: 15px; flex: none;
+  width: 36px; height: 36px; border-radius: 11px; background: var(--card);
+  border: 1px solid var(--bd); display: grid; place-items: center;
+  font-size: 16px; font-weight: 800; flex: none;
 }
-.rec-body { flex: 1; min-width: 0; text-align: left; }
-.rec-body b { font-size: 13.5px; font-weight: 800; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.rec-body { flex: 1; min-width: 0; }
+.rec-body b { display: block; font-size: 13.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .rec-body small { font-size: 11.5px; color: var(--mut); display: block; margin-top: 2px; }
-.rec-time {
-  font-family: 'JetBrains Mono', monospace; font-size: 15.5px; font-weight: 900;
-  color: var(--tx); text-align: right;
-}
-.rec-diff { font-size: 11px; font-weight: 700; color: var(--mut); display: block; }
-.rec-diff.best { color: var(--ok); }
+.rec-time { font-family: 'JetBrains Mono', monospace; font-size: 14.5px; font-weight: 900; text-align: right; }
+.rec-diff { display: block; font-size: 10.5px; color: var(--mut); text-align: right; font-weight: 700; }
+.rec-diff.best { color: #10b981; }
 
-/* Currency Converter Cards */
 .rate-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(135px, 1fr)); gap: 10px; margin-bottom: 14px; }
 .rate-box {
   background: var(--bg); border: 1px solid var(--bd); border-radius: 16px;
-  padding: 12px; display: flex; flex-direction: column; gap: 4px;
+  padding: 12px 14px; display: flex; flex-direction: column; gap: 4px;
 }
-.rate-box small { font-size: 11px; color: var(--mut); font-weight: 700; }
-.rate-box b { font-size: 15px; font-weight: 900; color: var(--gold); }
+.rate-box small { font-size: 11.5px; color: var(--mut); font-weight: 600; }
+.rate-box b { font-size: 15px; font-weight: 800; color: var(--gold); }
 
 .th-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
 .th-card { border: 2px solid var(--bd); border-radius: 16px; padding: 12px; cursor: pointer; display: flex; flex-direction: column; gap: 8px; }
@@ -662,15 +693,278 @@ textarea { min-height: 80px; font-family: monospace; font-size: 12px; }
 .th-dots { display: flex; gap: 6px; }
 .th-dots span { width: 14px; height: 14px; border-radius: 50%; display: inline-block; }
 
-.calc-disp { background: var(--bg); border: 1px solid var(--bd); border-radius: 14px; padding: 14px; text-align: right; font-size: 24px; font-weight: 800; margin-bottom: 10px; font-family: monospace; overflow-x: auto; }
+.calc-screen {
+  background: linear-gradient(160deg, color-mix(in srgb, var(--bg) 90%, #000), var(--bg));
+  border: 1px solid var(--bd); border-radius: 18px;
+  padding: 14px 16px; text-align: right; margin-bottom: 12px;
+  box-shadow: inset 0 2px 10px rgba(0,0,0,.25);
+}
+.calc-expr {
+  min-height: 18px; font-size: 13px; color: var(--mut);
+  font-family: 'JetBrains Mono', monospace; overflow-x: auto; white-space: nowrap;
+}
+.calc-disp {
+  font-size: 30px; font-weight: 900; margin-top: 4px;
+  font-family: 'JetBrains Mono', monospace; overflow-x: auto; letter-spacing: -.5px;
+}
 .calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-.calc-grid button { padding: 14px; border-radius: 13px; border: 1px solid var(--bd); background: var(--bg); color: var(--tx); font-size: 16px; font-weight: 700; cursor: pointer; }
+.calc-grid button {
+  padding: 15px 10px; border-radius: 14px; border: 1px solid var(--bd);
+  background: var(--bg); color: var(--tx); font-size: 17px; font-weight: 800;
+  cursor: pointer; transition: transform .12s, background .15s, border-color .15s;
+}
+.calc-grid button:active { transform: scale(.94); }
+.calc-grid button:hover { border-color: var(--pr); }
 .calc-grid button.op { background: color-mix(in srgb, var(--pr) 16%, var(--bg)); color: var(--pr2); }
-.calc-grid button.eq { background: linear-gradient(135deg, var(--pr), var(--pr2)); color: #fff; border: 0; }
+.calc-grid button.dng-op { background: rgba(244, 63, 94, .14); color: var(--no); border-color: rgba(244, 63, 94, .28); }
+.calc-grid button.eq {
+  background: linear-gradient(135deg, var(--pr), var(--pr2)); color: #fff; border: 0;
+  box-shadow: 0 6px 16px color-mix(in srgb, var(--pr) 38%, transparent);
+}
 
 .sw-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--bd); }
 .sw-row:last-child { border-bottom: 0; }
 .sw-chk { width: 44px; height: 24px; accent-color: var(--pr); cursor: pointer; }
+
+/* ================= 3D RETRO FLIP-CLOCK FULLSCREEN STUDIO (#fsClockModal) ================= */
+#fsClockModal {
+  --fl-c: #ff6b00;
+  --fl-c2: #ff9e00;
+  position: fixed; inset: 0; z-index: 2500;
+  background:
+    radial-gradient(circle at 50% 46%, color-mix(in srgb, var(--fl-c) 15%, transparent), transparent 62%),
+    radial-gradient(circle at 50% 100%, rgba(255,255,255,.03), transparent 50%),
+    #050508;
+  display: none; flex-direction: column; align-items: center; justify-content: center;
+  padding: 24px; overflow: hidden; user-select: none;
+  font-family: Inter, system-ui, -apple-system, sans-serif;
+}
+#fsClockModal.on { display: flex; animation: fsFadeIn .32s cubic-bezier(.16,1,.3,1); }
+@keyframes fsFadeIn { from { opacity: 0; transform: scale(.96); } to { opacity: 1; transform: scale(1); } }
+
+.fl-top-tag {
+  position: fixed; top: calc(18px + env(safe-area-inset-top, 0px)); left: 24px;
+  display: flex; align-items: center; gap: 10px; z-index: 2510;
+  background: rgba(18, 19, 26, .72); border: 1px solid rgba(255,255,255,.08);
+  padding: 7px 14px; border-radius: 99px; backdrop-filter: blur(12px);
+  color: #a1a1aa; font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase;
+}
+.fl-top-tag i {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--fl-c);
+  box-shadow: 0 0 12px var(--fl-c); display: inline-block;
+}
+.fl-top-exit {
+  position: fixed; top: calc(18px + env(safe-area-inset-top, 0px)); right: 24px;
+  z-index: 2510; background: rgba(18, 19, 26, .72); border: 1px solid rgba(255,255,255,.1);
+  color: #e4e4e7; padding: 8px 14px; border-radius: 12px; cursor: pointer;
+  font-size: 12px; font-weight: 800; backdrop-filter: blur(12px); transition: .18s;
+}
+.fl-top-exit:hover { border-color: var(--fl-c); color: #fff; }
+
+.fl-stage {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  width: 100%; max-width: 960px; margin: auto;
+}
+.fl-overtitle {
+  color: #d4d4d8; font-size: clamp(10px, 1.5vw, 13px); font-weight: 800;
+  letter-spacing: 6px; text-transform: uppercase; margin-bottom: 22px;
+  opacity: .88; text-align: center;
+  text-shadow: 0 2px 10px rgba(0,0,0,.8);
+}
+
+/* Matte-Black Metallic Bezel Housing */
+.fl-bezel {
+  position: relative;
+  background: linear-gradient(180deg, #14151a 0%, #0b0c10 100%);
+  border: 1.5px solid #23252f;
+  border-radius: clamp(20px, 3vw, 32px);
+  padding: clamp(20px, 4vw, 44px) clamp(16px, 4.2vw, 52px) clamp(18px, 3.2vw, 34px);
+  box-shadow:
+    0 32px 80px rgba(0, 0, 0, .92),
+    0 0 65px color-mix(in srgb, var(--fl-c) 12%, transparent),
+    inset 0 1px 1px rgba(255, 255, 255, .09),
+    inset 0 -3px 12px rgba(0, 0, 0, .85);
+  display: flex; align-items: center; justify-content: center;
+  gap: clamp(8px, 2vw, 24px);
+}
+/* 4 Corner Screws / Rivets */
+.fl-screw {
+  position: absolute; width: 8px; height: 8px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #3a3d4a, #121318);
+  border: 1px solid #070709; box-shadow: inset 0 1px 1px rgba(255,255,255,.15);
+}
+.fl-screw.tl { top: 14px; left: 14px; }
+.fl-screw.tr { top: 14px; right: 14px; }
+.fl-screw.bl { bottom: 14px; left: 14px; }
+.fl-screw.br { bottom: 14px; right: 14px; }
+
+.fl-unit {
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+}
+.fl-pair {
+  display: flex; gap: clamp(5px, 1vw, 12px);
+}
+
+/* Individual 3D Split-Flap Digit Tile */
+.fl-digit {
+  position: relative;
+  width: clamp(46px, 11.5vw, 112px);
+  height: clamp(68px, 16.5vw, 158px);
+  border-radius: clamp(10px, 1.5vw, 16px);
+  background: linear-gradient(180deg, #1d1e26 0%, #13141a 49.2%, #060608 50%, #15161d 50.8%, #0e0f14 100%);
+  border: 1px solid #2a2c38;
+  box-shadow:
+    0 12px 24px rgba(0, 0, 0, .78),
+    inset 0 1px 0 rgba(255, 255, 255, .1),
+    inset 0 -2px 6px rgba(0, 0, 0, .7);
+  display: grid; place-items: center;
+  overflow: hidden; perspective: 600px;
+}
+/* Crisp Horizontal Mechanical Split Line + Side Notches */
+.fl-digit::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 2px;
+  background: rgba(0, 0, 0, .92);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, .06);
+  z-index: 3; pointer-events: none;
+}
+.fl-digit::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,.045) 0%, transparent 48%, rgba(0,0,0,.28) 52%, transparent 100%);
+  pointer-events: none; z-index: 2;
+}
+.fl-digit span {
+  font-family: 'JetBrains Mono', 'Roboto Mono', Impact, ui-monospace, monospace;
+  font-size: clamp(42px, 10.5vw, 106px);
+  font-weight: 900; line-height: 1;
+  color: var(--fl-c);
+  text-shadow:
+    0 0 22px color-mix(in srgb, var(--fl-c) 68%, transparent),
+    0 0 42px color-mix(in srgb, var(--fl-c) 32%, transparent),
+    0 3px 6px rgba(0, 0, 0, .85);
+  z-index: 1; display: inline-block;
+  transform-origin: 50% 50%;
+}
+.fl-digit.flip-anim span {
+  animation: flapTick .26s cubic-bezier(.22, 1, .36, 1);
+}
+@keyframes flapTick {
+  0% { transform: rotateX(75deg) scaleY(.88); opacity: .45; filter: brightness(1.5); }
+  60% { transform: rotateX(-10deg) scaleY(1.02); opacity: 1; }
+  100% { transform: rotateX(0deg) scaleY(1); opacity: 1; }
+}
+
+/* Glowing Twin Colon Dots */
+.fl-colon {
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  gap: clamp(12px, 2.8vw, 26px); padding-bottom: 22px;
+}
+.fl-colon i {
+  width: clamp(6px, 1.1vw, 11px); height: clamp(6px, 1.1vw, 11px);
+  border-radius: 50%; background: var(--fl-c);
+  box-shadow: 0 0 14px var(--fl-c), 0 0 28px var(--fl-c);
+  display: block;
+}
+#fsClockModal.running .fl-colon i {
+  animation: colonPulse 1s infinite ease-in-out;
+}
+@keyframes colonPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: .32; transform: scale(.82); }
+}
+
+.fl-unit-lbl {
+  color: #8e92a4; font-size: clamp(8.5px, 1.1vw, 11px);
+  font-weight: 800; letter-spacing: clamp(2px, .5vw, 4.5px);
+  text-transform: uppercase;
+}
+
+/* Bottom Progress Bar & Series Signature */
+.fl-prog-wrap {
+  width: min(86vw, 560px); height: 3px;
+  background: rgba(255, 255, 255, .07); border-radius: 99px;
+  margin-top: 30px; overflow: hidden; position: relative;
+}
+.fl-prog-bar {
+  height: 100%; width: 100%;
+  background: linear-gradient(90deg, var(--fl-c), var(--fl-c2));
+  box-shadow: 0 0 16px var(--fl-c);
+  border-radius: 99px; transition: width .25s linear;
+}
+.fl-series-sub {
+  margin-top: 14px; color: #686b7a; font-size: 10px;
+  font-weight: 800; letter-spacing: 4.5px; text-transform: uppercase;
+  text-align: center;
+}
+
+/* Corner Docked Controls (Pastki o'ng burchakdagi ixcham boshqaruv paneli) */
+.fl-corner-dock {
+  position: fixed;
+  right: 20px;
+  bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  z-index: 2520;
+  display: flex; flex-direction: column; align-items: flex-end; gap: 8px;
+}
+.fl-dock-panel {
+  background: rgba(16, 17, 24, .82);
+  border: 1px solid rgba(255, 255, 255, .12);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-radius: 22px; padding: 12px 14px;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, .75);
+  display: flex; flex-direction: column; gap: 10px;
+  width: min(90vw, 310px);
+  transition: transform .25s cubic-bezier(.2,.9,.3,1), opacity .22s ease;
+  transform-origin: bottom right;
+}
+.fl-corner-dock.collapsed .fl-dock-panel {
+  transform: scale(.75) translate(30px, 30px);
+  opacity: 0; pointer-events: none; position: absolute; bottom: 52px; right: 0;
+}
+.fl-dock-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 6px; flex-wrap: wrap;
+}
+.fl-dock-btn {
+  flex: 1; border: 1px solid rgba(255,255,255,.1);
+  background: rgba(255,255,255,.06); color: #f4f4f5;
+  padding: 9px 11px; border-radius: 12px; font-size: 12px; font-weight: 800;
+  cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+  transition: .15s; white-space: nowrap;
+}
+.fl-dock-btn:hover { border-color: var(--fl-c); }
+.fl-dock-btn:active { transform: scale(.95); }
+.fl-dock-btn.pri {
+  background: linear-gradient(135deg, var(--fl-c), var(--fl-c2));
+  color: #fff; border: 0;
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--fl-c) 42%, transparent);
+}
+.fl-mini-presets {
+  display: flex; gap: 5px; flex-wrap: wrap; width: 100%;
+}
+.fl-mini-presets button {
+  flex: 1; border: 1px solid rgba(255,255,255,.08);
+  background: rgba(255,255,255,.04); color: #a1a1aa;
+  padding: 6px 8px; border-radius: 9px; font-size: 11px; font-weight: 700; cursor: pointer;
+}
+.fl-mini-presets button:hover, .fl-mini-presets button.on {
+  border-color: var(--fl-c); color: #fff;
+  background: color-mix(in srgb, var(--fl-c) 22%, transparent);
+}
+.fl-dock-colors {
+  display: flex; align-items: center; justify-content: space-between; gap: 6px;
+  padding-top: 4px; border-top: 1px solid rgba(255,255,255,.07);
+}
+.fl-dock-dot {
+  width: 20px; height: 20px; border-radius: 50%; cursor: pointer;
+  border: 2px solid rgba(255,255,255,.22); transition: .16s;
+}
+.fl-dock-dot.on { border-color: #fff; transform: scale(1.2); box-shadow: 0 0 10px currentColor; }
+.fl-dock-fab {
+  width: 44px; height: 44px; border-radius: 14px;
+  background: rgba(20, 21, 30, .85); border: 1px solid rgba(255,255,255,.15);
+  color: var(--fl-c); font-size: 18px; cursor: pointer;
+  display: grid; place-items: center; backdrop-filter: blur(14px);
+  box-shadow: 0 8px 24px rgba(0,0,0,.65); transition: .18s;
+}
+.fl-dock-fab:hover { border-color: var(--fl-c); transform: scale(1.05); }
 </style>
 </head>
 <body>
@@ -932,15 +1226,16 @@ textarea { min-height: 80px; font-family: monospace; font-size: 12px; }
         </form>
       </div>
       <div class="tabs" id="tb">
-        <button data-f="all" class="on">Hammasi</button>
-        <button data-f="o">Bir marta</button>
-        <button data-f="d">Kunlik</button>
-        <button data-f="m">Oy bo'yicha</button>
-        <button data-f="y">Yillik</button>
+        <button type="button" data-f="all" class="on">Hammasi</button>
+        <button type="button" data-f="o">Bir marta</button>
+        <button type="button" data-f="d">Kunlik</button>
+        <button type="button" data-f="m">Oy bo'yicha</button>
+        <button type="button" data-f="y">Yillik</button>
       </div>
       <div class="card" id="tl"></div>
     </div>
 
+    <!-- Rangli Qaydlar -->
     <div id="tl-notes" class="tl-pane" style="display:none">
       <div class="card">
         <h2>📝 Yangi qayd</h2>
@@ -964,18 +1259,30 @@ textarea { min-height: 80px; font-family: monospace; font-size: 12px; }
       </div>
     </div>
 
-    <!-- Zamonaviy Taymer (Pomodoro & Deep Work + Saqlanadigan tarix) -->
+    <!-- Zamonaviy Taymer (Pomodoro & Deep Work + Rang tanlash + Saqlanadigan tarix) -->
     <div id="tl-timer" class="tl-pane" style="display:none">
-      <div class="tmr-hero">
-        <div class="sec-bar" style="margin-top:0">
+      <div class="tmr-hero" id="tmrHeroCard">
+        <div class="sec-bar" style="margin-top:0;width:100%">
           <h2>⏲️ Fokus & Pomodoro</h2>
-          <div style="display:flex;gap:6px;align-items:center">
+          <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
             <span class="tag" id="tmrSessBadge">🔥 Bugun: 0 seans</span>
+            <button type="button" class="pill-btn" onclick="toggleClockFs('tmrHeroCard')" title="Katta ekran">⛶ Katta ekran</button>
             <button type="button" class="pill-btn" onclick="$('dTmrSet').showModal();ta($('dTmrSet'))">⚙️ Sozlash</button>
           </div>
         </div>
 
-        <div class="seg" id="tmrModeSeg" style="margin-bottom:10px">
+        <!-- 6 xil Zamonaviy Neon Rang Tanlagich -->
+        <div class="acc-bar" id="tmrColorBar">
+          <small>🎨 Rang:</small>
+          <span class="acc-swatch on" data-c="#10b981" data-c2="#059669" style="background:#10b981;--sw-c:#10b981" onclick="setTmrAccent('#10b981','#059669',this)" title="Zumrad (Emerald)"></span>
+          <span class="acc-swatch" data-c="#f59e0b" data-c2="#fbbf24" style="background:#f59e0b;--sw-c:#f59e0b" onclick="setTmrAccent('#f59e0b','#fbbf24',this)" title="Tilla (Royal Gold)"></span>
+          <span class="acc-swatch" data-c="#8b5cf6" data-c2="#c084fc" style="background:#8b5cf6;--sw-c:#8b5cf6" onclick="setTmrAccent('#8b5cf6','#c084fc',this)" title="Kiber Binafsha (Cyber Violet)"></span>
+          <span class="acc-swatch" data-c="#06b6d4" data-c2="#3b82f6" style="background:#06b6d4;--sw-c:#06b6d4" onclick="setTmrAccent('#06b6d4','#3b82f6',this)" title="Moviy Neon (Electric Cyan)"></span>
+          <span class="acc-swatch" data-c="#f43f5e" data-c2="#fb7185" style="background:#f43f5e;--sw-c:#f43f5e" onclick="setTmrAccent('#f43f5e','#fb7185',this)" title="Pushti (Sunset Rose)"></span>
+          <span class="acc-swatch" data-c="#f97316" data-c2="#facc15" style="background:#f97316;--sw-c:#f97316" onclick="setTmrAccent('#f97316','#facc15',this)" title="Olcha Olov (Amber Flame)"></span>
+        </div>
+
+        <div class="seg" id="tmrModeSeg" style="margin-bottom:10px;width:min(100%,360px);margin-inline:auto">
           <button type="button" class="on in-m" data-m="work" onclick="swTmrMode('work',this)">🔥 Fokus (Ish)</button>
           <button type="button" class="pr-m" data-m="rest" onclick="swTmrMode('rest',this)">☕ Tanaffus (Dam)</button>
         </div>
@@ -986,23 +1293,24 @@ textarea { min-height: 80px; font-family: monospace; font-size: 12px; }
           <button type="button" class="tmr-preset on" data-min="25" onclick="setTmrPreset(25,'work',this)">🍅 25 daq</button>
           <button type="button" class="tmr-preset" data-min="45" onclick="setTmrPreset(45,'work',this)">🚀 45 daq</button>
           <button type="button" class="tmr-preset" data-min="60" onclick="setTmrPreset(60,'work',this)">💎 60 daq</button>
+          <button type="button" class="tmr-preset" onclick="askCustomTmrMin()">➕ Boshqa</button>
         </div>
 
-        <div style="max-width:320px;margin:0 auto 6px">
+        <div style="max-width:320px;width:100%;margin:0 auto 6px">
           <input id="tmrLabelInp" placeholder="🎯 Mashg'ulot nomi (masalan: Kitob o'qish, Sport...)" oninput="saveTmrState()" style="text-align:center;font-size:13px;padding:9px 12px">
         </div>
 
         <div class="ring-wrap" id="tmrRingWrap">
-          <svg width="236" height="236" viewBox="0 0 236 236">
+          <svg width="248" height="248" viewBox="0 0 248 248">
             <defs>
-              <linearGradient id="tmrGrad" x1="0" y1="0" x2="236" y2="236" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stop-color="#10b981"/>
-                <stop offset="50%" stop-color="#6c5ce7"/>
-                <stop offset="100%" stop-color="#fbbf24"/>
+              <linearGradient id="tmrGrad" x1="0" y1="0" x2="248" y2="248" gradientUnits="userSpaceOnUse">
+                <stop id="tmrGradStop1" offset="0%" stop-color="#10b981"/>
+                <stop id="tmrGradStop2" offset="100%" stop-color="#059669"/>
               </linearGradient>
             </defs>
-            <circle cx="118" cy="118" r="102" fill="none" stroke="var(--bd)" stroke-width="11"/>
-            <circle id="tmrRing" cx="118" cy="118" r="102" fill="none" stroke="url(#tmrGrad)" stroke-width="11" stroke-linecap="round" stroke-dasharray="641" stroke-dashoffset="0"/>
+            <g class="dial-ticks" id="tmrTicks"></g>
+            <circle cx="124" cy="124" r="102" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="11"/>
+            <circle id="tmrRing" cx="124" cy="124" r="102" fill="none" stroke="url(#tmrGrad)" stroke-width="11" stroke-linecap="round" stroke-dasharray="641" stroke-dashoffset="0"/>
           </svg>
           <div class="tmr-disp" id="tmrDisp">25:00</div>
           <div class="tmr-sub-lbl" id="tmrStatusLbl">FOKUS REJIMI</div>
@@ -1025,32 +1333,46 @@ textarea { min-height: 80px; font-family: monospace; font-size: 12px; }
       </div>
     </div>
 
-    <!-- Zamonaviy Sekundomer (Ko'p ishtirokchi + O'chib ketmaydigan natijalar) -->
+    <!-- Zamonaviy Sekundomer (Ko'p ishtirokchi + Rang tanlash + O'chib ketmaydigan natijalar) -->
     <div id="tl-sw" class="tl-pane" style="display:none">
-      <div class="sw-hero">
-        <div class="sec-bar" style="margin-top:0">
+      <div class="sw-hero" id="swHeroCard">
+        <div class="sec-bar" style="margin-top:0;width:100%">
           <h2>⏱️ Professional Sekundomer</h2>
-          <span class="tag" id="swStateBadge">⏱ Tayyor</span>
+          <div style="display:flex;gap:6px;align-items:center">
+            <span class="tag" id="swStateBadge">⏱ Tayyor</span>
+            <button type="button" class="pill-btn" onclick="toggleClockFs('swHeroCard')" title="Katta ekran">⛶ Katta ekran</button>
+          </div>
         </div>
 
-        <div style="max-width:340px;margin:0 auto 8px">
+        <!-- 6 xil Zamonaviy Neon Rang Tanlagich (Sekundomer uchun) -->
+        <div class="acc-bar" id="swColorBar">
+          <small>🎨 Rang:</small>
+          <span class="acc-swatch on" data-c="#06b6d4" data-c2="#3b82f6" style="background:#06b6d4;--sw-c:#06b6d4" onclick="setSwAccent('#06b6d4','#3b82f6',this)" title="Moviy Neon (Electric Cyan)"></span>
+          <span class="acc-swatch" data-c="#f59e0b" data-c2="#fbbf24" style="background:#f59e0b;--sw-c:#f59e0b" onclick="setSwAccent('#f59e0b','#fbbf24',this)" title="Tilla (Royal Gold)"></span>
+          <span class="acc-swatch" data-c="#10b981" data-c2="#059669" style="background:#10b981;--sw-c:#10b981" onclick="setSwAccent('#10b981','#059669',this)" title="Zumrad (Emerald)"></span>
+          <span class="acc-swatch" data-c="#8b5cf6" data-c2="#c084fc" style="background:#8b5cf6;--sw-c:#8b5cf6" onclick="setSwAccent('#8b5cf6','#c084fc',this)" title="Kiber Binafsha (Cyber Violet)"></span>
+          <span class="acc-swatch" data-c="#f43f5e" data-c2="#fb7185" style="background:#f43f5e;--sw-c:#f43f5e" onclick="setSwAccent('#f43f5e','#fb7185',this)" title="Pushti (Sunset Rose)"></span>
+          <span class="acc-swatch" data-c="#f97316" data-c2="#facc15" style="background:#f97316;--sw-c:#f97316" onclick="setSwAccent('#f97316','#facc15',this)" title="Olcha Olov (Amber Flame)"></span>
+        </div>
+
+        <div style="max-width:340px;width:100%;margin:0 auto 8px">
           <input id="swRunnerName" placeholder="🏃 Ishtirokchi ismi (masalan: 1-ishtirokchi, Ali...)" style="text-align:center;font-size:13px;padding:10px 14px">
         </div>
 
         <div class="ring-wrap sw-dial" id="swRingWrap">
-          <svg width="236" height="236" viewBox="0 0 236 236">
+          <svg width="248" height="248" viewBox="0 0 248 248">
             <defs>
-              <linearGradient id="swGrad" x1="0" y1="0" x2="236" y2="236" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stop-color="#38bdf8"/>
-                <stop offset="50%" stop-color="#6c5ce7"/>
-                <stop offset="100%" stop-color="#10b981"/>
+              <linearGradient id="swGrad" x1="0" y1="0" x2="248" y2="248" gradientUnits="userSpaceOnUse">
+                <stop id="swGradStop1" offset="0%" stop-color="#06b6d4"/>
+                <stop id="swGradStop2" offset="100%" stop-color="#3b82f6"/>
               </linearGradient>
             </defs>
-            <circle cx="118" cy="118" r="102" fill="none" stroke="var(--bd)" stroke-width="11"/>
-            <circle id="swRing" cx="118" cy="118" r="102" fill="none" stroke="url(#swGrad)" stroke-width="11" stroke-linecap="round" stroke-dasharray="641" stroke-dashoffset="641"/>
+            <g class="dial-ticks" id="swTicks"></g>
+            <circle cx="124" cy="124" r="102" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="11"/>
+            <circle id="swRing" cx="124" cy="124" r="102" fill="none" stroke="url(#swGrad)" stroke-width="11" stroke-linecap="round" stroke-dasharray="641" stroke-dashoffset="641"/>
           </svg>
           <div class="tmr-disp"><span id="swMainDisp">00:00</span><span class="sw-ms" id="swMsDisp">.00</span></div>
-          <div class="tmr-sub-lbl" id="swLapCounterLbl">SAQLANGANLAR: 0 TA</div>
+          <div class="tmr-sub-lbl" id="swLapCounterLbl">ISHTIROKCHI: 0 TA</div>
         </div>
 
         <div class="ctrl-grid">
@@ -1071,17 +1393,21 @@ textarea { min-height: 80px; font-family: monospace; font-size: 12px; }
       </div>
     </div>
 
+    <!-- Zamonaviy Kalkulyator + Hisoblar Tarixi -->
     <div id="tl-calc" class="tl-pane" style="display:none">
       <div class="card">
         <div class="sec-bar" style="margin-top:0">
-          <h2>🧮 Kalkulyator</h2>
-          <button type="button" class="pill-btn" onclick="calcToTx()">💸 Chiqimga o'tkazish</button>
+          <h2>🧮 Aqlli Kalkulyator</h2>
+          <button type="button" class="pill-btn pr" onclick="calcToTx()">💸 Chiqimga o'tkazish</button>
         </div>
-        <div class="calc-disp" id="calcDisp">0</div>
+        <div class="calc-screen">
+          <div class="calc-expr" id="calcExprLine"></div>
+          <div class="calc-disp" id="calcDisp">0</div>
+        </div>
         <div class="calc-grid">
-          <button type="button" class="op" onclick="cIn('C')">C</button>
-          <button type="button" class="op" onclick="cIn('(')">(</button>
-          <button type="button" class="op" onclick="cIn(')')">)</button>
+          <button type="button" class="dng-op" onclick="cIn('C')">AC</button>
+          <button type="button" class="op" onclick="cIn('BS')">⌫</button>
+          <button type="button" class="op" onclick="cIn('%')">%</button>
           <button type="button" class="op" onclick="cIn('/')">÷</button>
           <button type="button" onclick="cIn('7')">7</button>
           <button type="button" onclick="cIn('8')">8</button>
@@ -1100,6 +1426,14 @@ textarea { min-height: 80px; font-family: monospace; font-size: 12px; }
           <button type="button" onclick="cIn('.')">.</button>
           <button type="button" class="eq" onclick="cIn('=')">=</button>
         </div>
+      </div>
+
+      <div class="card">
+        <div class="sec-bar" style="margin-top:0">
+          <h2>📜 Hisoblar tarixi <small>(ustiga bosib qayta oling)</small></h2>
+          <button type="button" class="pill-btn" onclick="clearCalcHist()">🗑 Tarixni tozalash</button>
+        </div>
+        <div id="calcHistList"></div>
       </div>
     </div>
 
@@ -1221,11 +1555,11 @@ textarea { min-height: 80px; font-family: monospace; font-size: 12px; }
 
 <!-- Pastki 5 ta menyu -->
 <nav>
-  <button data-s="home" class="on">📊<small>Asosiy</small></button>
-  <button data-s="wal">⇄<small>Amallar</small></button>
-  <button data-s="rep">💲<small>Qarz & Hisob</small></button>
-  <button data-s="tsk">🎛️<small>Vositalar</small></button>
-  <button data-s="more">⚙️<small>Sozlamalar</small></button>
+  <button type="button" data-s="home" class="on" onclick="goSec('home')">📊<small>Asosiy</small></button>
+  <button type="button" data-s="wal" onclick="goSec('wal')">⇄<small>Amallar</small></button>
+  <button type="button" data-s="rep" onclick="goSec('rep')">💲<small>Qarz & Hisob</small></button>
+  <button type="button" data-s="tsk" onclick="goSec('tsk')">🎛️<small>Vositalar</small></button>
+  <button type="button" data-s="more" onclick="goSec('more')">⚙️<small>Sozlamalar</small></button>
 </nav>
 
 <!-- Dialog: Tezkor Harajat Shablonini Tahrirlash / Qo'shish (#dQuickTpl) -->
@@ -1428,13 +1762,109 @@ textarea { min-height: 80px; font-family: monospace; font-size: 12px; }
   </div>
 </dialog>
 
+<!-- 3D RETRO FLIP-CLOCK FULLSCREEN STUDIO OVERLAY -->
+<div id="fsClockModal">
+  <!-- Yuqori chap burchakda kichik status nishoni -->
+  <div class="fl-top-tag">
+    <i></i>
+    <span id="fsModeBadge">24 HOURS COUNTDOWN</span>
+  </div>
+  <!-- Yuqori o'ng burchakda Kichraytirish tugmasi -->
+  <button type="button" class="fl-top-exit" onclick="closeClockFs()">✕ Kichraytirish</button>
+
+  <!-- Markaziy 3D Mexanik Flip-Soat Sahnasi -->
+  <div class="fl-stage" onclick="toggleFsClockRun()">
+    <div class="fl-overtitle" id="fsOverTitle">24 HOURS COUNTDOWN</div>
+
+    <div class="fl-bezel" onclick="event.stopPropagation()">
+      <span class="fl-screw tl"></span>
+      <span class="fl-screw tr"></span>
+      <span class="fl-screw bl"></span>
+      <span class="fl-screw br"></span>
+
+      <!-- 1-Juftlik: SOAT (Taymerda) yoki DAQIQA (Sekundomerda) -->
+      <div class="fl-unit">
+        <div class="fl-pair">
+          <div class="fl-digit" id="fd0"><span>0</span></div>
+          <div class="fl-digit" id="fd1"><span>0</span></div>
+        </div>
+        <div class="fl-unit-lbl" id="flLbl1">HOURS</div>
+      </div>
+
+      <div class="fl-colon"><i></i><i></i></div>
+
+      <!-- 2-Juftlik: DAQIQA (Taymerda) yoki SONIYA (Sekundomerda) -->
+      <div class="fl-unit">
+        <div class="fl-pair">
+          <div class="fl-digit" id="fd2"><span>2</span></div>
+          <div class="fl-digit" id="fd3"><span>5</span></div>
+        </div>
+        <div class="fl-unit-lbl" id="flLbl2">MINUTES</div>
+      </div>
+
+      <div class="fl-colon"><i></i><i></i></div>
+
+      <!-- 3-Juftlik: SONIYA (Taymerda) yoki ULUSH (Sekundomerda) -->
+      <div class="fl-unit">
+        <div class="fl-pair">
+          <div class="fl-digit" id="fd4"><span>0</span></div>
+          <div class="fl-digit" id="fd5"><span>0</span></div>
+        </div>
+        <div class="fl-unit-lbl" id="flLbl3">SECONDS</div>
+      </div>
+    </div>
+
+    <div class="fl-prog-wrap">
+      <div class="fl-prog-bar" id="fsProgBar"></div>
+    </div>
+    <div class="fl-series-sub" id="fsSubCaption">RETRO FLIP — JM BLACK SERIES</div>
+  </div>
+
+  <!-- Pastki o'ng burchakka yig'ilgan ixcham boshqaruv paneli (Corner Dock) -->
+  <div class="fl-corner-dock" id="fsCornerDock">
+    <div class="fl-dock-panel">
+      <div class="fl-dock-row">
+        <button type="button" class="fl-dock-btn pri" id="fsStartBtn" onclick="toggleFsClockRun()">▶ Boshlash</button>
+        <button type="button" class="fl-dock-btn" id="fsLapBtn" style="display:none" onclick="recordSwLap(false)">🏁 Finish</button>
+        <button type="button" class="fl-dock-btn" id="fsNextBtn" style="display:none" onclick="nextRunnerSw()">🔄 00:00</button>
+        <button type="button" class="fl-dock-btn" onclick="resetFsClock()">↺ Qayta</button>
+      </div>
+
+      <!-- Tezkor vaqt tanlash (faqat Taymer rejimida ko'rinadi) -->
+      <div class="fl-mini-presets" id="fsTmrPresets">
+        <button type="button" onclick="setTmrPreset(5,'work')">5m</button>
+        <button type="button" onclick="setTmrPreset(15,'work')">15m</button>
+        <button type="button" onclick="setTmrPreset(25,'work')">25m</button>
+        <button type="button" onclick="setTmrPreset(60,'work')">1s</button>
+        <button type="button" onclick="setTmrPreset(1440,'work')">24s</button>
+        <button type="button" onclick="askCustomTmrMin()">+ Vaqt</button>
+      </div>
+
+      <!-- 6 xil Neon Rang Tanlagich (Rasmdagi Olovrang #ff6b00 bilan) -->
+      <div class="fl-dock-colors" id="fsColorDots">
+        <span style="font-size:10.5px;color:#a1a1aa;font-weight:700">🎨 Rang:</span>
+        <span class="fl-dock-dot on" data-c="#ff6b00" data-c2="#ff9e00" style="background:#ff6b00;color:#ff6b00" onclick="setFsFlipColor('#ff6b00','#ff9e00',this)" title="Retro Orange (Rasmdagi)"></span>
+        <span class="fl-dock-dot" data-c="#10b981" data-c2="#059669" style="background:#10b981;color:#10b981" onclick="setFsFlipColor('#10b981','#059669',this)" title="Emerald"></span>
+        <span class="fl-dock-dot" data-c="#fbbf24" data-c2="#f59e0b" style="background:#fbbf24;color:#fbbf24" onclick="setFsFlipColor('#fbbf24','#f59e0b',this)" title="Royal Gold"></span>
+        <span class="fl-dock-dot" data-c="#06b6d4" data-c2="#3b82f6" style="background:#06b6d4;color:#06b6d4" onclick="setFsFlipColor('#06b6d4','#3b82f6',this)" title="Electric Cyan"></span>
+        <span class="fl-dock-dot" data-c="#a855f7" data-c2="#c084fc" style="background:#a855f7;color:#a855f7" onclick="setFsFlipColor('#a855f7','#c084fc',this)" title="Cyber Violet"></span>
+        <span class="fl-dock-dot" data-c="#f43f5e" data-c2="#fb7185" style="background:#f43f5e;color:#f43f5e" onclick="setFsFlipColor('#f43f5e','#fb7185',this)" title="Sunset Rose"></span>
+      </div>
+    </div>
+
+    <!-- Burchakdagi panelni yashirish / ochish tugmasi -->
+    <button type="button" class="fl-dock-fab" onclick="$('fsCornerDock').classList.toggle('collapsed')" title="Boshqaruv panelini yig'ish / ochish">⚙️</button>
+  </div>
+</div>
+
 <div id="toast"></div>
 
 <script>
-const $=id=>document.getElementById(id);
+const _noopEl={style:{setProperty(){}},classList:{add(){},remove(){},toggle(){return false},contains(){return false}},dataset:{},addEventListener(){},removeEventListener(){},querySelector(){return null},querySelectorAll(){return[]},setAttribute(){},close(){},showModal(){},focus(){},reset(){},click(){},options:[]};
+const $=id=>document.getElementById(id)||_noopEl;
 
 /* 1.5s Splash Screen yopilishi */
-setTimeout(()=>{const sp=$('splash');if(sp)sp.classList.add('hide')},1500);
+setTimeout(()=>{const sp=document.getElementById('splash');if(sp)sp.classList.add('hide')},1500);
 
 /* ================= 3 TILLI (UZ / RU / EN) TARJIMA TIZIMI ================= */
 var LG=(()=>{try{const q=new URLSearchParams(location.search).get('lang');if(['uz','ru','en'].includes(q)){localStorage.setItem('lg',q);return q}const s=localStorage.getItem('lg');if(s&&['uz','ru','en'].includes(s))return s;return 'uz'}catch(e){return 'uz'}})();
@@ -1562,6 +1992,10 @@ Qaytarish sanasi (ixtiyoriy)=>Дата возврата (необязатель�
 🍅 25 daq=>🍅 25 мин|🍅 25 min
 🚀 45 daq=>🚀 45 мин|🚀 45 min
 💎 60 daq=>💎 60 мин|💎 60 min
+➕ Boshqa=>➕ Другое|➕ Custom
+🎨 Rang:=>🎨 Цвет:|🎨 Color:
+⛶ Katta ekran=>⛶ Полный экран|⛶ Fullscreen
+✕ Kichraytirish=>✕ Свернуть|✕ Exit fullscreen
 🎯 Mashg'ulot nomi (masalan: Kitob o'qish, Sport...)=>🎯 Название занятия (например: Чтение, Спорт...)|🎯 Session label (e.g. Reading, Workout...)
 💾 Natijani saqlash=>💾 Сохранить результат|💾 Save session
 ↺ Qayta (00:00)=>↺ Сброс (00:00)|↺ Reset (00:00)
@@ -1578,6 +2012,13 @@ Qaytarish sanasi (ixtiyoriy)=>Дата возврата (необязатель�
 ↺ Vaqtni 00:00 qilish=>↺ Сбросить часы 00:00|↺ Reset clock 00:00
 🏆 Ishtirokchilar va Natijalar jadvali=>🏆 Таблица участников и результатов|🏆 Runners & Results Leaderboard
 🗑 Ro'yxatni tozalash=>🗑 Очистить список|🗑 Clear list
+🧮 Aqlli Kalkulyator=>🧮 Умный калькулятор|🧮 Smart Calculator
+📜 Hisoblar tarixi=>📜 История вычислений|📜 Calculation history
+(ustiga bosib qayta oling)=>(нажмите, чтобы подставить)|(tap to reuse result)
+🗑 Tarixni tozalash=>🗑 Очистить историю|🗑 Clear history
+Hozircha hisoblar tarixi yo'q=>История вычислений пока пуста|No calculation history yet
+💸 Chiqimga=>💸 В расход|💸 Expense
+Necha daqiqalik taymer qo'yamiz? (1 - 240)=>На сколько минут поставить таймер? (1 - 240)|Set timer duration in minutes (1 - 240):
 Hozircha saqlangan natijalar yo'q=>Сохранённых результатов пока нет|No saved results yet
 Hozircha saqlangan seanslar yo'q=>Сохранённых сессий пока нет|No saved sessions yet
 Ishtirokchi=>Участник|Runner
@@ -1811,10 +2252,12 @@ function goSec(s){
   document.querySelectorAll('nav button,.sec').forEach(e=>e.classList.remove('on'));
   const nb=document.querySelector(`nav button[data-s="${s}"]`);
   if(nb)nb.classList.add('on');
-  $('s-'+s).classList.add('on');
+  const secEl=document.getElementById('s-'+s);
+  if(secEl)secEl.classList.add('on');
   if(s==='rep')rc();
+  window.scrollTo({top:0,behavior:'smooth'});
 }
-document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>goSec(b.dataset.s));
+document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>goSec(b.dataset.s)));
 
 function openQuickTx(){
   goSec('wal');
@@ -2267,11 +2710,12 @@ $('fs').onsubmit=e=>{
   sv('w',W);e.target.reset();$('dl').close();rw();ra();rh();toast("Daromad qo'shildi 🎉");
 };
 
-/* ================= VOSITALAR VA ZAMONAVIY TAYMER ================= */
+/* ================= VOSITALAR (VAZIFALAR, QAYDLAR, TAYMER, SEKUNDOMER, KALKULYATOR, VALYUTA) ================= */
 function openTool(name){
   document.querySelectorAll('.tool-box').forEach(b=>b.classList.toggle('on',b.dataset.tl===name));
   document.querySelectorAll('.tl-pane').forEach(p=>p.style.display='none');
-  $('tl-'+name).style.display='block';
+  const pane=document.getElementById('tl-'+name);
+  if(pane)pane.style.display='block';
   if(name==='conv')renderCBURates();
 }
 document.querySelectorAll('#tb button').forEach(b=>b.onclick=()=>{
@@ -2319,7 +2763,177 @@ $('f-nt').onsubmit=e=>{
 function delNote(id){N=N.filter(x=>x.id!==id);sv('nt',N);rNotes()}
 rNotes();
 
-/* ================= ZAMONAVIY TAYMER (SAQLANADIGAN TARIX BILAN) ================= */
+/* ================= ZAMONAVIY TAYMER (RANG TANLASH VA SAQLANADIGAN TARIX BILAN) ================= */
+function buildDialTicks(gId){
+  const g=$(gId);if(!g)return;
+  let s='';
+  for(let i=0;i<60;i++){
+    const ang=(i*6)*Math.PI/180;
+    const isMaj=i%5===0;
+    const r1=isMaj?111:114, r2=119;
+    const x1=(124+r1*Math.cos(ang)).toFixed(2), y1=(124+r1*Math.sin(ang)).toFixed(2);
+    const x2=(124+r2*Math.cos(ang)).toFixed(2), y2=(124+r2*Math.sin(ang)).toFixed(2);
+    s+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke-width="${isMaj?2:1}" class="${isMaj?'maj':''}"/>`;
+  }
+  g.innerHTML=s;
+}
+buildDialTicks('tmrTicks');
+buildDialTicks('swTicks');
+
+/* 3D Retro Flip-Clock Fullscreen Studio boshqaruvi */
+let fsActiveKind = null; // 'tmr' yoki 'sw'
+let fsPrevDigits = ['', '', '', '', '', ''];
+
+function setFsFlipColor(c1, c2, dotEl){
+  const modal = $('fsClockModal');
+  if(modal){
+    modal.style.setProperty('--fl-c', c1);
+    modal.style.setProperty('--fl-c2', c2 || c1);
+  }
+  document.querySelectorAll('#fsColorDots .fl-dock-dot').forEach(d=>d.classList.toggle('on', d===dotEl || d.dataset.c===c1));
+  try{localStorage.setItem('fs_flip_col', JSON.stringify({c1, c2: c2||c1}))}catch(e){}
+  if(fsActiveKind==='tmr') setTmrAccent(c1, c2||c1);
+  if(fsActiveKind==='sw') setSwAccent(c1, c2||c1);
+}
+
+try{
+  const savedFl = ld('fs_flip_col', {c1:'#ff6b00', c2:'#ff9e00'});
+  if(savedFl && savedFl.c1){
+    const modal = document.getElementById('fsClockModal');
+    if(modal){
+      modal.style.setProperty('--fl-c', savedFl.c1);
+      modal.style.setProperty('--fl-c2', savedFl.c2 || savedFl.c1);
+    }
+  }
+}catch(e){}
+
+function updateFlipDigits(dArr){
+  for(let i=0;i<6;i++){
+    const box = document.getElementById('fd'+i);
+    if(!box) continue;
+    const sp = box.querySelector('span');
+    if(sp && fsPrevDigits[i] !== dArr[i]){
+      sp.textContent = dArr[i];
+      box.classList.remove('flip-anim');
+      void box.offsetWidth;
+      box.classList.add('flip-anim');
+      fsPrevDigits[i] = dArr[i];
+    }
+  }
+}
+
+function syncFsClockUI(){
+  if(!fsActiveKind) return;
+  const modal = document.getElementById('fsClockModal');
+  if(!modal || !modal.classList.contains('on')) return;
+
+  if(fsActiveKind === 'tmr'){
+    const hrs = Math.floor(tmrSec / 3600);
+    const mins = Math.floor((tmrSec % 3600) / 60);
+    const secs = Math.max(0, tmrSec % 60);
+    const sH = String(hrs).padStart(2, '0');
+    const sM = String(mins).padStart(2, '0');
+    const sS = String(secs).padStart(2, '0');
+    updateFlipDigits([sH[0], sH[1], sM[0], sM[1], sS[0], sS[1]]);
+
+    const pct = Math.max(0, Math.min(100, (tmrSec / Math.max(1, tmrTotal)) * 100));
+    if($('fsProgBar')) $('fsProgBar').style.width = pct + '%';
+    modal.classList.toggle('running', !!tmrInt);
+    if($('fsStartBtn')) $('fsStartBtn').textContent = tmrInt ? '⏸ Pause' : tx('▶ Boshlash');
+    const customTitle = ($('tmrLabelInp') && $('tmrLabelInp').value.trim()) ? $('tmrLabelInp').value.trim().toUpperCase() : '24 HOURS COUNTDOWN';
+    if($('fsOverTitle')) $('fsOverTitle').textContent = customTitle;
+    if($('fsModeBadge')) $('fsModeBadge').textContent = tmrInt ? 'COUNTDOWN ACTIVE' : 'RETRO FLIP TIMER';
+    if($('flLbl1')) $('flLbl1').textContent = LG==='uz'?'SOAT':LG==='ru'?'ЧАСЫ':'HOURS';
+    if($('flLbl2')) $('flLbl2').textContent = LG==='uz'?'DAQIQA':LG==='ru'?'МИНУТЫ':'MINUTES';
+    if($('flLbl3')) $('flLbl3').textContent = LG==='uz'?'SONIYA':LG==='ru'?'СЕКУНДЫ':'SECONDS';
+  } else {
+    const totalCs = Math.floor(Math.max(0, swElapsedMs) / 10);
+    const cs = totalCs % 100;
+    const totalSec = Math.floor(totalCs / 100);
+    const secs = totalSec % 60;
+    const mins = Math.floor(totalSec / 60) % 100;
+    const sM = String(mins).padStart(2, '0');
+    const sS = String(secs).padStart(2, '0');
+    const sC = String(cs).padStart(2, '0');
+    updateFlipDigits([sM[0], sM[1], sS[0], sS[1], sC[0], sC[1]]);
+
+    const pct = ((swElapsedMs % 60000) / 60000) * 100;
+    if($('fsProgBar')) $('fsProgBar').style.width = pct + '%';
+    modal.classList.toggle('running', !!swInt);
+    if($('fsStartBtn')) $('fsStartBtn').textContent = swInt ? '⏸ Pause' : tx('▶ Boshlash');
+    const rName = ($('swRunnerName') && $('swRunnerName').value.trim()) ? $('swRunnerName').value.trim().toUpperCase() : `JM CHRONOGRAPH · ${SW_LAPS.length} RUNNERS`;
+    if($('fsOverTitle')) $('fsOverTitle').textContent = rName;
+    if($('fsModeBadge')) $('fsModeBadge').textContent = swInt ? 'STOPWATCH RUNNING' : 'PRO CHRONOGRAPH';
+    if($('flLbl1')) $('flLbl1').textContent = LG==='uz'?'DAQIQA':LG==='ru'?'МИНУТЫ':'MINUTES';
+    if($('flLbl2')) $('flLbl2').textContent = LG==='uz'?'SONIYA':LG==='ru'?'СЕКУНДЫ':'SECONDS';
+    if($('flLbl3')) $('flLbl3').textContent = LG==='uz'?'ULUSH (MS)':LG==='ru'?'ДОЛИ':'MS';
+  }
+}
+
+function toggleClockFs(cardId){
+  fsActiveKind = (cardId === 'swHeroCard') ? 'sw' : 'tmr';
+  fsPrevDigits = ['', '', '', '', '', ''];
+  const isSw = fsActiveKind === 'sw';
+  if($('fsTmrPresets')) $('fsTmrPresets').style.display = isSw ? 'none' : 'flex';
+  if($('fsLapBtn')) $('fsLapBtn').style.display = isSw ? 'inline-flex' : 'none';
+  if($('fsNextBtn')) $('fsNextBtn').style.display = isSw ? 'inline-flex' : 'none';
+  const modal = document.getElementById('fsClockModal');
+  if(modal) modal.classList.add('on');
+  syncFsClockUI();
+}
+
+function closeClockFs(){
+  const modal = document.getElementById('fsClockModal');
+  if(modal) modal.classList.remove('on');
+  fsActiveKind = null;
+}
+
+function toggleFsClockRun(){
+  if(fsActiveKind === 'sw') toggleSw();
+  else toggleTmr();
+  syncFsClockUI();
+}
+
+function resetFsClock(){
+  if(fsActiveKind === 'sw') resetSwClockOnly();
+  else resetTmr();
+  syncFsClockUI();
+}
+
+function setTmrAccent(c1,c2,el){
+  const hero=$('tmrHeroCard');
+  if(hero){hero.style.setProperty('--acc',c1);hero.style.setProperty('--acc2',c2)}
+  if($('tmrGradStop1'))$('tmrGradStop1').setAttribute('stop-color',c1);
+  if($('tmrGradStop2'))$('tmrGradStop2').setAttribute('stop-color',c2);
+  document.querySelectorAll('#tmrColorBar .acc-swatch').forEach(s=>s.classList.toggle('on',s===el||s.dataset.c===c1));
+  try{localStorage.setItem('tmr_accent',JSON.stringify({c1,c2}))}catch(e){}
+}
+
+function setSwAccent(c1,c2,el){
+  const hero=$('swHeroCard');
+  if(hero){hero.style.setProperty('--acc',c1);hero.style.setProperty('--acc2',c2)}
+  if($('swGradStop1'))$('swGradStop1').setAttribute('stop-color',c1);
+  if($('swGradStop2'))$('swGradStop2').setAttribute('stop-color',c2);
+  document.querySelectorAll('#swColorBar .acc-swatch').forEach(s=>s.classList.toggle('on',s===el||s.dataset.c===c1));
+  try{localStorage.setItem('sw_accent',JSON.stringify({c1,c2}))}catch(e){}
+}
+
+try{
+  const taSaved=ld('tmr_accent',null);
+  if(taSaved&&taSaved.c1)setTmrAccent(taSaved.c1,taSaved.c2);
+  const swSaved=ld('sw_accent',null);
+  if(swSaved&&swSaved.c1)setSwAccent(swSaved.c1,swSaved.c2);
+}catch(e){}
+
+function askCustomTmrMin(){
+  ask('Necha daqiqalik taymer qo\'yamiz? (1 - 1440)',{inp:1,type:'number',def:60},v=>{
+    const m=Math.min(1440,Math.max(1,parseInt(v)||0));
+    if(!m)return;
+    setTmrPreset(m,tmrMode,null);
+    toast(`⏲️ ${m} daqiqalik taymer o'rnatildi ✔`);
+  });
+}
+
 let tmrCfg=ld('tmr_cfg',{w:25,r:5,sess:0});
 let TMR_HIST=ld('tmr_hist',[]);
 let tmrState=ld('tmr_state',{mode:'work',total:25*60,rem:25*60,running:false,endAt:0,lbl:''});
@@ -2362,7 +2976,7 @@ function fmtMinSec(sec){
 }
 
 function updTmrRing(){
-  $('tmrDisp').textContent=fmtMinSec(tmrSec);
+  $('tmrDisp').textContent=tmrSec>=3600 ? (String(Math.floor(tmrSec/3600)).padStart(2,'0')+':'+fmtMinSec(tmrSec%3600)) : fmtMinSec(tmrSec);
   const C=641;
   const off=C-(tmrSec/Math.max(1,tmrTotal))*C;
   if($('tmrRing'))$('tmrRing').style.strokeDashoffset=off;
@@ -2372,6 +2986,7 @@ function updTmrRing(){
     $('tmrStart').textContent=tmrInt?'⏸ Pause':tx('▶ Boshlash');
     $('tmrStart').className='ctrl-btn '+(tmrInt?'pause':'start');
   }
+  syncFsClockUI();
 }
 
 function renderTmrHist(){
@@ -2539,6 +3154,7 @@ function updSwUI(){
     $('swStart').textContent=swInt?'⏸ To\'xtatish':tx('▶ Boshlash');
     $('swStart').className='ctrl-btn '+(swInt?'pause':'start');
   }
+  syncFsClockUI();
 }
 
 function toggleSw(){
@@ -2675,21 +3291,114 @@ if(swState.running&&swState.startAt>0){
 }
 renderSwLaps();
 
+/* ================= ZAMONAVIY KALKULYATOR + SAQLANUVCHI HISOBLAR TARIXI ================= */
 let cExpr='';
-function cIn(v){
-  if(v==='C'){cExpr='';$('calcDisp').textContent='0';return}
-  if(v==='='){
-    try{const res=Function('"use strict";return ('+cExpr+')')();cExpr=String(Math.round(res*100)/100);$('calcDisp').textContent=Number(cExpr).toLocaleString('ru-RU')}
-    catch(e){$('calcDisp').textContent='Xato';cExpr=''}
+let CALC_HIST=ld('calc_hist',[]);
+
+function renderCalcHist(){
+  const box=$('calcHistList');if(!box)return;
+  if(!CALC_HIST.length){
+    box.innerHTML=`<div class="empty">${tx("Hozircha hisoblar tarixi yo'q")}</div>`;
     return;
   }
-  cExpr+=v;$('calcDisp').textContent=cExpr;
+  box.innerHTML=CALC_HIST.map(h=>`<div class="rec-card" onclick="reuseCalcVal('${esc(h.res)}')" style="cursor:pointer" title="Hisobni ekranga qaytarish">
+    <div class="rec-rank">🧮</div>
+    <div class="rec-body">
+      <b>${esc(h.expr)} = <span style="color:var(--gold)">${Number(h.res).toLocaleString('ru-RU')}</span></b>
+      <small>🕒 ${fd(h.d)}</small>
+    </div>
+    <button type="button" class="pill-btn" onclick="event.stopPropagation();sendCalcValToTx(${Number(h.res)})" title="Chiqimga o'tkazish">${tx('💸 Chiqimga')}</button>
+    <button type="button" class="tx-act-btn" onclick="event.stopPropagation();delCalcHist(${h.id})" title="O'chirish">✕</button>
+  </div>`).join('');
+}
+
+function reuseCalcVal(val){
+  cExpr=String(val);
+  if($('calcExprLine'))$('calcExprLine').textContent='';
+  $('calcDisp').textContent=Number(val).toLocaleString('ru-RU');
+  toast('🔄 Natija kalkulyatorga olindi');
+}
+
+function sendCalcValToTx(val){
+  const n=Math.abs(Number(val)||0);
+  if(!n)return toast('Summa 0 ga teng');
+  openQuickTx();
+  $('wa').value=n;
+}
+
+function delCalcHist(id){
+  CALC_HIST=CALC_HIST.filter(x=>x.id!==id);
+  sv('calc_hist',CALC_HIST);
+  renderCalcHist();
+}
+
+function clearCalcHist(){
+  if(!CALC_HIST.length)return;
+  ask("Barcha saqlangan natijalarni o'chirasizmi?",{},()=>{
+    CALC_HIST=[];
+    sv('calc_hist',CALC_HIST);
+    renderCalcHist();
+    toast("Tarix tozalandi ✔");
+  });
+}
+
+function cIn(v){
+  if(v==='C'){
+    cExpr='';
+    if($('calcExprLine'))$('calcExprLine').textContent='';
+    $('calcDisp').textContent='0';
+    return;
+  }
+  if(v==='BS'){
+    cExpr=String(cExpr).slice(0,-1);
+    $('calcDisp').textContent=cExpr||'0';
+    return;
+  }
+  if(v==='%'){
+    try{
+      const val=Function('"use strict";return ('+(cExpr||'0')+')')()/100;
+      cExpr=String(Math.round(val*10000)/10000);
+      $('calcDisp').textContent=Number(cExpr).toLocaleString('ru-RU');
+    }catch(e){}
+    return;
+  }
+  if(v==='='){
+    if(!cExpr)return;
+    try{
+      const rawExpr=cExpr;
+      const res=Function('"use strict";return ('+rawExpr+')')();
+      if(!isFinite(res))throw new Error('NaN');
+      const cleanRes=Math.round(res*100)/100;
+      const prettyExpr=rawExpr.replace(/\*/g,' × ').replace(/\//g,' ÷ ').replace(/\+/g,' + ').replace(/-/g,' − ');
+      if($('calcExprLine'))$('calcExprLine').textContent=prettyExpr+' =';
+      $('calcDisp').textContent=Number(cleanRes).toLocaleString('ru-RU');
+      if(String(rawExpr)!==String(cleanRes)){
+        CALC_HIST.unshift({
+          id:Date.now(),
+          expr:prettyExpr,
+          res:cleanRes,
+          d:new Date().toISOString()
+        });
+        if(CALC_HIST.length>50)CALC_HIST.pop();
+        sv('calc_hist',CALC_HIST);
+        renderCalcHist();
+      }
+      cExpr=String(cleanRes);
+    }catch(e){
+      $('calcDisp').textContent='Xato';
+      cExpr='';
+    }
+    return;
+  }
+  cExpr+=v;
+  $('calcDisp').textContent=cExpr;
 }
 function calcToTx(){
-  const val=Number(String(cExpr).replace(/\D/g,''))||0;
+  const val=Math.abs(Number(cExpr)||0);
   if(!val)return toast('Avval summani hisoblang');
   openQuickTx();$('wa').value=val;
 }
+renderCalcHist();
 
 /* ================= BOSH SAHIFA YANGILANISHI (KO'P VALYUTALI BALANS BILAN) ================= */
 function rh(){
@@ -2724,7 +3433,7 @@ function tick(){
 }
 
 /* ================= QARZ KITOBI ================= */
-const RK=['w','t','a','s','d','g','r','nt','q_tpl','cbu_rates','sw_laps','tmr_hist'];
+const RK=['w','t','a','s','d','g','r','nt','q_tpl','cbu_rates','sw_laps','tmr_hist','calc_hist'];
 const CS=(()=>{try{const g=Telegram.WebApp;return g.CloudStorage&&g.isVersionAtLeast('6.9')?g.CloudStorage:null}catch(e){return null}})();
 function snap(){const o={};RK.forEach(k=>o[k]=ld(k,k==='s'?{}:[]));return o}
 function cs(){
@@ -3004,7 +3713,7 @@ function applyLang(){
   $('lgb').textContent=LG.toUpperCase();
   $('dt').textContent=new Date().toLocaleDateString(LC(),{weekday:'short',day:'numeric',month:'short',year:'numeric'});
   renderQuickGrid();renderCBURates();fc();qc();sc2();renderCatMgr();rd();rg();rr();rw();rt();rh();ra();rNotes();rc();pl();
-  updTmrRing();renderTmrHist();updSwUI();renderSwLaps();
+  updTmrRing();renderTmrHist();updSwUI();renderSwLaps();renderCalcHist();
   ta(document.body);
 }
 $('lgb').onclick=()=>{
@@ -3022,4 +3731,3 @@ window.addEventListener('load',()=>{try{const g=Telegram.WebApp;g.ready();g.expa
 </script>
 </body>
 </html>
-```
