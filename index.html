@@ -2,7 +2,7 @@
 <html lang="uz" data-theme="dark">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, viewport-fit=cover">
 <title>JM Hamyon & Reja</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <meta name="theme-color" content="#6c5ce7">
@@ -1069,6 +1069,20 @@ body.has-wp .card, body.has-wp .q-item, body.has-wp .ib {
   text-shadow: none;
 }
 
+
+/* ===== Telefon: gorizontal toshib ketishni oldini olish ===== */
+html, body { max-width: 100%; overflow-x: hidden; }
+header { gap: 10px; }
+.brand { min-width: 0; flex: 1 1 auto; }
+.brand > div:last-child { min-width: 0; }
+.user-greet-pill { max-width: 100%; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+.user-greet-pill #hdrUserNameTxt { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.top-actions { flex: none; gap: 6px; }
+@media (max-width: 430px) {
+  .ib { width: 36px; height: 36px; border-radius: 12px; }
+  .jm-badge { width: 40px; height: 40px; }
+  .brand { gap: 9px; }
+}
 </style>
 </head>
 <body>
@@ -3897,11 +3911,11 @@ window.addEventListener('load',()=>{try{const g=Telegram.WebApp;g.ready();g.expa
       <span>Galereyadan</span>
       <input type="file" id="inpWpFile" accept="image/*" style="display:none" onchange="pickImgFile(this, 'wp')">
     </div>
-    <div class="wp-item" style="background-image:url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=500&q=80')" onclick="setAppWp('https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=900&q=80')">Tog' va ko'l</div>
-    <div class="wp-item" style="background-image:url('https://images.unsplash.com/photo-1519681393784-d120267933ba?w=500&q=80')" onclick="setAppWp('https://images.unsplash.com/photo-1519681393784-d120267933ba?w=900&q=80')">Yulduzli tog'</div>
-    <div class="wp-item" style="background-image:url('https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=500&q=80')" onclick="setAppWp('https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=900&q=80')">Tungi shahar</div>
-    <div class="wp-item" style="background-image:url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500&q=80')" onclick="setAppWp('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=900&q=80')">Kiber Neon</div>
-    <div class="wp-item" style="background-image:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=500&q=80')" onclick="setAppWp('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=900&q=80')">Okean</div>
+    <div class="wp-item">Tog' va ko'l</div>
+    <div class="wp-item">Yulduzli tog'</div>
+    <div class="wp-item">Tungi shahar</div>
+    <div class="wp-item">Kiber Neon</div>
+    <div class="wp-item">Okean</div>
   </div>
 
   <div style="font-size:12px;color:var(--mut);font-weight:700;margin-bottom:4px">🕶️ Fonni qoraytirish (yozuvlar aniq ko'rinishi uchun):</div>
@@ -4047,6 +4061,32 @@ function setHeroWp(url){
   toast(url ? '💳 Balans kartasi foni yangilandi ✔' : 'Karta foni tiklandi ✔');
 }
 
+/* ===== Tayyor fonlar: internetsiz ham ishlaydigan ichki rasmlar (Unsplash yuklanmasa ko'rinadi) ===== */
+function rngW(s){return()=>(s=(s*16807)%2147483647)/2147483647}
+const WPSVG={
+  mountain(){const r=rngW(7);let tr='';for(let i=0;i<30;i++){const x=i*14+r()*8,h=26+r()*30;tr+=`<polygon points="${x},${400-h} ${x-9},400 ${x+9},400"/>`}
+    const m='<path d="M0 330 L70 250 L130 310 L200 220 L280 320 L340 260 L400 330 V400 H0Z" fill="#7fa5b3" opacity=".85"/><path d="M0 370 L90 290 L170 360 L250 280 L330 360 L400 310 V400 H0Z" fill="#4f7f8f"/><g fill="#244a45">'+tr+'</g>';
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6c1a0"/><stop offset=".5" stop-color="#9ec9cf"/><stop offset="1" stop-color="#4b8a9c"/></linearGradient><linearGradient id="l" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6fa6b4"/><stop offset="1" stop-color="#1b4456"/></linearGradient></defs><rect width="400" height="600" fill="url(#a)"/><circle cx="290" cy="190" r="46" fill="#fff4d6" opacity=".9"/>${m}<rect y="400" width="400" height="200" fill="url(#l)"/><g transform="translate(0,800) scale(1,-1)" opacity=".32">${m}</g></svg>`},
+  stars(){const r=rngW(11);let st='';for(let i=0;i<150;i++)st+=`<circle cx="${r()*400}" cy="${r()*420}" r="${(.3+r()*1.3).toFixed(2)}" fill="#fff" opacity="${(.4+r()*.6).toFixed(2)}"/>`;
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#090c2b"/><stop offset=".6" stop-color="#2e1d63"/><stop offset="1" stop-color="#7a3f8f"/></linearGradient><filter id="b"><feGaussianBlur stdDeviation="16"/></filter></defs><rect width="400" height="600" fill="url(#a)"/><ellipse cx="200" cy="210" rx="270" ry="46" transform="rotate(-35 200 210)" fill="#c9a7ff" opacity=".3" filter="url(#b)"/>${st}<path d="M0 470 L80 380 L140 440 L220 340 L300 450 L360 400 L400 440 V600 H0Z" fill="#1b1d45"/><path d="M0 520 L100 440 L180 510 L260 430 L340 520 L400 480 V600 H0Z" fill="#0a0b1c"/></svg>`},
+  city(){const r=rngW(5);let b='',x=0,row=(c,hmin,hmax,wn)=>{let s='',x=-5;while(x<400){const w=18+r()*22,h=hmin+r()*(hmax-hmin);s+=`<rect x="${x}" y="${520-h}" width="${w}" height="${h}" fill="${c}"/>`;if(wn)for(let k=0;k<h/14;k++)for(let j=0;j<w/9;j++)if(r()>.62)s+=`<rect x="${x+3+j*8}" y="${520-h+6+k*13}" width="3" height="5" fill="#ffd36b" opacity="${(.5+r()*.5).toFixed(2)}"/>`;x+=w+2}return s};
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#090c24"/><stop offset=".6" stop-color="#2a1d5c"/><stop offset="1" stop-color="#b0457a"/></linearGradient><linearGradient id="w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b2350"/><stop offset="1" stop-color="#07081a"/></linearGradient></defs><rect width="400" height="600" fill="url(#a)"/><circle cx="310" cy="150" r="26" fill="#fff3d0" opacity=".9"/>${row('#1a1d45',90,230,0)}${row('#0a0c1f',60,200,1)}<rect y="520" width="400" height="80" fill="url(#w)"/></svg>`},
+  neon(){let g='';for(let i=-8;i<=8;i++)g+=`<line x1="200" y1="330" x2="${200+i*95}" y2="600"/>`;for(let i=1;i<9;i++)g+=`<line x1="0" y1="${330+i*i*3.8}" x2="400" y2="${330+i*i*3.8}"/>`;
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#12062b"/><stop offset="1" stop-color="#4a0f7c"/></linearGradient><linearGradient id="s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd84a"/><stop offset="1" stop-color="#ff2fb3"/></linearGradient><filter id="g"><feGaussianBlur stdDeviation="2.2"/></filter></defs><rect width="400" height="600" fill="url(#a)"/><circle cx="200" cy="260" r="96" fill="url(#s)"/><g fill="#12062b"><rect x="90" y="268" width="220" height="5"/><rect x="90" y="286" width="220" height="7"/><rect x="90" y="306" width="220" height="9"/></g><rect y="330" width="400" height="270" fill="#12062b"/><g stroke="#ff3fd8" stroke-width="1.6" opacity=".8" filter="url(#g)">${g}</g><g stroke="#ff9cf0" stroke-width=".8">${g}</g></svg>`},
+  ocean(){let w='';for(let i=0;i<7;i++){const y=360+i*34;w+=`<path d="M0 ${y} Q50 ${y-10} 100 ${y} T200 ${y} T300 ${y} T400 ${y}" fill="none" stroke="#fff" stroke-width="${1+i*.4}" opacity="${(.12+i*.05).toFixed(2)}"/>`}
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a4aa5"/><stop offset=".5" stop-color="#ff7a85"/><stop offset="1" stop-color="#ffb36b"/></linearGradient><linearGradient id="s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2aa6b5"/><stop offset="1" stop-color="#0a3f63"/></linearGradient></defs><rect width="400" height="600" fill="url(#a)"/><circle cx="200" cy="340" r="58" fill="#fff0c4"/><rect y="340" width="400" height="260" fill="url(#s)"/><rect x="160" y="340" width="80" height="150" fill="#fff0c4" opacity=".35"/>${w}</svg>`}
+};
+const WPS=[{k:'mountain',id:'photo-1506744038136-46273834b3fb'},{k:'stars',id:'photo-1519681393784-d120267933ba'},{k:'city',id:'photo-1477959858617-67f85cf4f1df'},{k:'neon',id:'photo-1618005182384-a83a8bd57fbe'},{k:'ocean',id:'photo-1507525428034-b723cf961d3e'}];
+const _wpC={};
+function wpSvgUrl(k){return _wpC[k]||(_wpC[k]='data:image/svg+xml,'+encodeURIComponent(WPSVG[k]()))}
+function wpCss(u){const p=WPS.find(x=>u.includes(x.id));return p?`url("${u}"), url("${wpSvgUrl(p.k)}")`:`url("${u}")`}
+function initWpPresets(){
+  document.querySelectorAll('.wp-grid .wp-item:not(.up-box)').forEach((el,i)=>{const p=WPS[i];if(!p)return;
+    el.style.backgroundImage=`url("https://images.unsplash.com/${p.id}?w=500&q=80"), url("${wpSvgUrl(p.k)}")`;
+    el.onclick=()=>setAppWp(`https://images.unsplash.com/${p.id}?w=900&q=80`)});
+}
+initWpPresets();
+
 function setAppWp(url){
   try{
     if(url) localStorage.setItem('jm_wp', url);
@@ -4099,7 +4139,7 @@ function applyCustomVisuals(){
   /* 3. Ilova orqa foni */
   if(wp){
     document.body.classList.add('has-wp');
-    document.body.style.setProperty('--wp-url', `url("${wp}")`);
+    document.body.style.setProperty('--wp-url', wpCss(wp));
     document.body.style.setProperty('--wp-dim', dim);
     document.body.style.setProperty('--wp-blur', blur + 'px');
   } else {
