@@ -966,6 +966,74 @@ textarea { min-height: 80px; font-family: monospace; font-size: 12px; }
 }
 .fl-dock-fab:hover { border-color: var(--fl-c); transform: scale(1.05); }
 </style>
+  /* Shaxsiy Fon (Wallpaper) va Avatar Uslublari */
+body.has-wp {
+  background-image: var(--wp-url) !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-attachment: fixed !important;
+}
+body.has-wp::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 9, 20, var(--wp-dim, 0.45));
+  backdrop-filter: blur(var(--wp-blur, 6px));
+  -webkit-backdrop-filter: blur(var(--wp-blur, 6px));
+  z-index: 0;
+  pointer-events: none;
+}
+.wrap { position: relative; z-index: 1; }
+body.has-wp .card, body.has-wp .q-item, body.has-wp .ib {
+  background: color-mix(in srgb, var(--card) 78%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+.hero.has-hero-wp {
+  background-image: linear-gradient(135deg, rgba(20, 16, 54, 0.62), rgba(35, 28, 92, 0.72)), var(--hero-wp) !important;
+  background-size: cover !important;
+  background-position: center !important;
+}
+.jm-badge.has-ava {
+  background-size: cover !important;
+  background-position: center !important;
+  color: transparent !important;
+  border: 2px solid #fbbf24 !important;
+}
+.wp-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 10px 0 14px;
+}
+.wp-item {
+  height: 64px;
+  border-radius: 13px;
+  border: 2px solid var(--bd);
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
+  display: flex;
+  align-items: flex-end;
+  padding: 5px 7px;
+  font-size: 10.5px;
+  font-weight: 800;
+  color: #fff;
+  text-shadow: 0 2px 6px rgba(0,0,0,.9);
+  position: relative;
+  overflow: hidden;
+}
+.wp-item.up-box {
+  background: var(--bg);
+  border-style: dashed;
+  border-color: var(--pr);
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 3px;
+  color: var(--pr2);
+  text-shadow: none;
+}
 </head>
 <body>
 
@@ -999,6 +1067,7 @@ textarea { min-height: 80px; font-family: monospace; font-size: 12px; }
       </div>
     </div>
     <div class="top-actions">
+      <button class="ib" onclick="$('dWp').showModal();ta($('dWp'))" title="Shaxsiy rasm va Fon">🖼️</button>
       <button class="ib" id="eyeTopBtn" onclick="toggleHideBal()" title="Yashirish / Ko'rsatish">👁</button>
       <button class="ib" id="lgb" style="font-size:12px;font-weight:800">UZ</button>
       <button class="ib" id="th" title="Mavzu">🌓</button>
@@ -1465,6 +1534,13 @@ textarea { min-height: 80px; font-family: monospace; font-size: 12px; }
 
   <!-- 5. SOZLAMALAR -->
   <section class="sec" id="s-more">
+    <div class="card">
+      <div class="sec-bar" style="margin-top:0">
+        <h2>📸 Shaxsiy rasm va Fon studiyasi</h2>
+        <button type="button" class="pill-btn pr" onclick="$('dWp').showModal();ta($('dWp'))">🖼️ O'zgartirish</button>
+      </div>
+      <div class="hint">O'z rasmingizni logotipga (avatarga), ilova orqa foniga yoki balans kartasiga o'rnating.</div>
+    </div>
     <div class="card">
       <h2>🎨 Mavzu va ko'rinish</h2>
       <div class="th-grid" id="thGrid">
@@ -3728,6 +3804,168 @@ fetchCBURates(false);
 tick();setInterval(tick,30000);
 pull();push();
 window.addEventListener('load',()=>{try{const g=Telegram.WebApp;g.ready();g.expand();g.setHeaderColor('#0b0c1a')}catch(e){}});
+</script>
+<!-- Dialog: Shaxsiy rasm (Avatar) va Fon rasmi (Wallpaper) studiyasi -->
+<dialog id="dWp">
+  <h2>🖼️ Shaxsiy rasm va Fon studiyasi</h2>
+
+  <!-- 1. Profil rasmi (JM o'rniga o'z rasmingiz) -->
+  <div style="font-size:12.5px;font-weight:800;margin-bottom:6px">👤 1. Logotip o'rniga shaxsiy rasm (Avatar):</div>
+  <div style="display:flex;gap:8px;margin-bottom:14px">
+    <button type="button" class="btn s" style="flex:1" onclick="$('inpAva').click()">📸 Rasm tanlash</button>
+    <button type="button" class="btn s g" onclick="setCustomAva('')">↺ JM ga qaytarish</button>
+    <input type="file" id="inpAva" accept="image/*" style="display:none" onchange="pickImgFile(this, 'ava')">
+  </div>
+
+  <!-- 2. VIP Balans kartasi foni -->
+  <div style="font-size:12.5px;font-weight:800;margin-bottom:6px">💳 2. Umumiy balans (VIP karta) foni:</div>
+  <div style="display:flex;gap:8px;margin-bottom:14px">
+    <button type="button" class="btn s" style="flex:1" onclick="$('inpHeroWp').click()">🏞️ Kartaga rasm qo'yish</button>
+    <button type="button" class="btn s g" onclick="setHeroWp('')">↺ Asliga qaytarish</button>
+    <input type="file" id="inpHeroWp" accept="image/*" style="display:none" onchange="pickImgFile(this, 'hero')">
+  </div>
+
+  <!-- 3. Ilova orqa foni (Wallpaper) -->
+  <div style="font-size:12.5px;font-weight:800;margin-bottom:4px">🌌 3. Ilova orqa foni (Galereyadan yoki tayyor):</div>
+  <div class="wp-grid">
+    <div class="wp-item up-box" onclick="$('inpWpFile').click()">
+      <span style="font-size:18px">➕</span>
+      <span>Galereyadan</span>
+      <input type="file" id="inpWpFile" accept="image/*" style="display:none" onchange="pickImgFile(this, 'wp')">
+    </div>
+    <div class="wp-item" style="background-image:url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=500&q=80')" onclick="setAppWp('https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=900&q=80')">Tog' va ko'l</div>
+    <div class="wp-item" style="background-image:url('https://images.unsplash.com/photo-1519681393784-d120267933ba?w=500&q=80')" onclick="setAppWp('https://images.unsplash.com/photo-1519681393784-d120267933ba?w=900&q=80')">Yulduzli tog'</div>
+    <div class="wp-item" style="background-image:url('https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=500&q=80')" onclick="setAppWp('https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=900&q=80')">Tungi shahar</div>
+    <div class="wp-item" style="background-image:url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500&q=80')" onclick="setAppWp('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=900&q=80')">Kiber Neon</div>
+    <div class="wp-item" style="background-image:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=500&q=80')" onclick="setAppWp('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=900&q=80')">Okean</div>
+  </div>
+
+  <div style="font-size:12px;color:var(--mut);font-weight:700;margin-bottom:4px">🕶️ Fonni qoraytirish (yozuvlar aniq ko'rinishi uchun):</div>
+  <input type="range" id="wpDimRng" min="0.1" max="0.85" step="0.05" value="0.45" oninput="updWpSliders()">
+
+  <div style="font-size:12px;color:var(--mut);font-weight:700;margin:8px 0 4px">💧 Fonni xiralashtirish (Blur):</div>
+  <input type="range" id="wpBlurRng" min="0" max="20" step="1" value="6" oninput="updWpSliders()">
+
+  <div style="display:flex;gap:8px;margin-top:14px">
+    <button type="button" class="btn dng" style="flex:1" onclick="setAppWp('')">🗑 Fonni o'chirish</button>
+    <button type="button" class="btn" style="flex:1" onclick="$('dWp').close()">✔ Tayyor</button>
+  </div>
+</dialog>
+
+<script>
+/* Rasmni xotira to'lib qolmasligi uchun avtomatik ixchamlashtirish (Canvas Compress) */
+function compressImg(file, maxW, cb){
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = new Image();
+    img.onload = () => {
+      const scale = Math.min(1, maxW / img.width);
+      const cv = document.createElement('canvas');
+      cv.width = Math.round(img.width * scale);
+      cv.height = Math.round(img.height * scale);
+      cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height);
+      cb(cv.toDataURL('image/jpeg', 0.82));
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function pickImgFile(inp, target){
+  const f = inp.files && inp.files[0];
+  if(!f) return;
+  const maxW = target === 'ava' ? 240 : 1080;
+  compressImg(f, maxW, dataUrl => {
+    if(target === 'ava') setCustomAva(dataUrl);
+    else if(target === 'hero') setHeroWp(dataUrl);
+    else setAppWp(dataUrl);
+    inp.value = '';
+  });
+}
+
+function setCustomAva(url){
+  try{
+    if(url) localStorage.setItem('jm_ava', url);
+    else localStorage.removeItem('jm_ava');
+  }catch(e){}
+  applyCustomVisuals();
+  toast(url ? '👤 Shaxsiy rasm o\'rnatildi ✔' : 'JM logotipi tiklandi ✔');
+}
+
+function setHeroWp(url){
+  try{
+    if(url) localStorage.setItem('jm_hero_wp', url);
+    else localStorage.removeItem('jm_hero_wp');
+  }catch(e){}
+  applyCustomVisuals();
+  toast(url ? '💳 Balans kartasi foni yangilandi ✔' : 'Karta foni tiklandi ✔');
+}
+
+function setAppWp(url){
+  try{
+    if(url) localStorage.setItem('jm_wp', url);
+    else localStorage.removeItem('jm_wp');
+  }catch(e){ toast('Rasm hajmi juda katta'); return; }
+  applyCustomVisuals();
+  toast(url ? '🖼️ Orqa fon o\'rnatildi ✔' : 'Standart fon tiklandi ✔');
+}
+
+function updWpSliders(){
+  const dim = $('wpDimRng').value;
+  const blur = $('wpBlurRng').value;
+  try{
+    localStorage.setItem('jm_wp_dim', dim);
+    localStorage.setItem('jm_wp_blur', blur);
+  }catch(e){}
+  applyCustomVisuals();
+}
+
+function applyCustomVisuals(){
+  const ava = localStorage.getItem('jm_ava') || '';
+  const heroWp = localStorage.getItem('jm_hero_wp') || '';
+  const wp = localStorage.getItem('jm_wp') || '';
+  const dim = localStorage.getItem('jm_wp_dim') || '0.45';
+  const blur = localStorage.getItem('jm_wp_blur') || '6';
+
+  /* 1. Avatar */
+  document.querySelectorAll('.jm-badge').forEach(b => {
+    if(ava){
+      b.classList.add('has-ava');
+      b.style.backgroundImage = `url("${ava}")`;
+    } else {
+      b.classList.remove('has-ava');
+      b.style.backgroundImage = '';
+    }
+  });
+
+  /* 2. VIP Hero Card foni */
+  const heroEl = document.querySelector('.hero');
+  if(heroEl){
+    if(heroWp){
+      heroEl.classList.add('has-hero-wp');
+      heroEl.style.setProperty('--hero-wp', `url("${heroWp}")`);
+    } else {
+      heroEl.classList.remove('has-hero-wp');
+      heroEl.style.removeProperty('--hero-wp');
+    }
+  }
+
+  /* 3. Ilova orqa foni */
+  if(wp){
+    document.body.classList.add('has-wp');
+    document.body.style.setProperty('--wp-url', `url("${wp}")`);
+    document.body.style.setProperty('--wp-dim', dim);
+    document.body.style.setProperty('--wp-blur', blur + 'px');
+  } else {
+    document.body.classList.remove('has-wp');
+    document.body.style.removeProperty('--wp-url');
+  }
+
+  if($('wpDimRng')) $('wpDimRng').value = dim;
+  if($('wpBlurRng')) $('wpBlurRng').value = blur;
+}
+
+applyCustomVisuals();
 </script>
 </body>
 </html>
